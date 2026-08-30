@@ -1,0 +1,57 @@
+.Barnav-container {
+  display: flex;
+  padding: 10px 25px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.144);
+}
+
+.Logo-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.Logo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.Nav {
+  display: flex;
+  gap: 10px;
+
+}
+
+.Nav>* {
+  color: #e2e8f0;
+  opacity: .5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  transition: all ease .2s;
+}
+
+.Nav>*:hover {
+  opacity: 1;
+}
+
+.User-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.User-container img {
+  width: 35px;
+}
+
+.Info-user {
+  text-align: right;
+}
+
+.Info-user>:not(:first-child) {
+  opacity: .5;
+}

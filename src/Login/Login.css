@@ -1,0 +1,158 @@
+.Login-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.Branding>*,
+.Branding header>*,
+.Branding section>*,
+.Branding .stat-card>* {
+  background: transparent;
+}
+
+.Branding {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  background-color: #0b1428;
+  background-image:
+    linear-gradient(rgba(0, 210, 190, 0.07) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(0, 210, 190, 0.07) 1px,
+      transparent 1px),
+    radial-gradient(circle at 0% 50%,
+      rgba(0, 190, 180, 0.16),
+      transparent 45%),
+    radial-gradient(circle at 70% 100%,
+      rgba(0, 120, 150, 0.12),
+      transparent 40%);
+
+  background-size:
+    40px 40px,
+    40px 40px,
+    100% 100%,
+    100% 100%;
+}
+
+.Branding header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.Branding .INFO {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.Branding .INFO span {
+  color: #2dd4bf;
+}
+
+.Branding .INFO strong {
+  font-size: 64px;
+}
+
+.Branding .INFO p {
+  opacity: .5;
+}
+
+.Minicards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.Minicards-container>* {
+  min-height: 106px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(24, 39, 62, 0.75);
+  border: 1px solid rgba(100, 140, 180, 0.18);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.Branding footer {
+  opacity: .3;
+}
+
+.stat-card :first-child {
+  width: 18px;
+  height: 18px;
+  color: #00d4c7;
+}
+
+.stat-card strong {
+  font-size: 21px;
+  font-weight: 700px;
+  line-height: 1;
+
+  color: #f5f7fa;
+}
+
+.stat-card span {
+  font-size: 12px;
+  color: #7185a5;
+}
+
+.FORM-container {
+  display: grid;
+  place-items: center;
+}
+
+.FORM-container :first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-container label {
+  color: #bcc3ce;
+  ;
+}
+
+.input-container input {
+  height: 15px;
+  width: 250px;
+  border-radius: 4px;
+  background: rgba(197, 211, 255, 0.171);
+  border: none;
+  padding: 10px;
+  transition: all ease .3s;
+}
+
+.input-container input:focus {
+  outline: solid 1px #00d4c7;
+}
+
+.Form button {
+  height: 30px;
+  border-radius: 10PX;
+  outline: none;
+  border: none;
+  color: #0b1428;
+  background: #00d4c7;
+}
+

@@ -12,7 +12,7 @@ export function Login() {
         </header>
         <section className="INFO">
           <span>Sistema de gestion</span>
-          <strong>Control total de tu Inventario</strong>
+          <h3>Control total de tu Inventario</h3>
           <p>
             Gestiona productos, órdenes y proveedores desde un solo lugar.
             Rápido, claro y siempre al día.
@@ -30,24 +30,20 @@ export function Login() {
         <footer>Created by Yader Saenz</footer>
       </div>
       <section className="FORM-container">
-        <div className="header">
-          <h3>Bienvenido</h3>
-          <p>Inicia sesión para continuar</p>
-        </div>
         <form className="Form">
+          <div>
+            <h3>Bienvenido</h3>
+            <p>Inicia sesión para continuar</p>
+          </div>
           <div className="input-container">
             <label>User</label>
-            <input />
+            <input type="text" placeholder="example@company.com" />
           </div>
           <div className="input-container">
             <label>Password</label>
-            <input />
+            <input type="password" placeholder="*********" />
           </div>
-          <button>
-            <p>
-              <strong>login</strong>
-            </p>
-          </button>
+          <button>Login</button>
         </form>
       </section>
     </section>

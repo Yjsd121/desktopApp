@@ -4,12 +4,6 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.Branding>*,
-.Branding header>*,
-.Branding section>*,
-.Branding .stat-card>* {
-  background: transparent;
-}
 
 .Branding {
   padding: 48px;
@@ -55,7 +49,7 @@
   color: #2dd4bf;
 }
 
-.Branding .INFO strong {
+.Branding .INFO h3 {
   font-size: 64px;
 }
 
@@ -70,16 +64,16 @@
 }
 
 .Minicards-container>* {
-  min-height: 106px;
-  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-height: 106px;
+  padding: 16px;
   gap: 10px;
-  background: rgba(24, 39, 62, 0.75);
-  border: 1px solid rgba(100, 140, 180, 0.18);
   border-radius: 12px;
   box-sizing: border-box;
+  background: rgba(116, 119, 117, 0.253);
+  border: 1px solid rgba(100, 140, 180, 0.18);
 }
 
 .Branding footer {
@@ -96,7 +90,6 @@
   font-size: 21px;
   font-weight: 700px;
   line-height: 1;
-
   color: #f5f7fa;
 }
 
@@ -106,20 +99,26 @@
 }
 
 .FORM-container {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
 }
 
-.FORM-container :first-child {
+.FORM-container:first-child {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 100%;
+  text-align: left;
 }
 
 .Form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 400px;
 }
 
 .input-container {
@@ -130,17 +129,17 @@
 
 .input-container label {
   color: #bcc3ce;
-  ;
+
 }
 
 .input-container input {
-  height: 15px;
-  width: 250px;
-  border-radius: 4px;
+  height: 30px;
+  border-radius: 12px;
   background: rgba(197, 211, 255, 0.171);
   border: none;
   padding: 10px;
   transition: all ease .3s;
+  color: white;
 }
 
 .input-container input:focus {
@@ -148,11 +147,12 @@
 }
 
 .Form button {
-  height: 30px;
+  height: 40px;
   border-radius: 10PX;
   outline: none;
   border: none;
   color: #0b1428;
   background: #00d4c7;
+  font-weight: bold;
+  font-size: 16px;
 }
-

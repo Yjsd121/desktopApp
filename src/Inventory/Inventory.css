@@ -34,6 +34,12 @@
   background: #00d4c7;
   font-weight: bold;
   font-size: 16px;
+
+  transition: all ease .2s;
+}
+
+.filters-Side button:active {
+  scale: .8;
 }
 
 .filters-Side select {
@@ -73,7 +79,7 @@
 
 /* TODO ESTO ES LO DE LA TABLA */
 .Inventory-Table {
-  height: 500px;
+  height: 75%;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -143,13 +149,37 @@
 }
 
 .Products-Table td:nth-child(4) {
-  color: #9ba5a4;
+  color: #5baca4;
   font-weight: 600;
 }
 
 .Products-Table td:nth-child(5) {
   text-align: left;
   font-weight: bold;
+}
+
+.active {
+  color: #79cf6e;
+  width: fit-content;
+  padding: 3px;
+  border: solid 2px #184b12;
+  border-radius: 5px;
+}
+
+.LowStock {
+  width: fit-content;
+  color: #eeb64d;
+  padding: 3px;
+  border: solid 2px #644d21;
+  border-radius: 5px;
+}
+
+.offStock {
+  color: #ec6363;
+  width: fit-content;
+  padding: 3px;
+  border: solid 2px #5c2525;
+  border-radius: 5px;
 }
 
 .actions {
@@ -165,4 +195,10 @@
   color: #0b1428;
   background: #00d4c7;
   font-weight: bold;
+
+  transition: all ease .2s;
+}
+
+.actions button:active {
+  scale: .8;
 }

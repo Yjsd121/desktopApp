@@ -2,6 +2,12 @@ import "./Inventory.css";
 
 import { Barnav } from "../Components/Barnav/Barnav";
 import { Products } from "../mock/Products-table";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
+import { getStatus } from "./utilities/getStatus";
+import { productColumns } from "../static/ProductsHeader";
+import { Table } from "../Components/table/Table";
 
 export function InevntoryView() {
   return (
@@ -21,39 +27,32 @@ export function InevntoryView() {
           <button>+ Nuevo producto </button>
         </div>
       </section>
-      <section className="Inventory-Table">
-        <table className="Products-Table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>SKU</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Supplier</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Products.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.sku}</td>
-                <td>{item.category}</td>
-                <td>$ {item.price}</td>
-                <td>{item.stock}</td>
-                <td>{item.supplier}</td>
-                <td>{item.status}</td>
-                <td className="actions">
-                  <button>delete</button>
-                  <button>Edit</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+
+      <Table Header={productColumns}>
+        {Products.map((item) => (
+          <tr key={item.id}>
+            <td>{item.name}</td>
+            <td>{item.sku}</td>
+            <td>{item.category}</td>
+            <td>$ {item.price}</td>
+            <td style={{ color: getStatus(item.stock).color }}>{item.stock}</td>
+            <td>{item.supplier}</td>
+            <td>
+              <div className={getStatus(item.stock).class}>
+                {getStatus(item.stock).class}
+              </div>
+            </td>
+            <td className="actions">
+              <button>
+                <EditOutlinedIcon />
+              </button>
+              <button>
+                <DeleteOutlinedIcon />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </Table>
     </>
   );
 }

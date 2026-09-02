@@ -4,7 +4,6 @@
   grid-template-columns: 1fr 1fr;
 }
 
-
 .Branding {
   padding: 48px;
   display: flex;
@@ -103,7 +102,6 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
-
 }
 
 .FORM-container:first-child {

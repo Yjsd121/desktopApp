@@ -55,3 +55,11 @@
 .Info-user>:not(:first-child) {
   opacity: .5;
 }
+
+.Logoutbutton {
+  color: rgba(255, 251, 251, 0.329);
+}
+
+.Logoutbutton:hover {
+  color: rgba(238, 103, 103, 0.671);
+}

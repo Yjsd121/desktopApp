@@ -1,0 +1,11 @@
+.Orders-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.OrederView {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}

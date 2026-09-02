@@ -8,26 +8,13 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { getStatus } from "./utilities/getStatus";
 import { productColumns } from "../static/ProductsHeader";
 import { Table } from "../Components/table/Table";
+import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
 
 export function InevntoryView() {
   return (
     <>
       <Barnav />
-      <section className="SearchFilters-container">
-        <input />
-        <div className="filters-Side">
-          <select>
-            <option>Select</option>
-            <option>Select</option>
-            <option>Select</option>
-          </select>
-          <select>
-            <option>select2</option>
-          </select>
-          <button>+ Nuevo producto </button>
-        </div>
-      </section>
-
+      <SearchFilter />
       <Table Header={productColumns}>
         {Products.map((item) => (
           <tr key={item.id}>

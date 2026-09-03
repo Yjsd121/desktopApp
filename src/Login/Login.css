@@ -131,7 +131,8 @@
 }
 
 .input-container input {
-  height: 30px;
+  box-sizing: border-box;
+  height: 45px;
   border-radius: 12px;
   background: rgba(197, 211, 255, 0.171);
   border: none;

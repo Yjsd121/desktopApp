@@ -14,32 +14,36 @@ export function InevntoryView() {
   return (
     <>
       <Barnav />
-      <SearchFilter />
-      <Table Header={productColumns}>
-        {Products.map((item) => (
-          <tr key={item.id}>
-            <td>{item.name}</td>
-            <td>{item.sku}</td>
-            <td>{item.category}</td>
-            <td>$ {item.price}</td>
-            <td style={{ color: getStatus(item.stock).color }}>{item.stock}</td>
-            <td>{item.supplier}</td>
-            <td>
-              <div className={getStatus(item.stock).class}>
-                {getStatus(item.stock).class}
-              </div>
-            </td>
-            <td className="actions">
-              <button>
-                <EditOutlinedIcon />
-              </button>
-              <button>
-                <DeleteOutlinedIcon />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </Table>
+      <section className="Iventory-container">
+        <SearchFilter />
+        <Table Header={productColumns}>
+          {Products.map((item) => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.sku}</td>
+              <td>{item.category}</td>
+              <td>$ {item.price}</td>
+              <td style={{ color: getStatus(item.stock).color }}>
+                {item.stock}
+              </td>
+              <td>{item.supplier}</td>
+              <td>
+                <div className={getStatus(item.stock).class}>
+                  {getStatus(item.stock).class}
+                </div>
+              </td>
+              <td className="actions">
+                <button>
+                  <EditOutlinedIcon />
+                </button>
+                <button>
+                  <DeleteOutlinedIcon />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </Table>
+      </section>
     </>
   );
 }

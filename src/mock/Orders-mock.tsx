@@ -1,0 +1,81 @@
+import type { ListOrders } from "../Types/type";
+
+export const Orders: ListOrders = [
+  {
+    id: "ORD-2024-001",
+    customer: "Carlos Méndez",
+    email: "carlos@empresa.com",
+    product: 'Monitor Ultrawide 34"',
+    quantity: 2,
+    address: "Av. Reforma 450, CDMX",
+    notes: "Entregar en recepción",
+    date: "2024-08-15",
+    total: 1299.98,
+    status: "delivering",
+  },
+
+  {
+    id: "ORD-2024-002",
+    customer: "Lucía Vargas",
+    email: "lucia@empresa.com",
+    product: "Laptop Gaming X15",
+    quantity: 1,
+    address: "Calle Reforma 120, CDMX",
+    notes: "Entregar durante horario laboral",
+    date: "2024-08-18",
+    total: 1299.0,
+    status: "processing",
+  },
+
+  {
+    id: "ORD-2024-003",
+    customer: "Miguel Torres",
+    email: "miguel@empresa.com",
+    product: "Teclado Mecánico RGB",
+    quantity: 3,
+    address: "Av. Insurgentes 820, CDMX",
+    notes: "Sin instrucciones especiales",
+    date: "2024-08-20",
+    total: 387.0,
+    status: "pending",
+  },
+
+  {
+    id: "ORD-2024-004",
+    customer: "Ana Flores",
+    email: "ana@empresa.com",
+    product: "Mouse Inalámbrico",
+    quantity: 10,
+    address: "Calle Juárez 215, CDMX",
+    notes: "Llamar antes de entregar",
+    date: "2024-08-10",
+    total: 599.9,
+    status: "delivering",
+  },
+
+  {
+    id: "ORD-2024-005",
+    customer: "Roberto Kim",
+    email: "roberto@empresa.com",
+    product: "Disco SSD 1TB",
+    quantity: 5,
+    address: "Av. Universidad 340, CDMX",
+    notes: "Entregar en recepción",
+    date: "2024-08-12",
+    total: 495.0,
+    status: "canceled",
+  },
+
+  {
+    id: "ORD-2024-006",
+    customer: "Sofía Ramírez",
+    email: "sofia@empresa.com",
+    product: "Auriculares Noise Cancel",
+    quantity: 1,
+    address: "Calle Roma 78, CDMX",
+    notes: "Entregar personalmente",
+    date: "2024-08-21",
+    total: 299.0,
+    status: "pending",
+  },
+];

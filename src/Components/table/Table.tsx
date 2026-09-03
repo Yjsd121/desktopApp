@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { ListHeader } from "../../type";
+import type { ListHeader } from "../../Types/type";
 
 interface TableProps {
   Header: ListHeader;

@@ -1,4 +1,4 @@
-.Iventory-container{
+.Iventory-container {
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,7 @@
 /* TODO ESTO ES LO DE LA TABLA */
 .Inventory-Table {
   height: 75%;
+  max-height: 600px;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -42,6 +43,9 @@
 }
 
 .Products-Table th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   padding: 16px 18px;
   text-align: left;
   color: rgba(255, 249, 249, 0.692);
@@ -49,13 +53,14 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  background: rgba(20, 30, 50, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .Products-Table tbody tr {
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .Products-Table tbody tr:not(:last-child) td {
@@ -124,16 +129,15 @@
 
 .actions button {
   padding: 5px;
-  border-radius: 10PX;
+  border-radius: 10px;
   outline: none;
   border: none;
   color: #0b1428;
   background: #00d4c7;
   font-weight: bold;
-
-  transition: all ease .2s;
+  transition: all ease 0.2s;
 }
 
 .actions button:active {
-  scale: .8;
+  scale: 0.8;
 }

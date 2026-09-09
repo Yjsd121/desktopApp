@@ -3,6 +3,13 @@
 .env.*
 !.env.example
 
+dev.db
+dev.db-journal
+generated/
+
+*.db
+*.db-journal
+
 # Dependencies
 node_modules/
 

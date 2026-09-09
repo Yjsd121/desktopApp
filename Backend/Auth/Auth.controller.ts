@@ -1,29 +1,30 @@
 import type { Request, Response } from "express";
+import { prisma } from "../DataBase/prisma.js";
 
-import jwt from "jsonwebtoken";
-import * as bcrypt from "bcrypt";
+// import jwt from "jsonwebtoken";
+
+// import * as bcrypt from "bcrypt";
 
 export const AuthLogin = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body as {
-      email?: string;
-      password?: string;
+    const { emailbody, pass } = req.body as {
+      emailbody?: string;
+      pass?: string;
     };
 
-    if (!email || !password) {
+    if (!emailbody || !pass) {
       res.status(404).json({
         ok: false,
         message: "Data is missing",
       });
     }
-    
-    // aquí ira la petición a la base de datos 
-    const user = {
-      email: "admin",
-      password: "admin",
-    };
 
+    const user = await prisma.user.findMany()
 
+    return res.status(200).json({
+      ok: true,
+      message: user,
+    });
   } catch (err) {
     console.log(err);
     res.status(400).json({

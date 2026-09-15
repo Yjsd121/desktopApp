@@ -1,5 +1,7 @@
 import "./Login.css";
 
+import { Loginform } from "./forms/login";
+
 import statsMock from "../mock/minichards";
 import ViewQuiltTwoToneIcon from "@mui/icons-material/ViewQuiltTwoTone";
 export function Login() {
@@ -30,21 +32,7 @@ export function Login() {
         <footer>Created by Yader Saenz</footer>
       </div>
       <section className="FORM-container">
-        <form className="Form">
-          <div>
-            <h3>Bienvenido</h3>
-            <p>Inicia sesión para continuar</p>
-          </div>
-          <div className="input-container">
-            <label>User</label>
-            <input type="text" placeholder="example@company.com" />
-          </div>
-          <div className="input-container">
-            <label>Password</label>
-            <input type="password" placeholder="*********" />
-          </div>
-          <button>Login</button>
-        </form>
+        <Loginform />
       </section>
     </section>
   );

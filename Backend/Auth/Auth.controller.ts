@@ -38,6 +38,7 @@ export const AuthLogin = async (req: Request, res: Response) => {
           message: "JWT not configurated",
         });
       }
+
       const token = jwt.sign(
         {
           id: credentials?.User_id,
@@ -51,8 +52,7 @@ export const AuthLogin = async (req: Request, res: Response) => {
 
       return res.status(200).json({
         ok: true,
-        token: token,
-        Pass: isvalid,
+        token: token
       });
     }
     return res.status(401).json({

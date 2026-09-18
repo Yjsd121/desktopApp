@@ -13,20 +13,19 @@ export async function GetMe(req: Request, res: Response) {
       select: {
         username: true,
         email: true,
-        role: true,
       },
       where: { User_id: req.user.id },
     });
-
     if (!InfoMe) {
       return res.status(404).json({
         ok: false,
         message: "Not found",
       });
     }
+
     res.status(200).json({
       ok: true,
-      Data: InfoMe,
+      InfoMe,
     });
   } catch (err) {
     console.log(err);

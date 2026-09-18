@@ -1,36 +1,40 @@
 import type React from "react";
 import { useState } from "react";
-import { APIURL } from "../../API/apis";
-interface loginSucess {
-  
-    ok: boolean;
-    token: string;
+import { handleInfoUser, HandleLogin } from "../utils/login";
+import type { InfoUser } from "../../Types/type";
+import { useNavigate } from "react-router-dom";
 
-  
+
+interface loginSucess {
+  ok: boolean;
+  token: string;
 }
+
 export function Loginform() {
   const [formData, setformData] = useState({
-    email: "",
+    emailbody: "",
     pass: "",
   });
+  const navigate = useNavigate();
   async function handlesubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
-    const response = await fetch(`${APIURL}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        pass: formData.pass,
-      }),
-    });
+    const response = await HandleLogin(formData.emailbody, formData.pass);
 
     const data: loginSucess = await response.json();
 
-    if(data.token){
-      
+    if (data.token) {
+      const InfoUser: InfoUser = await handleInfoUser(data.token);
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: InfoUser.username,
+          email: InfoUser.email,
+        }),
+      );
+      if (data.token && InfoUser) {
+        navigate("/Inventory");
+      }
     }
   }
   function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,9 +53,9 @@ export function Loginform() {
       <div className="input-container">
         <label>User</label>
         <input
-          id="pass"
-          name="pass"
-          value={formData.email}
+          id="emailbody"
+          name="emailbody"
+          value={formData.emailbody}
           onChange={handlechange}
           type="text"
           placeholder="example@company.com"
@@ -59,7 +63,14 @@ export function Loginform() {
       </div>
       <div className="input-container">
         <label>Password</label>
-        <input type="password" placeholder="*********" />
+        <input
+          id="pass"
+          name="pass"
+          value={formData.pass}
+          onChange={handlechange}
+          type="text"
+          placeholder="*********"
+        />
       </div>
       <button>Login</button>
     </form>

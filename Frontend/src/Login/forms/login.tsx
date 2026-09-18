@@ -1,6 +1,13 @@
 import type React from "react";
 import { useState } from "react";
+import { APIURL } from "../../API/apis";
+interface loginSucess {
+  
+    ok: boolean;
+    token: string;
 
+  
+}
 export function Loginform() {
   const [formData, setformData] = useState({
     email: "",
@@ -9,7 +16,22 @@ export function Loginform() {
   async function handlesubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
-    const response  = fetch(``)
+    const response = await fetch(`${APIURL}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        pass: formData.pass,
+      }),
+    });
+
+    const data: loginSucess = await response.json();
+
+    if(data.token){
+      
+    }
   }
   function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
     setformData({

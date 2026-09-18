@@ -18,6 +18,11 @@ export const AuthLogin = async (req: Request, res: Response) => {
     }
 
     const user = await prisma.user.findMany({
+      select: {
+        User_id: true,
+        role: true,
+        password: true,
+      },
       where: { email: emailbody },
     });
 
@@ -52,7 +57,7 @@ export const AuthLogin = async (req: Request, res: Response) => {
 
       return res.status(200).json({
         ok: true,
-        token: token
+        token: token,
       });
     }
     return res.status(401).json({

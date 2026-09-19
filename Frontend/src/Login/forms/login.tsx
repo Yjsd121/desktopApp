@@ -3,7 +3,8 @@ import { useState } from "react";
 import { handleInfoUser, HandleLogin } from "../utils/login";
 import type { InfoUser } from "../../Types/type";
 import { useNavigate } from "react-router-dom";
-
+import { Eye, EyeOff } from "lucide";
+import { MorphIcon } from "morphicons/react";
 
 interface loginSucess {
   ok: boolean;
@@ -16,6 +17,7 @@ export function Loginform() {
     pass: "",
   });
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   async function handlesubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
@@ -50,29 +52,37 @@ export function Loginform() {
         <h3>Bienvenido</h3>
         <p>Inicia sesión para continuar</p>
       </div>
-      <div className="input-container">
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
         <label>User</label>
-        <input
-          id="emailbody"
-          name="emailbody"
-          value={formData.emailbody}
-          onChange={handlechange}
-          type="text"
-          placeholder="example@company.com"
-        />
+        <div className="input-container">
+          <input
+            id="emailbody"
+            name="emailbody"
+            value={formData.emailbody}
+            onChange={handlechange}
+            type="text"
+            placeholder="example@company.com"
+          />
+        </div>
       </div>
-      <div className="input-container">
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
         <label>Password</label>
-        <input
-          id="pass"
-          name="pass"
-          value={formData.pass}
-          onChange={handlechange}
-          type="text"
-          placeholder="*********"
-        />
+        <div className="input-container">
+          <input
+            id="pass"
+            name="pass"
+            value={formData.pass}
+            onChange={handlechange}
+            type={showPassword ? "text" : "password"}
+            placeholder="*********"
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+            <MorphIcon icon={showPassword ? Eye : EyeOff} />
+          </button>
+        </div>
       </div>
-      <button>Login</button>
+
+      <button className="loginbutton">Login</button>
     </form>
   );
 }

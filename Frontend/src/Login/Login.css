@@ -121,31 +121,43 @@
 
 .input-container {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: space-around;
+  height: 45px;
+  background: rgba(197, 211, 255, 0.171);
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  border-radius: 12px;
+  padding: 10px;
 }
 
 .input-container label {
   color: #bcc3ce;
-
 }
 
-.input-container input {
-  box-sizing: border-box;
-  height: 45px;
-  border-radius: 12px;
-  background: rgba(197, 211, 255, 0.171);
+.input-container>input {
+  background: transparent;
   border: none;
-  padding: 10px;
-  transition: all ease .3s;
   color: white;
+  height: 100%;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+  border-radius: 12px;
 }
 
-.input-container input:focus {
-  outline: solid 1px #00d4c7;
+
+.input-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  color: #bcc3ce;
+  width: 50px;
 }
 
-.Form button {
+.Form .loginbutton {
   height: 40px;
   border-radius: 10PX;
   outline: none;

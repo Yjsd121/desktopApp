@@ -1,15 +1,10 @@
 import type React from "react";
 import { useState } from "react";
 import { handleInfoUser, HandleLogin } from "../utils/login";
-import type { InfoUser } from "../../Types/type";
+import type { InfoUser, loginSucess } from "../../Types/type";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide";
 import { MorphIcon } from "morphicons/react";
-
-interface loginSucess {
-  ok: boolean;
-  token: string;
-}
 
 export function Loginform() {
   const [formData, setformData] = useState({
@@ -18,6 +13,7 @@ export function Loginform() {
   });
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+
   async function handlesubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
@@ -26,11 +22,12 @@ export function Loginform() {
     const data: loginSucess = await response.json();
 
     if (data.token) {
+      window.localStorage.setItem("token", data.token);
       const InfoUser: InfoUser = await handleInfoUser(data.token);
       window.localStorage.setItem(
         "user",
         JSON.stringify({
-          name: InfoUser.username,
+          username: InfoUser.username,
           email: InfoUser.email,
         }),
       );

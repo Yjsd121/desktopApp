@@ -4,7 +4,7 @@ export function getStatus(value: number) {
       color: "#79cf6e",
       class: "active",
     };
-  } else if (value < 10 && value > 1) {
+  } else if (value <= 10 && value > 1) {
     return {
       color: "#eeb64d",
       class: "LowStock",

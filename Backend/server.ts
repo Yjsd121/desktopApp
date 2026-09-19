@@ -5,6 +5,7 @@ import cors from "cors";
 import AuthRoutes from "./Auth/Auth.routes.js";
 import { AuthMiddleware } from "./middleware/auth.middleware.js";
 import UserRoutes from "./Users/User.routes.js";
+import ProductsRoutes from "./products/products.routes.js";
 const app = express();
 const port = 3000;
 
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use("/", AuthRoutes);
 app.use(AuthMiddleware);
 app.use("/User", UserRoutes);
+app.use("/Inventory", ProductsRoutes);
+
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server listening in http://localhost:${port}`);

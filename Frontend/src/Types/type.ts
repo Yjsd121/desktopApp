@@ -1,4 +1,4 @@
-import type { StatusType} from "./consts";
+import type { StatusType } from "./consts";
 
 export interface Header {
   key: string;
@@ -24,8 +24,11 @@ export interface Order {
 
 export type ListOrders = Order[];
 
-
 export interface InfoUser {
   username: string;
   email: string;
+}
+export interface loginSucess {
+  ok: boolean;
+  token: string;
 }

@@ -22,15 +22,27 @@ model User {
   createdAt DateTime @default(now())
 }
 
+model Supplier {
+  id            Int     @id @default(autoincrement())
+  Supplier_id   String  @unique 
+  name          String 
+  contact_name  String 
+  email         String
+  phone         String
+  address       String
+  status        String
+  created_at    DateTime @default(now())
+}
+
 model Product { 
-  id Int @id @default(autoincrement())
-  sku String
-  name String
-  category String
-  status String
-  stock Int
-  price Float
-  supplier String
-  description String
-  image String
+  id             Int @id @default(autoincrement())
+  sku            String
+  name           String
+  category       String
+  status         String
+  stock          Int
+  price          Float
+  supplier       String
+  description    String
+  image          String
 }

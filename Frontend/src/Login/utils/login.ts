@@ -23,5 +23,5 @@ export async function handleInfoUser(token: string) {
     },
   });
   const data = await response.json();
-  return data.InfoMe;
+  return data.InfoMe[0];
 }

@@ -8,3 +8,12 @@ export const productColumns = [
   { key: "status", label: "Status" },
   { key: "actions", label: "Actions" },
 ];
+
+export const supplier = [
+  { key: "name", Label: "Name" },
+  { key: "contact_name", Label: "ContactName" },
+  { key: "email", Label: "Email" },
+  { key: "phone", Label: "ContactPhone" },
+  { key: "address", Label: "Address" },
+  { key: "status", Label: "Status" },
+];

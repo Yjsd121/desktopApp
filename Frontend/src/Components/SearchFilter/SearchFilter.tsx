@@ -1,17 +1,20 @@
 import "./SearchFilter.css";
-export function SearchFilter() {
+import type { ListFilters } from "../../Types/type";
+interface SearchFilterProps {
+  filters: ListFilters;
+}
+export function SearchFilter({ filters }: SearchFilterProps) {
   return (
     <section className="SearchFilters-container">
       <input />
       <div className="filters-Side">
-        <select>
-          <option>Select</option>
-          <option>Select</option>
-          <option>Select</option>
-        </select>
-        <select>
-          <option>select2</option>
-        </select>
+        {filters.map((filter) => (
+          <select key={filter.name}>
+            {filter.options.map((options) => (
+              <option key={options.key}>{options.option}</option>
+            ))}
+          </select>
+        ))}
         <button>+ Nuevo producto </button>
       </div>
     </section>

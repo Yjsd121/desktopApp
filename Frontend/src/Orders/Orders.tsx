@@ -4,6 +4,7 @@ import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
 import { Orders } from "../mock/Orders-mock";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import { useState } from "react";
+import { StatusFilters } from "../static/Filters";
 
 export function OrderView() {
   const [exppanded, setexpanded] = useState("");
@@ -51,7 +52,7 @@ export function OrderView() {
           </form>
         </section>
         <section className="OrderSide">
-          <SearchFilter />
+          <SearchFilter filters={StatusFilters} />
           <div className="Cards-container">
             {Orders.map((item) => (
               <section className="Overflow">

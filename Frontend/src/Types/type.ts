@@ -27,8 +27,32 @@ export type ListOrders = Order[];
 export interface InfoUser {
   username: string;
   email: string;
+  role: string;
 }
 export interface loginSucess {
   ok: boolean;
   token: string;
 }
+
+export interface Producttype {
+  id: number;
+  sku: string;
+  name: string;
+  category: string;
+  status: string;
+  stock: number;
+  price: number;
+  supplier: string;
+  description: string;
+  image: string;
+}
+export interface FilterOption {
+  key: string;
+  option: string;
+}
+export interface Filter {
+  name: string;
+  options: FilterOption[];
+}
+
+export type ListFilters = Filter[];

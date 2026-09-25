@@ -6,24 +6,14 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import { getStatus } from "./utilities/getStatus";
-import { productColumns } from "../static/ProductsHeader";
+import { productColumns } from "../static/TableHeaders";
 import { Table } from "../Components/table/Table";
 import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
 import { APIURL } from "../API/apis";
 import { useEffect, useState } from "react";
+import type { Producttype } from "../Types/type";
 
-interface Producttype {
-  id: number;
-  sku: string;
-  name: string;
-  category: string;
-  status: string;
-  stock: number;
-  price: number;
-  supplier: string;
-  description: string;
-  image: string;
-}
+import { StatusFilters } from "../static/Filters";
 
 export function InevntoryView() {
   const token = window.localStorage.getItem("token");
@@ -57,7 +47,7 @@ export function InevntoryView() {
     <>
       <Barnav />
       <section className="Iventory-container">
-        <SearchFilter />
+        <SearchFilter filters={StatusFilters} />
         <Table Header={productColumns}>
           {Product.map((item) => (
             <tr key={item.id}>

@@ -56,6 +56,13 @@
   opacity: .5;
 }
 
+.logoutButtonclick {
+  display: flex;
+  background-color: transparent;
+  border: none;
+  
+}
+
 .Logoutbutton {
   color: rgba(255, 251, 251, 0.329);
 }

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { InevntoryView } from "./Inventory/Inventory";
 import { Login } from "./Login/Login";
 import { OrderView } from "./Orders/Orders";
+import { Suppliers } from "./suppliers/suppliers";
 
 export function Router() {
   return (
@@ -11,6 +12,7 @@ export function Router() {
         <Route path="/" element={<Login />} />
         <Route path="/Inventory" element={<InevntoryView />} />
         <Route path="/Orders" element={<OrderView />} />
+        <Route path="/Suppliers" element={<Suppliers/>} />
       </Routes>
     </BrowserRouter>
   );

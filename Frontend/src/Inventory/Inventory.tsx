@@ -1,34 +1,31 @@
 import "./Inventory.css";
-
-import { Barnav } from "../Components/Barnav/Barnav";
+import { useEffect, useState } from "react";
+import type { Producttype } from "../Types/type";
 
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import { getStatus } from "./utilities/getStatus";
-import { productColumns } from "../static/TableHeaders";
+import { getProducts } from "./utilities/request";
+
+import { Barnav } from "../Components/Barnav/Barnav";
 import { Table } from "../Components/table/Table";
 import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
-import { APIURL } from "../API/apis";
-import { useEffect, useState } from "react";
-import type { Producttype } from "../Types/type";
 
+import { productColumns } from "../static/TableHeaders";
 import { StatusFilters } from "../static/Filters";
+import { Modal } from "../Components/Modal/Modal";
 
 export function InevntoryView() {
   const token = window.localStorage.getItem("token");
   const [Product, setProduct] = useState<Producttype[]>([]);
+  const [OpenModal, setOPenModal] = useState(false);
   async function handlegetInventory() {
-    const response = await fetch(`${APIURL}/Inventory`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-
+    if (!token) {
+      return;
+    }
+    const response = await getProducts(token);
     const data = await response.json();
-
     return data.Allproducts;
   }
 
@@ -65,7 +62,11 @@ export function InevntoryView() {
                 </div>
               </td>
               <td className="actions">
-                <button>
+                <button
+                  onClick={() => {
+                    setOPenModal(true);
+                  }}
+                >
                   <EditOutlinedIcon />
                 </button>
                 <button>
@@ -76,6 +77,7 @@ export function InevntoryView() {
           ))}
         </Table>
       </section>
+      {OpenModal && <Modal />}
     </>
   );
 }

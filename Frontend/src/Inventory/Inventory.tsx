@@ -13,8 +13,9 @@ import { Table } from "../Components/table/Table";
 import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
 
 import { productColumns } from "../static/TableHeaders";
-import { StatusFilters } from "../static/Filters";
+import { ProductsFilters } from "../static/Filters.ts";
 import { Modal } from "../Components/Modal/Modal";
+import { NewProductForm } from "./utilities/NewproductForm";
 
 export function InevntoryView() {
   const token = window.localStorage.getItem("token");
@@ -43,8 +44,8 @@ export function InevntoryView() {
   return (
     <>
       <Barnav />
-      <section className="Iventory-container">
-        <SearchFilter filters={StatusFilters} />
+      <section className="Inventory-container">
+        <SearchFilter filters={ProductsFilters} setOpenModal={setOPenModal} />
         <Table Header={productColumns}>
           {Product.map((item) => (
             <tr key={item.id}>
@@ -77,7 +78,11 @@ export function InevntoryView() {
           ))}
         </Table>
       </section>
-      {OpenModal && <Modal />}
+      {OpenModal && (
+        <Modal>
+          <NewProductForm SetOpenModal={setOPenModal} />
+        </Modal>
+      )}
     </>
   );
 }

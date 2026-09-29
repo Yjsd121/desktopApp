@@ -13,3 +13,185 @@ body {
   color: white;
   height: 100vh;
 }
+
+
+/*form style*/
+.Modal-container .Form-Style {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-width: 100%;
+  padding: 28px 24px 23px;
+  box-sizing: border-box;
+  gap: 16px;
+  background: #11182b;
+  border: 1px solid #30415d;
+  border-radius: 16px;
+}
+
+.Modal-container .Form-Style .Form-header {
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+.Modal-container .Form-Style .Form-header label {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #f1f5f9;
+}
+
+
+.Modal-container .Form-Style section {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.Modal-container .Form-Style .Form-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 6px;
+}
+
+.Modal-container .Form-Style section .Form-input-container {
+  flex: 1;
+}
+
+.Modal-container .Form-Style .Form-input-container label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #91a0b8;
+}
+
+
+.Modal-container .Form-Style input,
+.Modal-container .Form-Style select {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: #1d2a40;
+  color: #dce5f2;
+  border: 1px solid #344762;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.Modal-container .Form-Style input::placeholder {
+  color: #7d899d;
+}
+
+.Modal-container .Form-Style input:focus,
+.Modal-container .Form-Style select:focus {
+  border-color: #00b5ad;
+  background: #202e45;
+}
+
+.Modal-container .Form-Style select {
+  cursor: pointer;
+}
+
+
+.Modal-container .Form-Style .Form-actions {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.Modal-container .Form-Style .Form-actions button {
+  width: 100%;
+  height: 38px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.Modal-container .Form-Style .Form-actions button:first-child {
+  background: transparent;
+  color: #a7b3c7;
+  border: 1px solid #41536f;
+}
+
+.Modal-container .Form-Style .Form-actions button:last-child {
+  background: #00b8ad;
+  color: #07121b;
+  border: 1px solid #00b8ad;
+}
+
+.Modal-container .Form-Style .Form-actions button:first-child:hover {
+  background: #18243a;
+  border-color: #60738f;
+}
+
+.Modal-container .Form-Style .Form-actions button:last-child:hover {
+  background: #00c7bb;
+  border-color: #00c7bb;
+}
+
+.Modal-container .Form-Style .Form-actions button:active {
+  transform: scale(0.98);
+}
+
+.Modal-container .Form-Style textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: #1d2a40;
+  color: #dce5f2;
+  border: 1px solid #344762;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  resize: vertical;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.Modal-container .Form-Style textarea::placeholder {
+  color: #7d899d;
+}
+
+.Modal-container .Form-Style textarea:focus {
+  border-color: #00b5ad;
+  background: #202e45;
+}
+
+@media (max-width: 500px) {
+  .Modal-container .Form-Style {
+    width: 100%;
+    padding: 24px 20px 20px;
+  }
+
+  .Modal-container .Form-Style section {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .Modal-container .Form-Style .Form-actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -1,4 +1,4 @@
-.Iventory-container {
+.Inventory-container {
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -8,21 +8,8 @@
 
 .Inventory-Table {
   width: 100%;
+  min-height: 0;
   box-sizing: border-box;
-}
-
-
-/* TODO ESTO ES LO DE LA TABLA */
-.Inventory-Table {
-  height: 75%;
-  max-height: 600px;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.Inventory-Table::-webkit-scrollbar {
-  display: none;
 }
 
 .Products-Table {
@@ -39,13 +26,13 @@
 }
 
 .Products-Table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .Products-Table th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   padding: 16px 18px;
   text-align: left;
   color: rgba(255, 249, 249, 0.692);
@@ -59,8 +46,28 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.Products-Table tbody {
+  display: block;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.Products-Table tbody::-webkit-scrollbar {
+  display: none;
+}
+
 .Products-Table tbody tr {
-  transition: background 0.2s ease, transform 0.2s ease;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .Products-Table tbody tr:not(:last-child) td {

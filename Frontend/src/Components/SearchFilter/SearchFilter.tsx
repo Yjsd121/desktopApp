@@ -1,9 +1,11 @@
 import "./SearchFilter.css";
 import type { ListFilters } from "../../Types/type";
+import type React from "react";
 interface SearchFilterProps {
   filters: ListFilters;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function SearchFilter({ filters }: SearchFilterProps) {
+export function SearchFilter({ filters, setOpenModal }: SearchFilterProps) {
   return (
     <section className="SearchFilters-container">
       <input />
@@ -15,7 +17,13 @@ export function SearchFilter({ filters }: SearchFilterProps) {
             ))}
           </select>
         ))}
-        <button>+ Nuevo producto </button>
+        <button
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        >
+          + Nuevo producto{" "}
+        </button>
       </div>
     </section>
   );

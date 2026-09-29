@@ -1,10 +1,13 @@
+import type { ReactNode } from "react";
 import "./Modal.css";
-export function Modal() {
+
+interface Modalprop {
+  children: ReactNode;
+}
+export function Modal({ children }: Modalprop) {
   return (
     <section className="Modal-overlay">
-      <div className="Modal-container">
-        <h2>Hola modal</h2>
-      </div>
+      <div className="Modal-container">{children}</div>
     </section>
   );
 }

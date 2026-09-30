@@ -1,0 +1,2400 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+public/
+  favicon.svg
+  icons.svg
+  UserDefault.png
+src/
+  renderer/
+    API/
+      apis.ts
+    assets/
+      hero.png
+      react.svg
+      vite.svg
+    Components/
+      Barnav/
+        Barnav.css
+        Barnav.tsx
+      Modal/
+        Modal.css
+        Modal.tsx
+      SearchFilter/
+        SearchFilter.css
+        SearchFilter.tsx
+      table/
+        Table.tsx
+    Inventory/
+      utilities/
+        getStatus.ts
+        NewproductForm.tsx
+        request.ts
+      Inventory.css
+      Inventory.tsx
+    Login/
+      forms/
+        login.tsx
+      utils/
+        login.ts
+      Login.css
+      Login.tsx
+    mock/
+      minichards.tsx
+      Orders-mock.tsx
+      Products-table.tsx
+    Orders/
+      Orders.css
+      Orders.tsx
+    static/
+      Filters.ts
+      TableHeaders.tsx
+    suppliers/
+      suppliers.tsx
+    Types/
+      consts.ts
+      type.ts
+    App.css
+    App.tsx
+    index.css
+    main.tsx
+    Router.tsx
+    vite-env.d.ts
+.env.example
+.gitignore
+.oxlintrc.json
+index.html
+package.json
+README.md
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/renderer/API/apis.ts">
+export const APIURL = import.meta.env.VITE_API_URL
+</file>
+
+<file path="src/renderer/assets/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="src/renderer/assets/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="src/renderer/Components/Barnav/Barnav.css">
+.Barnav-container {
+  display: flex;
+  padding: 10px 25px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.144);
+}
+
+.Logo-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.Logo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.Nav {
+  display: flex;
+  gap: 10px;
+
+}
+
+.Nav>* {
+  color: #e2e8f0;
+  opacity: .5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  transition: all ease .2s;
+}
+
+.Nav>*:hover {
+  opacity: 1;
+}
+
+.User-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.User-container img {
+  width: 35px;
+}
+
+.Info-user {
+  text-align: right;
+}
+
+.Info-user>:not(:first-child) {
+  opacity: .5;
+}
+
+.logoutButtonclick {
+  display: flex;
+  background-color: transparent;
+  border: none;
+  
+}
+
+.Logoutbutton {
+  color: rgba(255, 251, 251, 0.329);
+}
+
+.Logoutbutton:hover {
+  color: rgba(238, 103, 103, 0.671);
+}
+</file>
+
+<file path="src/renderer/Components/Barnav/Barnav.tsx">
+import "./Barnav.css";
+
+import ViewQuiltTwoToneIcon from "@mui/icons-material/ViewQuiltTwoTone";
+import HexagonOutlinedIcon from "@mui/icons-material/HexagonOutlined";
+import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import { NavLink, useNavigate } from "react-router-dom";
+import type { InfoUser } from "../../Types/type";
+
+export function Barnav() {
+  const navigate = useNavigate();
+  const User = window.localStorage.getItem("user");
+  const InfoUser: InfoUser = User ? JSON.parse(User) : null;
+
+  function handleLogout() {
+    window.localStorage.clear();
+    navigate("/");
+  }
+  return (
+    <section className="Barnav-container">
+      <div className="Logo-container">
+        <div className="Logo">
+          <ViewQuiltTwoToneIcon />
+          <h3>Inventario</h3>
+        </div>
+        <div className="Nav">
+          <NavLink to="/Inventory">
+            <HexagonOutlinedIcon /> Inventario
+          </NavLink>
+          <NavLink to="/Orders">
+            <BeenhereOutlinedIcon />
+            Ordernes
+          </NavLink>
+          <NavLink to="/Suppliers">
+            <BeenhereOutlinedIcon />
+            Suppliers
+          </NavLink>
+        </div>
+      </div>
+      <div className="User-container">
+        <div className="Info-user">
+          <p>{InfoUser.username}</p>
+          <p>{InfoUser.role}</p>
+        </div>
+        <img src="./UserDefault.png" />
+        <button className="logoutButtonclick" onClick={handleLogout}>
+          <LoginOutlinedIcon className="Logoutbutton" />
+        </button>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/renderer/Components/Modal/Modal.css">
+.Modal-overlay {
+  z-index: 9999;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.377);
+}
+
+.Modal-container {
+  border-radius: 10px;
+  padding: 10px;
+  overflow-y: auto;
+}
+</file>
+
+<file path="src/renderer/Components/Modal/Modal.tsx">
+import type { ReactNode } from "react";
+import "./Modal.css";
+
+interface Modalprop {
+  children: ReactNode;
+}
+export function Modal({ children }: Modalprop) {
+  return (
+    <section className="Modal-overlay">
+      <div className="Modal-container">{children}</div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/renderer/Components/SearchFilter/SearchFilter.css">
+.SearchFilters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  padding-bottom: 20px;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+}
+
+.SearchFilters-container input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 45px;
+  border-radius: 12px;
+  background: rgba(197, 211, 255, 0.171);
+  border: none;
+  padding: 10px;
+  transition: all ease .3s;
+  color: white;
+}
+
+.filters-Side {
+  display: flex;
+  gap: 10px;
+}
+
+.filters-Side button {
+  width: 150px;
+  border-radius: 10PX;
+  outline: none;
+  border: none;
+  color: #0b1428;
+  background: #00d4c7;
+  font-weight: bold;
+  font-size: 16px;
+
+  transition: all ease .2s;
+}
+
+.filters-Side button:active {
+  scale: .8;
+}
+
+.filters-Side select {
+  width: 153px;
+  height: 38px;
+  background-color: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #00a8a8;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.filters-Side select:focus {
+  border-color: #00d4d4;
+}
+
+.filters-Side select option {
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 10px;
+}
+
+.filters-Side select option:checked {
+  background-color: #1769d1;
+  color: white;
+}
+</file>
+
+<file path="src/renderer/Components/SearchFilter/SearchFilter.tsx">
+import "./SearchFilter.css";
+import type { ListFilters } from "../../Types/type";
+import type React from "react";
+interface SearchFilterProps {
+  filters: ListFilters;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export function SearchFilter({ filters, setOpenModal }: SearchFilterProps) {
+  return (
+    <section className="SearchFilters-container">
+      <input />
+      <div className="filters-Side">
+        {filters.map((filter) => (
+          <select key={filter.name}>
+            {filter.options.map((options) => (
+              <option key={options.key}>{options.option}</option>
+            ))}
+          </select>
+        ))}
+        <button
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        >
+          + Nuevo producto{" "}
+        </button>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/renderer/Components/table/Table.tsx">
+import type { ReactNode } from "react";
+import type { ListHeader } from "../../Types/type";
+
+interface TableProps {
+  Header: ListHeader;
+  children: ReactNode;
+}
+
+export function Table(Props: TableProps) {
+  return (
+    <section className="Inventory-Table">
+      <table className="Products-Table">
+        <thead>
+          <tr>
+            {Props.Header.map((item) => (
+              <th key={item.key}>{item.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{Props.children}</tbody>
+      </table>
+    </section>
+  );
+}
+</file>
+
+<file path="src/renderer/Inventory/utilities/getStatus.ts">
+export function getStatus(value: number) {
+  if (value > 10) {
+    return {
+      color: "#79cf6e",
+      class: "active",
+    };
+  } else if (value <= 10 && value > 1) {
+    return {
+      color: "#eeb64d",
+      class: "LowStock",
+    };
+  } else {
+    return {
+      color: "#ec6363",
+      class: "offStock",
+    };
+  }
+}
+</file>
+
+<file path="src/renderer/Inventory/utilities/NewproductForm.tsx">
+import type React from "react";
+import { ProductsFilters } from "../../static/Filters";
+import { useState } from "react";
+interface FormProp {
+  SetOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export function NewProductForm({ SetOpenModal }: FormProp) {
+  const [ProductInfo, setProductInfo] = useState({
+    name: "",
+    category: "",
+    price: "",
+    stock: "",
+    supplier: "",
+    description: "",
+  });
+
+  const Category = ProductsFilters[1];
+  return (
+    <form className="Form-Style">
+      <div className="Form-header">
+        <label>New Product</label>
+      </div>
+      <div className="Form-input-container">
+        <label>Name</label>
+        <input />
+      </div>
+      <section>
+        <div className="Form-input-container">
+          <label>SKU</label>
+          <input />
+        </div>
+
+        <div className="Form-input-container">
+          <label>Category</label>
+          <select>
+            <option>All</option>
+            {Category.options.map((item) => (
+              <option key={item.key}>{item.option}</option>
+            ))}
+          </select>
+        </div>
+      </section>
+      <section>
+        <div className="Form-input-container">
+          <label>Price (C$)</label>
+          <input />
+        </div>
+        <div className="Form-input-container">
+          <label>Stock</label>
+          <input />
+        </div>
+      </section>
+      <div className="Form-input-container">
+        <label>Proveedor</label>
+        <input />
+      </div>
+      <div className="Form-input-container">
+        <label>Description</label>
+        <textarea />
+      </div>
+      <div className="Form-actions">
+        <button
+          type="button"
+          onClick={() => {
+            SetOpenModal(false);
+          }}
+        >
+          Cancelar
+        </button>
+        <button type="submit">Crear Producto</button>
+      </div>
+    </form>
+  );
+}
+</file>
+
+<file path="src/renderer/Inventory/utilities/request.ts">
+import { APIURL } from "../../API/apis";
+
+export async function getProducts(token: string) {
+  const response = await fetch(`${APIURL}/Inventory`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response;
+}
+</file>
+
+<file path="src/renderer/Inventory/Inventory.css">
+.Inventory-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+}
+
+.Inventory-Table {
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.Products-Table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.Products-Table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.Products-Table th {
+  padding: 16px 18px;
+  text-align: left;
+  color: rgba(255, 249, 249, 0.692);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(20, 30, 50, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.Products-Table tbody {
+  display: block;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.Products-Table tbody::-webkit-scrollbar {
+  display: none;
+}
+
+.Products-Table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.Products-Table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.Products-Table td {
+  padding: 17px 18px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.015);
+  transition: background 0.2s ease;
+}
+
+.Products-Table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.Products-Table td:first-child {
+  font-weight: 600;
+}
+
+.Products-Table td:nth-child(2) {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: monospace;
+}
+
+.Products-Table td:nth-child(4) {
+  color: #5baca4;
+  font-weight: 600;
+}
+
+.Products-Table td:nth-child(5) {
+  text-align: left;
+  font-weight: bold;
+}
+
+.active {
+  color: #79cf6e;
+  width: fit-content;
+  padding: 3px;
+  border: solid 2px #184b12;
+  border-radius: 5px;
+}
+
+.LowStock {
+  width: fit-content;
+  color: #eeb64d;
+  padding: 3px;
+  border: solid 2px #644d21;
+  border-radius: 5px;
+}
+
+.offStock {
+  color: #ec6363;
+  width: fit-content;
+  padding: 3px;
+  border: solid 2px #5c2525;
+  border-radius: 5px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 5px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  color: #0b1428;
+  background: #00d4c7;
+  font-weight: bold;
+  transition: all ease 0.2s;
+}
+
+.actions button:active {
+  scale: 0.8;
+}
+</file>
+
+<file path="src/renderer/Inventory/Inventory.tsx">
+import "./Inventory.css";
+import { useEffect, useState } from "react";
+import type { Producttype } from "../Types/type";
+
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
+import { getStatus } from "./utilities/getStatus";
+import { getProducts } from "./utilities/request";
+
+import { Barnav } from "../Components/Barnav/Barnav";
+import { Table } from "../Components/table/Table";
+import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
+
+import { productColumns } from "../static/TableHeaders";
+import { ProductsFilters } from "../static/Filters.ts";
+import { Modal } from "../Components/Modal/Modal";
+import { NewProductForm } from "./utilities/NewproductForm";
+
+export function InevntoryView() {
+  const token = window.localStorage.getItem("token");
+  const [Product, setProduct] = useState<Producttype[]>([]);
+  const [OpenModal, setOPenModal] = useState(false);
+  async function handlegetInventory() {
+    if (!token) {
+      return;
+    }
+    const response = await getProducts(token);
+    const data = await response.json();
+    return data.Allproducts;
+  }
+
+  useEffect(() => {
+    async function getProducts() {
+      const data = await handlegetInventory();
+      if (!data) {
+        return;
+      }
+      setProduct(data);
+    }
+
+    getProducts();
+  }, []);
+  return (
+    <>
+      <Barnav />
+      <section className="Inventory-container">
+        <SearchFilter filters={ProductsFilters} setOpenModal={setOPenModal} />
+        <Table Header={productColumns}>
+          {Product.map((item) => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.sku}</td>
+              <td>{item.category}</td>
+              <td>$ {item.price}</td>
+              <td style={{ color: getStatus(item.stock).color }}>
+                {item.stock}
+              </td>
+              <td>{item.supplier}</td>
+              <td>
+                <div className={getStatus(item.stock).class}>
+                  {getStatus(item.stock).class}
+                </div>
+              </td>
+              <td className="actions">
+                <button
+                  onClick={() => {
+                    setOPenModal(true);
+                  }}
+                >
+                  <EditOutlinedIcon />
+                </button>
+                <button>
+                  <DeleteOutlinedIcon />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </Table>
+      </section>
+      {OpenModal && (
+        <Modal>
+          <NewProductForm SetOpenModal={setOPenModal} />
+        </Modal>
+      )}
+    </>
+  );
+}
+</file>
+
+<file path="src/renderer/Login/forms/login.tsx">
+import type React from "react";
+import { useState } from "react";
+import { handleInfoUser, HandleLogin } from "../utils/login";
+import type { InfoUser, loginSucess } from "../../Types/type";
+import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide";
+import { MorphIcon } from "morphicons/react";
+
+export function Loginform() {
+  const [formData, setformData] = useState({
+    emailbody: "",
+    pass: "",
+  });
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  async function handlesubmit(e: React.SubmitEvent) {
+    e.preventDefault();
+
+    const response = await HandleLogin(formData.emailbody, formData.pass);
+
+    const data: loginSucess = await response.json();
+
+    if (data.token) {
+      window.localStorage.setItem("token", data.token);
+
+      const InfoUser: InfoUser = await handleInfoUser(data.token);
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: InfoUser.username,
+          email: InfoUser.email,
+          role: InfoUser.role,
+        }),
+      );
+      if (data.token && InfoUser) {
+        navigate("/Inventory");
+      }
+    }
+  }
+  function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
+    setformData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  return (
+    <form className="Form" onSubmit={handlesubmit}>
+      <div>
+        <h3>Bienvenido</h3>
+        <p>Inicia sesión para continuar</p>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+        <label>User</label>
+        <div className="input-container">
+          <input
+            id="emailbody"
+            name="emailbody"
+            value={formData.emailbody}
+            onChange={handlechange}
+            type="text"
+            placeholder="example@company.com"
+          />
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+        <label>Password</label>
+        <div className="input-container">
+          <input
+            id="pass"
+            name="pass"
+            value={formData.pass}
+            onChange={handlechange}
+            type={showPassword ? "text" : "password"}
+            placeholder="*********"
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+            <MorphIcon icon={showPassword ? Eye : EyeOff} />
+          </button>
+        </div>
+      </div>
+
+      <button className="loginbutton">Login</button>
+    </form>
+  );
+}
+</file>
+
+<file path="src/renderer/Login/utils/login.ts">
+import { APIURL } from "../../API/apis";
+export async function HandleLogin(email: string, pass: string) {
+  const response = await fetch(`${APIURL}`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      emailbody: email,
+      pass: pass,
+    }),
+  });
+
+  return response;
+}
+
+export async function handleInfoUser(token: string) {
+  const response = await fetch(`${APIURL}/User/getme`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await response.json();
+  return data.InfoMe[0];
+}
+</file>
+
+<file path="src/renderer/Login/Login.css">
+.Login-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.Branding {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  background-color: #0b1428;
+  background-image:
+    linear-gradient(rgba(0, 210, 190, 0.07) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(0, 210, 190, 0.07) 1px,
+      transparent 1px),
+    radial-gradient(circle at 0% 50%,
+      rgba(0, 190, 180, 0.16),
+      transparent 45%),
+    radial-gradient(circle at 70% 100%,
+      rgba(0, 120, 150, 0.12),
+      transparent 40%);
+
+  background-size:
+    40px 40px,
+    40px 40px,
+    100% 100%,
+    100% 100%;
+}
+
+.Branding header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.Branding .INFO {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.Branding .INFO span {
+  color: #2dd4bf;
+}
+
+.Branding .INFO h3 {
+  font-size: 64px;
+}
+
+.Branding .INFO p {
+  opacity: .5;
+}
+
+.Minicards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.Minicards-container>* {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 106px;
+  padding: 16px;
+  gap: 10px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background: rgba(116, 119, 117, 0.253);
+  border: 1px solid rgba(100, 140, 180, 0.18);
+}
+
+.Branding footer {
+  opacity: .3;
+}
+
+.stat-card :first-child {
+  width: 18px;
+  height: 18px;
+  color: #00d4c7;
+}
+
+.stat-card strong {
+  font-size: 21px;
+  font-weight: 700px;
+  line-height: 1;
+  color: #f5f7fa;
+}
+
+.stat-card span {
+  font-size: 12px;
+  color: #7185a5;
+}
+
+.FORM-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.FORM-container:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 400px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 45px;
+  background: rgba(197, 211, 255, 0.171);
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.input-container label {
+  color: #bcc3ce;
+}
+
+.input-container>input {
+  background: transparent;
+  border: none;
+  color: white;
+  height: 100%;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+  border-radius: 12px;
+}
+
+
+.input-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  color: #bcc3ce;
+  width: 50px;
+}
+
+.Form .loginbutton {
+  height: 40px;
+  border-radius: 10PX;
+  outline: none;
+  border: none;
+  color: #0b1428;
+  background: #00d4c7;
+  font-weight: bold;
+  font-size: 16px;
+}
+</file>
+
+<file path="src/renderer/Login/Login.tsx">
+import "./Login.css";
+
+import { Loginform } from "./forms/login";
+
+import statsMock from "../mock/minichards";
+import ViewQuiltTwoToneIcon from "@mui/icons-material/ViewQuiltTwoTone";
+
+export function Login() {
+  return (
+    <section className="Login-container">
+      <div className="Branding">
+        <header>
+          <ViewQuiltTwoToneIcon />
+          <h3>Inventario</h3>
+        </header>
+        <section className="INFO">
+          <span>Sistema de gestion</span>
+          <h3>Control total de tu Inventario</h3>
+          <p>
+            Gestiona productos, órdenes y proveedores desde un solo lugar.
+            Rápido, claro y siempre al día.
+          </p>
+        </section>
+        <section className="Minicards-container">
+          {statsMock.map((item) => (
+            <div className="stat-card" key={item.id}>
+              {item.icon}
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </section>
+        <footer>Created by Yader Saenz</footer>
+      </div>
+      <section className="FORM-container">
+        <Loginform />
+      </section>
+    </section>
+  );
+}
+</file>
+
+<file path="src/renderer/mock/minichards.tsx">
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import AssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+
+const statsMock = [
+  {
+    id: 1,
+    icon: <Inventory2OutlinedIcon />,
+    value: 8,
+    label: "Productos",
+  },
+  {
+    id: 2,
+    icon: <AssignmentTurnedInOutlinedIcon />,
+    value: 6,
+    label: "Órdenes",
+  },
+  {
+    id: 3,
+    icon: <GroupsOutlinedIcon />,
+    value: 5,
+    label: "Proveedores",
+  },
+];
+
+export default statsMock;
+</file>
+
+<file path="src/renderer/mock/Orders-mock.tsx">
+import type { ListOrders } from "../Types/type";
+
+export const Orders: ListOrders = [
+  {
+    id: "ORD-2024-001",
+    customer: "Carlos Méndez",
+    email: "carlos@empresa.com",
+    product: 'Monitor Ultrawide 34"',
+    quantity: 2,
+    address: "Av. Reforma 450, CDMX",
+    notes: "Entregar en recepción",
+    date: "2024-08-15",
+    total: 1299.98,
+    status: "delivering",
+  },
+
+  {
+    id: "ORD-2024-002",
+    customer: "Lucía Vargas",
+    email: "lucia@empresa.com",
+    product: "Laptop Gaming X15",
+    quantity: 1,
+    address: "Calle Reforma 120, CDMX",
+    notes: "Entregar durante horario laboral",
+    date: "2024-08-18",
+    total: 1299.0,
+    status: "processing",
+  },
+
+  {
+    id: "ORD-2024-003",
+    customer: "Miguel Torres",
+    email: "miguel@empresa.com",
+    product: "Teclado Mecánico RGB",
+    quantity: 3,
+    address: "Av. Insurgentes 820, CDMX",
+    notes: "Sin instrucciones especiales",
+    date: "2024-08-20",
+    total: 387.0,
+    status: "pending",
+  },
+
+  {
+    id: "ORD-2024-004",
+    customer: "Ana Flores",
+    email: "ana@empresa.com",
+    product: "Mouse Inalámbrico",
+    quantity: 10,
+    address: "Calle Juárez 215, CDMX",
+    notes: "Llamar antes de entregar",
+    date: "2024-08-10",
+    total: 599.9,
+    status: "delivering",
+  },
+
+  {
+    id: "ORD-2024-005",
+    customer: "Roberto Kim",
+    email: "roberto@empresa.com",
+    product: "Disco SSD 1TB",
+    quantity: 5,
+    address: "Av. Universidad 340, CDMX",
+    notes: "Entregar en recepción",
+    date: "2024-08-12",
+    total: 495.0,
+    status: "canceled",
+  },
+
+  {
+    id: "ORD-2024-006",
+    customer: "Sofía Ramírez",
+    email: "sofia@empresa.com",
+    product: "Auriculares Noise Cancel",
+    quantity: 1,
+    address: "Calle Roma 78, CDMX",
+    notes: "Entregar personalmente",
+    date: "2024-08-21",
+    total: 299.0,
+    status: "pending",
+  },
+];
+</file>
+
+<file path="src/renderer/mock/Products-table.tsx">
+export const Products = [
+  {
+    id: 1,
+    name: 'Monitor Ultrawide 34"',
+    sku: "MON-UW34",
+    category: "Electrónica",
+    price: 649.99,
+    stock: 18,
+    supplier: "TechSupply Co.",
+    status: "Activo",
+    description:
+      "Monitor ultrawide de 34 pulgadas para productividad y gaming.",
+    image: "/products/monitor-ultrawide.jpg",
+  },
+  {
+    id: 2,
+    name: "Teclado Mecánico RGB",
+    sku: "KBD-MECH01",
+    category: "Periféricos",
+    price: 129.0,
+    stock: 4,
+    supplier: "KeyPro Ltd.",
+    status: "Stock bajo",
+    description: "Teclado mecánico RGB con switches Blue.",
+    image: "/products/teclado-rgb.jpg",
+  },
+  {
+    id: 3,
+    name: "Silla Ergonómica Pro",
+    sku: "CHR-ERG-P",
+    category: "Mobiliario",
+    price: 489.0,
+    stock: 0,
+    supplier: "OfficeComfort SA",
+    status: "Agotado",
+    description:
+      "Silla ergonómica con soporte lumbar y reposabrazos ajustables.",
+    image: "/products/silla-ergonomica.jpg",
+  },
+  {
+    id: 4,
+    name: "Laptop Gaming X15",
+    sku: "LPT-GAM-X15",
+    category: "Electrónica",
+    price: 1299.0,
+    stock: 9,
+    supplier: "TechSupply Co.",
+    status: "Activo",
+    description: "Laptop gaming de alto rendimiento.",
+    image: "/products/laptop-gaming.jpg",
+  },
+  {
+    id: 5,
+    name: "Mouse Inalámbrico",
+    sku: "MSE-WL01",
+    category: "Periféricos",
+    price: 59.99,
+    stock: 45,
+    supplier: "KeyPro Ltd.",
+    status: "Activo",
+    description: "Mouse inalámbrico de 2.4GHz con alta precisión.",
+    image: "/products/mouse-wireless.jpg",
+  },
+  {
+    id: 6,
+    name: "Disco SSD 1TB",
+    sku: "SSD-1T-NVMe",
+    category: "Almacenamiento",
+    price: 99.0,
+    stock: 3,
+    supplier: "DataStore Inc.",
+    status: "Stock bajo",
+    description: "SSD NVMe M.2 de 1TB con velocidades de hasta 7000MB/s.",
+    image: "/products/ssd-1tb.jpg",
+  },
+  {
+    id: 7,
+    name: "Auriculares Noise Cancel",
+    sku: "AUD-NC-PRO",
+    category: "Audio",
+    price: 299.0,
+    stock: 21,
+    supplier: "SoundWave",
+    status: "Activo",
+    description: "Auriculares inalámbricos con cancelación activa de ruido.",
+    image: "/products/auriculares.jpg",
+  },
+  {
+    id: 8,
+    name: "Webcam 4K",
+    sku: "CAM-4K-01",
+    category: "Periféricos",
+    price: 189.0,
+    stock: 0,
+    supplier: "VisualTech",
+    status: "Agotado",
+    description: "Webcam 4K con micrófono integrado.",
+    image: "/products/webcam-4k.jpg",
+  },
+];
+</file>
+
+<file path="src/renderer/Orders/Orders.css">
+.Orders-container {
+  display: grid;
+  grid-template-columns: .30fr 1fr;
+  box-sizing: border-box;
+}
+
+.FormSide,
+.OrderSide {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  height: 80vh;
+}
+
+.FormSide form {
+  width: 95%;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #2f3b4dc2;
+  background-color: #1e293b;
+}
+
+.FormInput-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Input-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+}
+
+.Row {
+  display: flex;
+  align-items: center;
+}
+
+.Input-container label {
+  color: #c4cad498;
+  font-weight: bold;
+}
+
+.Input-container input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  border-radius: 12px;
+  background: #d2d7f327;
+  border: none;
+  padding: 10px;
+  transition: all ease .3s;
+  color: white;
+}
+
+
+.Input-container select {
+  height: 38px;
+  background-color: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #00a8a8;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+
+.Input-container select:focus {
+  border-color: #00d4d4;
+}
+
+
+.Input-container select option {
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 10px;
+}
+
+.Input-container select option:checked {
+  background-color: #1769d1;
+  color: white;
+}
+
+.FormInput-container button {
+  height: 40px;
+  border-radius: 10PX;
+  outline: none;
+  border: none;
+  color: #0b1428;
+  background: #00d4c7;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.Line {
+  background-color: #2dd4bf;
+}
+
+.Vertical {
+  width: 8px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.FormHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.Cards-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+  height: 70%;
+}
+
+.OrderSide .Cards-container .button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  padding: 20px;
+
+  /*Style*/
+  width: 100%;
+  height: 55px;
+  border: solid #8facac56 1px;
+  border-radius: 15px;
+  background-color: #1e293b;
+  color: white;
+}
+
+.OrderSide .Cards-container .expanded {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  padding: 20px;
+
+  /*Style*/
+  width: 100%;
+  height: 55px;
+  border: solid #8facac56 1px;
+  border-radius: 15px 15px 0 0;
+  background-color: #1e293b;
+  color: white;
+}
+
+.OrderSide .Cards-container button div {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 30%;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.ExpandedCard {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: #1e293b81;
+  border-radius: 0 0 15px 15px;
+  gap: 1rem;
+}
+
+.ExpandedCard-Info-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.ExpandedCard-Info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ExpandedCard-Info label {
+  color: #c4cad498;
+  font-weight: bold;
+}
+
+.ExpandedCard-button {
+  display: flex;
+  gap: 50px;
+  justify-content: space-between;
+}
+
+.ExpandedCard-button div {
+  gap: 15px;
+  display: flex;
+  width: 90%;
+  align-items: center;
+}
+
+.ExpandedCard-button button {
+  padding: 10px;
+  border: solid #8facac56 1px;
+  border-radius: 15px;
+  background-color: #1e293b;
+  color: white;
+}
+</file>
+
+<file path="src/renderer/Orders/Orders.tsx">
+import "./Orders.css";
+import { Barnav } from "../Components/Barnav/Barnav";
+import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
+import { Orders } from "../mock/Orders-mock";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import { useState } from "react";
+import { ProductsFilters } from "../static/Filters.ts";
+
+export function OrderView() {
+  const [exppanded, setexpanded] = useState("");
+  return (
+    <>
+      <Barnav />
+      <section className="Orders-container">
+        <section className="FormSide">
+          <form>
+            <div className="FormHeader">
+              <div className="Line Vertical" />
+              <h3>Nueva Orden</h3>
+            </div>
+            <div className="FormInput-container">
+              <div className="Input-container">
+                <label>Client</label>
+                <input />
+              </div>
+              <div className="Input-container">
+                <label>Email</label>
+                <input />
+              </div>
+              <div className="Input-container">
+                <label>Products</label>
+                <select>
+                  <option>Seleccionar Producto</option>
+                </select>
+              </div>
+
+              <div className="Input-container">
+                <label>Cantidad</label>
+                <input type="number" />
+              </div>
+              <div className="Input-container">
+                <label>Direction</label>
+                <input />
+              </div>
+
+              <div className="Input-container">
+                <label>Notas</label>
+                <input />
+              </div>
+              <button>Create Order</button>
+            </div>
+          </form>
+        </section>
+        <section className="OrderSide">
+          {/*<SearchFilter filters={ProductsFilters} />*/}
+          <div className="Cards-container">
+            {Orders.map((item) => (
+              <section className="Overflow">
+                <button
+                  className={exppanded === item.id ? "expanded" : "button"}
+                  onClick={() => {
+                    if (exppanded === item.id) {
+                      setexpanded("");
+                    } else {
+                      setexpanded(item.id);
+                    }
+                  }}
+                >
+                  <ArrowForwardIosOutlinedIcon />
+                  <span>{item.id}</span>
+                  <span>{item.customer}</span>
+                  <span>{item.product}</span>
+                  <div>
+                    <span>{item.date}</span>
+                    <span>{item.total}</span>
+                    <span>{item.status}</span>
+                  </div>
+                </button>
+
+                {exppanded === item.id && (
+                  <div className="ExpandedCard">
+                    <div className="ExpandedCard-Info-container">
+                      <div className="ExpandedCard-Info">
+                        <label>Customer</label>
+                        <span>{item.customer}</span>
+                        <span>{item.email}</span>
+                        <label>Notas</label>
+                        <span>{item.notes}</span>
+                      </div>
+                      <div className="ExpandedCard-Info">
+                        <label>Product</label>
+                        <span>{item.product}</span>
+                        <span>{item.quantity}</span>
+                      </div>
+                      <div className="ExpandedCard-Info">
+                        <label>Direction</label>
+                        <span>{item.address}</span>
+                      </div>
+                    </div>
+                    <div className="ExpandedCard-button">
+                      <div>
+                        <label>Change Status:</label>
+                        <button>Sending</button>
+                        <button>Sending</button>
+                        <button>Sending</button>
+                        <button>Sending</button>
+                        <button>Sending</button>
+                      </div>
+                      <button>Delete</button>
+                    </div>
+                  </div>
+                )}
+              </section>
+            ))}
+          </div>
+        </section>
+      </section>
+    </>
+  );
+}
+</file>
+
+<file path="src/renderer/static/Filters.ts">
+export const ProductsFilters = [
+  {
+    name: "Status",
+    options: [
+      { key: "1", option: "Active" },
+      { key: "2", option: "LowStock" },
+      { key: "3", option: "OffStock" },
+    ],
+  },
+  {
+    name: "Category",
+    options: [
+      { key: "1", option: "Accesorios" },
+      { key: "2", option: "Almacenamiento" },
+      { key: "3", option: "Audio" },
+      { key: "4", option: "Componentes" },
+      { key: "5", option: "Computadoras" },
+      { key: "6", option: "Electrónica" },
+      { key: "7", option: "Oficina" },
+      { key: "8", option: "Periféricos" },
+      { key: "9", option: "Redes" },
+    ],
+  },
+];
+</file>
+
+<file path="src/renderer/static/TableHeaders.tsx">
+export const productColumns = [
+  { key: "product", label: "Product" },
+  { key: "sku", label: "SKU" },
+  { key: "category", label: "Category" },
+  { key: "price", label: "Price" },
+  { key: "stock", label: "Stock" },
+  { key: "supplier", label: "Supplier" },
+  { key: "status", label: "Status" },
+  { key: "actions", label: "Actions" },
+];
+
+export const supplier = [
+  { key: "name", Label: "Name" },
+  { key: "contact_name", Label: "ContactName" },
+  { key: "email", Label: "Email" },
+  { key: "phone", Label: "ContactPhone" },
+  { key: "address", Label: "Address" },
+  { key: "status", Label: "Status" },
+];
+</file>
+
+<file path="src/renderer/suppliers/suppliers.tsx">
+import { Barnav } from "../Components/Barnav/Barnav";
+
+export function Suppliers() {
+  return (
+    <>
+      <Barnav />
+      <section></section>
+    </>
+  );
+}
+</file>
+
+<file path="src/renderer/Types/consts.ts">
+export const StatusType = {
+  Pending: "pending",
+  Processing: "processing",
+  Sending: "sending",
+  Delivering: "delivering",
+  Canceled: "canceled",
+} as const;
+</file>
+
+<file path="src/renderer/Types/type.ts">
+import type { StatusType } from "./consts";
+
+export interface Header {
+  key: string;
+  label: string;
+}
+
+export type ListHeader = Header[];
+
+export type StatusTypes = (typeof StatusType)[keyof typeof StatusType];
+
+export interface Order {
+  id: string;
+  customer: string;
+  email: string;
+  product: string;
+  quantity: number;
+  address: string;
+  notes: string;
+  date: string;
+  total: number;
+  status: StatusTypes;
+}
+
+export type ListOrders = Order[];
+
+export interface InfoUser {
+  username: string;
+  email: string;
+  role: string;
+}
+export interface loginSucess {
+  ok: boolean;
+  token: string;
+}
+
+export interface Producttype {
+  id: number;
+  sku: string;
+  name: string;
+  category: string;
+  status: string;
+  stock: number;
+  price: number;
+  supplier: string;
+  description: string;
+  image: string;
+}
+export interface FilterOption {
+  key: string;
+  option: string;
+}
+export interface Filter {
+  name: string;
+  options: FilterOption[];
+}
+
+export type ListFilters = Filter[];
+</file>
+
+<file path="src/renderer/App.css">
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #020617;
+  font-family: 'Saira', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  color: white;
+  height: 100vh;
+}
+
+
+/*form style*/
+.Modal-container .Form-Style {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-width: 100%;
+  padding: 28px 24px 23px;
+  box-sizing: border-box;
+  gap: 16px;
+  background: #11182b;
+  border: 1px solid #30415d;
+  border-radius: 16px;
+}
+
+.Modal-container .Form-Style .Form-header {
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+.Modal-container .Form-Style .Form-header label {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #f1f5f9;
+}
+
+
+.Modal-container .Form-Style section {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.Modal-container .Form-Style .Form-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 6px;
+}
+
+.Modal-container .Form-Style section .Form-input-container {
+  flex: 1;
+}
+
+.Modal-container .Form-Style .Form-input-container label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #91a0b8;
+}
+
+
+.Modal-container .Form-Style input,
+.Modal-container .Form-Style select {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: #1d2a40;
+  color: #dce5f2;
+  border: 1px solid #344762;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.Modal-container .Form-Style input::placeholder {
+  color: #7d899d;
+}
+
+.Modal-container .Form-Style input:focus,
+.Modal-container .Form-Style select:focus {
+  border-color: #00b5ad;
+  background: #202e45;
+}
+
+.Modal-container .Form-Style select {
+  cursor: pointer;
+}
+
+
+.Modal-container .Form-Style .Form-actions {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.Modal-container .Form-Style .Form-actions button {
+  width: 100%;
+  height: 38px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.Modal-container .Form-Style .Form-actions button:first-child {
+  background: transparent;
+  color: #a7b3c7;
+  border: 1px solid #41536f;
+}
+
+.Modal-container .Form-Style .Form-actions button:last-child {
+  background: #00b8ad;
+  color: #07121b;
+  border: 1px solid #00b8ad;
+}
+
+.Modal-container .Form-Style .Form-actions button:first-child:hover {
+  background: #18243a;
+  border-color: #60738f;
+}
+
+.Modal-container .Form-Style .Form-actions button:last-child:hover {
+  background: #00c7bb;
+  border-color: #00c7bb;
+}
+
+.Modal-container .Form-Style .Form-actions button:active {
+  transform: scale(0.98);
+}
+
+.Modal-container .Form-Style textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: #1d2a40;
+  color: #dce5f2;
+  border: 1px solid #344762;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  resize: vertical;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.Modal-container .Form-Style textarea::placeholder {
+  color: #7d899d;
+}
+
+.Modal-container .Form-Style textarea:focus {
+  border-color: #00b5ad;
+  background: #202e45;
+}
+
+@media (max-width: 500px) {
+  .Modal-container .Form-Style {
+    width: 100%;
+    padding: 24px 20px 20px;
+  }
+
+  .Modal-container .Form-Style section {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .Modal-container .Form-Style .Form-actions {
+    flex-direction: column-reverse;
+  }
+}
+</file>
+
+<file path="src/renderer/App.tsx">
+import "./App.css";
+import { Router } from "./Router";
+
+export function App() {
+  return (
+    <>
+      <Router />
+    </>
+  );
+}
+</file>
+
+<file path="src/renderer/index.css">
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+</file>
+
+<file path="src/renderer/main.tsx">
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { App } from "./App.tsx";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+</file>
+
+<file path="src/renderer/Router.tsx">
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { InevntoryView } from "./Inventory/Inventory";
+import { Login } from "./Login/Login";
+import { OrderView } from "./Orders/Orders";
+import { Suppliers } from "./suppliers/suppliers";
+
+export function Router() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Inventory" element={<InevntoryView />} />
+        <Route path="/Orders" element={<OrderView />} />
+        <Route path="/Suppliers" element={<Suppliers/>} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+</file>
+
+<file path="src/renderer/vite-env.d.ts">
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+</file>
+
+<file path=".env.example">
+API_URL=
+</file>
+
+<file path="public/favicon.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="46" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" style="fill:#863bff;fill:color(display-p3 .5252 .23 1);fill-opacity:1"/><mask id="a" width="48" height="46" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M25.842 44.938c-.664.844-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.183c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.498 0-3.579-1.842-3.579H1.133c-.92 0-1.456-1.04-.92-1.787L9.91.473c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.578 1.842 3.578h11.377c.943 0 1.473 1.088.89 1.832L25.843 44.94z" style="fill:#000;fill-opacity:1"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#ede6ff" rx="5.508" ry="14.704" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -4.47 31.516)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#ede6ff" rx="10.399" ry="29.851" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -39.328 7.883)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#7e14ff" rx="5.508" ry="30.487" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -25.913 -14.639)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -32.644 -3.334)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -34.34 30.47)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#ede6ff" rx="14.072" ry="22.078" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="rotate(93.35 24.506 48.493)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx=".387" cy="8.972" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(39.51 .387 8.972)"/></g><g filter="url(#k)"><ellipse cx="47.523" cy="-6.092" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 47.523 -6.092)"/></g><g filter="url(#l)"><ellipse cx="41.412" cy="6.333" fill="#47bfff" rx="5.971" ry="9.665" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 41.412 6.333)"/></g><g filter="url(#m)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#n)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#o)"><ellipse cx="35.651" cy="29.907" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 35.651 29.907)"/></g><g filter="url(#p)"><ellipse cx="38.418" cy="32.4" fill="#47bfff" rx="5.971" ry="15.297" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 38.418 32.4)"/></g></g><defs><filter id="b" width="60.045" height="41.654" x="-19.77" y="16.149" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-54.613" y="-7.533" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-49.64" y="2.03" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-45.045" y="20.029" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-43.513" y="21.178" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="15.756" y="-17.901" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-27.636" y="-22.853" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="20.116" y="-38.415" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="24.641" y="-11.323" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="8.244" y="-2.416" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="18.713" y="10.588" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="public/icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="bluesky-icon" viewBox="0 0 16 17">
+    <g clip-path="url(#bluesky-clip)"><path fill="#08060d" d="M7.75 7.735c-.693-1.348-2.58-3.86-4.334-5.097-1.68-1.187-2.32-.981-2.74-.79C.188 2.065.1 2.812.1 3.251s.241 3.602.398 4.13c.52 1.744 2.367 2.333 4.07 2.145-2.495.37-4.71 1.278-1.805 4.512 3.196 3.309 4.38-.71 4.987-2.746.608 2.036 1.307 5.91 4.93 2.746 2.72-2.746.747-4.143-1.747-4.512 1.702.189 3.55-.4 4.07-2.145.156-.528.397-3.691.397-4.13s-.088-1.186-.575-1.406c-.42-.19-1.06-.395-2.741.79-1.755 1.24-3.64 3.752-4.334 5.099"/></g>
+    <defs><clipPath id="bluesky-clip"><path fill="#fff" d="M.1.85h15.3v15.3H.1z"/></clipPath></defs>
+  </symbol>
+  <symbol id="discord-icon" viewBox="0 0 20 19">
+    <path fill="#08060d" d="M16.224 3.768a14.5 14.5 0 0 0-3.67-1.153c-.158.286-.343.67-.47.976a13.5 13.5 0 0 0-4.067 0c-.128-.306-.317-.69-.476-.976A14.4 14.4 0 0 0 3.868 3.77C1.546 7.28.916 10.703 1.231 14.077a14.7 14.7 0 0 0 4.5 2.306q.545-.748.965-1.587a9.5 9.5 0 0 1-1.518-.74q.191-.14.372-.293c2.927 1.369 6.107 1.369 8.999 0q.183.152.372.294-.723.437-1.52.74.418.838.963 1.588a14.6 14.6 0 0 0 4.504-2.308c.37-3.911-.63-7.302-2.644-10.309m-9.13 8.234c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.894 0 1.614.82 1.599 1.82.001 1-.705 1.82-1.6 1.82m5.91 0c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.893 0 1.614.82 1.599 1.82 0 1-.706 1.82-1.6 1.82"/>
+  </symbol>
+  <symbol id="documentation-icon" viewBox="0 0 21 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="m15.5 13.333 1.533 1.322c.645.555.967.833.967 1.178s-.322.623-.967 1.179L15.5 18.333m-3.333-5-1.534 1.322c-.644.555-.966.833-.966 1.178s.322.623.966 1.179l1.534 1.321"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M17.167 10.836v-4.32c0-1.41 0-2.117-.224-2.68-.359-.906-1.118-1.621-2.08-1.96-.599-.21-1.349-.21-2.848-.21-2.623 0-3.935 0-4.983.369-1.684.591-3.013 1.842-3.641 3.428C3 6.449 3 7.684 3 10.154v2.122c0 2.558 0 3.838.706 4.726q.306.383.713.671c.76.536 1.79.64 3.581.66"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M3 10a2.78 2.78 0 0 1 2.778-2.778c.555 0 1.209.097 1.748-.047.48-.129.854-.503.982-.982.145-.54.048-1.194.048-1.749a2.78 2.78 0 0 1 2.777-2.777"/>
+  </symbol>
+  <symbol id="github-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1 .077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844" clip-rule="evenodd"/>
+  </symbol>
+  <symbol id="social-icon" viewBox="0 0 20 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M12.5 6.667a4.167 4.167 0 1 0-8.334 0 4.167 4.167 0 0 0 8.334 0"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M2.5 16.667a5.833 5.833 0 0 1 8.75-5.053m3.837.474.513 1.035c.07.144.257.282.414.309l.93.155c.596.1.736.536.307.965l-.723.73a.64.64 0 0 0-.152.531l.207.903c.164.715-.213.991-.84.618l-.872-.52a.63.63 0 0 0-.577 0l-.872.52c-.624.373-1.003.094-.84-.618l.207-.903a.64.64 0 0 0-.152-.532l-.723-.729c-.426-.43-.289-.864.306-.964l.93-.156a.64.64 0 0 0 .412-.31l.513-1.034c.28-.562.735-.562 1.012 0"/>
+  </symbol>
+  <symbol id="x-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M1.893 1.98c.052.072 1.245 1.769 2.653 3.77l2.892 4.114c.183.261.333.48.333.486s-.068.089-.152.183l-.522.593-.765.867-3.597 4.087c-.375.426-.734.834-.798.905a1 1 0 0 0-.118.148c0 .01.236.017.664.017h.663l.729-.83c.4-.457.796-.906.879-.999a692 692 0 0 0 1.794-2.038c.034-.037.301-.34.594-.675l.551-.624.345-.392a7 7 0 0 1 .34-.374c.006 0 .93 1.306 2.052 2.903l2.084 2.965.045.063h2.275c1.87 0 2.273-.003 2.266-.021-.008-.02-1.098-1.572-3.894-5.547-2.013-2.862-2.28-3.246-2.273-3.266.008-.019.282-.332 2.085-2.38l2-2.274 1.567-1.782c.022-.028-.016-.03-.65-.03h-.674l-.3.342a871 871 0 0 1-1.782 2.025c-.067.075-.405.458-.75.852a100 100 0 0 1-.803.91c-.148.172-.299.344-.99 1.127-.304.343-.32.358-.345.327-.015-.019-.904-1.282-1.976-2.808L6.365 1.85H1.8zm1.782.91 8.078 11.294c.772 1.08 1.413 1.973 1.425 1.984.016.017.241.02 1.05.017l1.03-.004-2.694-3.766L7.796 5.75 5.722 2.852l-1.039-.004-1.039-.004z" clip-rule="evenodd"/>
+  </symbol>
+</svg>
+</file>
+
+<file path=".oxlintrc.json">
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  }
+}
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>desktop-store-app</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="package.json">
+{
+  "name": "desktop-store-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^9.4.0",
+    "@mui/material": "^9.4.0",
+    "dotenv": "^17.4.2",
+    "lucide": "^1.47.0",
+    "morphicons": "^1.7.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "oxlint": "^1.79.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}
+</file>
+
+<file path="tsconfig.app.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+</file>
+
+<file path="tsconfig.node.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["vite.config.ts"]
+}
+</file>
+
+<file path="vite.config.ts">
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
+import { defineConfig } from 'vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react(),
+    babel({ presets: [reactCompilerPreset()] })
+  ],
+})
+</file>
+
+<file path="README.md">
+#Desktop app
+</file>
+
+<file path=".gitignore">
+.env
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+</file>
+
+</files>

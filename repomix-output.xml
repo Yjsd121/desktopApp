@@ -40,11 +40,18 @@ The content is organized as follows:
 </file_summary>
 
 <directory_structure>
+dist-electron/
+  main.js
+  preload.mjs
 public/
   favicon.svg
   icons.svg
   UserDefault.png
 src/
+  main/
+    main.tsx
+  preload/
+    preload.ts
   renderer/
     API/
       apis.ts
@@ -113,6 +120,97 @@ vite.config.ts
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="dist-electron/main.js">
+import { BrowserWindow, app } from "electron";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+//#region src/main/main.tsx
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
+function createWindow() {
+	const window = new BrowserWindow({
+		width: 1400,
+		height: 900,
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js"),
+			contextIsolation: true,
+			nodeIntegration: false
+		}
+	});
+	if (process.env.VITE_DEV_SERVER_URL) window.loadURL(process.env.VITE_DEV_SERVER_URL);
+	else window.loadFile(path.join(__dirname, "../dist/index.html"));
+}
+app.whenReady().then(() => {
+	createWindow();
+	app.on("activate", () => {
+		if (BrowserWindow.getAllWindows().length === 0) createWindow();
+	});
+});
+app.on("window-all-closed", () => {
+	if (process.platform !== "darwin") app.quit();
+});
+//#endregion
+export {};
+</file>
+
+<file path="dist-electron/preload.mjs">
+//#region src/preload/preload.ts
+require("electron").contextBridge.exposeInMainWorld("api", {});
+//#endregion
+</file>
+
+<file path="src/main/main.tsx">
+import { app, BrowserWindow } from "electron";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function createWindow() {
+  const window = new BrowserWindow({
+    width: 1400,
+    height: 900,
+
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  if (process.env.VITE_DEV_SERVER_URL) {
+    window.loadURL(process.env.VITE_DEV_SERVER_URL);
+  } else {
+    window.loadFile(
+      path.join(__dirname, "../dist/index.html"),
+    );
+  }
+}
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+</file>
+
+<file path="src/preload/preload.ts">
+import { contextBridge } from "electron";
+
+contextBridge.exposeInMainWorld("api", {});
+</file>
 
 <file path="src/renderer/API/apis.ts">
 export const APIURL = import.meta.env.VITE_API_URL
@@ -2153,7 +2251,7 @@ createRoot(document.getElementById("root")!).render(
 </file>
 
 <file path="src/renderer/Router.tsx">
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import { InevntoryView } from "./Inventory/Inventory";
 import { Login } from "./Login/Login";
@@ -2162,14 +2260,14 @@ import { Suppliers } from "./suppliers/suppliers";
 
 export function Router() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/Inventory" element={<InevntoryView />} />
         <Route path="/Orders" element={<OrderView />} />
-        <Route path="/Suppliers" element={<Suppliers/>} />
+        <Route path="/Suppliers" element={<Suppliers />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 </file>
@@ -2241,7 +2339,7 @@ API_URL=
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/renderer/main.tsx"></script>
   </body>
 </html>
 </file>
@@ -2252,6 +2350,7 @@ API_URL=
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -2279,9 +2378,11 @@ API_URL=
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
     "babel-plugin-react-compiler": "^1.0.0",
+    "electron": "^44.5.1",
     "oxlint": "^1.79.0",
     "typescript": "~6.0.2",
-    "vite": "^8.2.2"
+    "vite": "^8.2.2",
+    "vite-plugin-electron": "^1.1.2"
   }
 }
 </file>
@@ -2352,17 +2453,30 @@ API_URL=
 </file>
 
 <file path="vite.config.ts">
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import babel from '@rolldown/plugin-babel'
-import { defineConfig } from 'vite'
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import electron from "vite-plugin-electron/simple";
+import { defineConfig } from "vite";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] })
+
+    babel({
+      presets: [reactCompilerPreset()],
+    }),
+
+    electron({
+      main: {
+        entry: "src/main/main.tsx",
+      },
+
+      preload: {
+        input: "src/preload/preload.ts",
+      },
+    }),
   ],
-})
+});
 </file>
 
 <file path="README.md">

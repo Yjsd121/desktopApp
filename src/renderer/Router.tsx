@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import { InevntoryView } from "./Inventory/Inventory";
 import { Login } from "./Login/Login";
@@ -7,13 +7,13 @@ import { Suppliers } from "./suppliers/suppliers";
 
 export function Router() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/Inventory" element={<InevntoryView />} />
         <Route path="/Orders" element={<OrderView />} />
-        <Route path="/Suppliers" element={<Suppliers/>} />
+        <Route path="/Suppliers" element={<Suppliers />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

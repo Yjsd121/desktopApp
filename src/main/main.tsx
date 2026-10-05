@@ -2,6 +2,8 @@ import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { registerAppIPC } from "./ipc/app.ipc";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -11,7 +13,7 @@ function createWindow() {
     height: 900,
 
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.mjs"),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -20,13 +22,12 @@ function createWindow() {
   if (process.env.VITE_DEV_SERVER_URL) {
     window.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
-    window.loadFile(
-      path.join(__dirname, "../dist/index.html"),
-    );
+    window.loadFile(path.join(__dirname, "../dist/index.html"));
   }
 }
 
 app.whenReady().then(() => {
+  registerAppIPC();
   createWindow();
 
   app.on("activate", () => {

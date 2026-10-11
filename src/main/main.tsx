@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { registerAppIPC } from "./ipc/app.ipc";
+import { RegisterUsersIpc } from "./ipc/user.ipc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +29,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   registerAppIPC();
+  RegisterUsersIpc();
   createWindow();
 
   app.on("activate", () => {

@@ -19,25 +19,25 @@ export function Loginform() {
 
     const response = await HandleLogin(formData.emailbody, formData.pass);
 
-    const data: loginSucess = await response.json();
+    const data: loginSucess = await response;
 
-    if (data.token) {
-      window.localStorage.setItem("token", data.token);
+    console.log(data);
+    // if (data.token) {
+    //   window.localStorage.setItem("token", data.token);
 
-      const InfoUser: InfoUser = await handleInfoUser(data.token);
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          username: InfoUser.username,
-          email: InfoUser.email,
-          role: InfoUser.role,
-        }),
-      );
-      if (data.token && InfoUser) {
-        navigate("/Inventory");
-      }
-    }
-
+    //   const InfoUser: InfoUser = await handleInfoUser(data.token);
+    //   window.localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       username: InfoUser.username,
+    //       email: InfoUser.email,
+    //       role: InfoUser.role,
+    //     }),
+    //   );
+    //   if (data.token && InfoUser) {
+    //     navigate("/Inventory");
+    //   }
+    // }
   }
   function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
     setformData({

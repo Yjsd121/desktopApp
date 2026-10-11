@@ -14,6 +14,21 @@ export default defineConfig({
     electron({
       main: {
         entry: "src/main/main.tsx",
+        vite: {
+          define: {
+            __filename: "fileURLToPath(import.meta.url)",
+          },
+          build: {
+            rollupOptions: {
+              external: [
+                "@prisma/adapter-better-sqlite3",
+                "better-sqlite3",
+                "bindings",
+                "file-uri-to-path",
+              ],
+            },
+          },
+        },
       },
 
       preload: {

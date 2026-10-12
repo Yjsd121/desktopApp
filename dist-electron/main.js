@@ -1,6 +1,50 @@
+import { createRequire } from "node:module";
 import { BrowserWindow, app, ipcMain } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { Buffer as Buffer$1 } from "node:buffer";
+//#region \0rolldown/runtime.js
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esmMin = (fn, res, err) => () => {
+	if (err) throw err[0];
+	try {
+		return fn && (res = fn(fn = 0)), res;
+	} catch (e) {
+		throw err = [e], e;
+	}
+};
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
+var __toCommonJS = (mod) => __hasOwnProp.call(mod, "module.exports") ? mod["module.exports"] : __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __require = /* #__PURE__ */ (() => createRequire(import.meta.url))();
+//#endregion
 //#region src/main/ipc/app.ipc.ts
 function registerAppIPC() {
 	ipcMain.handle("app:ping", () => {
@@ -8,20 +52,14311 @@ function registerAppIPC() {
 	});
 }
 //#endregion
+//#region node_modules/drizzle-orm/entity.js
+var entityKind = Symbol.for("drizzle:entityKind");
+function is(value, type) {
+	if (!value || typeof value !== "object") return false;
+	if (value instanceof type) return true;
+	if (!Object.prototype.hasOwnProperty.call(type, entityKind)) throw new Error(`Class "${type.name ?? "<unknown>"}" doesn't look like a Drizzle entity. If this is incorrect and the class is provided by Drizzle, please report this as a bug.`);
+	let cls = Object.getPrototypeOf(value)?.constructor;
+	if (cls) while (cls) {
+		if (entityKind in cls && cls[entityKind] === type[entityKind]) return true;
+		cls = Object.getPrototypeOf(cls);
+	}
+	return false;
+}
+//#endregion
+//#region node_modules/drizzle-orm/column-common.js
+var OriginalColumn = Symbol.for("drizzle:OriginalColumn");
+//#endregion
+//#region node_modules/drizzle-orm/column.js
+var noop = (v) => v;
+noop.isNoop = true;
+var Column = class {
+	static [entityKind] = "Column";
+	/** @internal */
+	codec;
+	name;
+	keyAsName;
+	primary;
+	notNull;
+	default;
+	defaultFn;
+	onUpdateFn;
+	hasDefault;
+	isUnique;
+	uniqueName;
+	uniqueType;
+	dataType;
+	columnType;
+	enumValues = void 0;
+	generated = void 0;
+	generatedIdentity = void 0;
+	length;
+	isLengthExact;
+	isAlias;
+	/** @internal */
+	config;
+	/** @internal */
+	table;
+	/** @internal */
+	onInit() {}
+	constructor(table, config) {
+		this.config = config;
+		this.onInit();
+		this.table = table;
+		this.name = config.name;
+		this.isAlias = false;
+		this.keyAsName = config.keyAsName;
+		this.notNull = config.notNull;
+		this.default = config.default;
+		this.defaultFn = config.defaultFn;
+		this.onUpdateFn = config.onUpdateFn;
+		this.hasDefault = config.hasDefault;
+		this.primary = config.primaryKey;
+		this.isUnique = config.isUnique;
+		this.uniqueName = config.uniqueName;
+		this.uniqueType = config.uniqueType;
+		this.dataType = config.dataType;
+		this.columnType = config.columnType;
+		this.generated = config.generated;
+		this.generatedIdentity = config.generatedIdentity;
+		this.length = config["length"];
+		this.isLengthExact = config["isLengthExact"];
+	}
+	mapFromDriverValue = noop;
+	mapToDriverValue = noop;
+	/** @internal */
+	postBuild() {
+		return this;
+	}
+	/** @internal */
+	shouldDisableInsert() {
+		return this.config.generated !== void 0 && this.config.generated.type !== "byDefault";
+	}
+	/** @internal */
+	[OriginalColumn]() {
+		return this;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/table.utils.js
+/** @internal */
+var TableName = Symbol.for("drizzle:Name");
+//#endregion
+//#region node_modules/drizzle-orm/table.js
+/** @internal */
+var TableSchema = Symbol.for("drizzle:Schema");
+/** @internal */
+var TableColumns = Symbol.for("drizzle:Columns");
+/** @internal */
+var ExtraConfigColumns = Symbol.for("drizzle:ExtraConfigColumns");
+/** @internal */
+var OriginalName = Symbol.for("drizzle:OriginalName");
+/** @internal */
+var BaseName = Symbol.for("drizzle:BaseName");
+/** @internal */
+var IsAlias = Symbol.for("drizzle:IsAlias");
+/** @internal */
+var ExtraConfigBuilder = Symbol.for("drizzle:ExtraConfigBuilder");
+var IsDrizzleTable = Symbol.for("drizzle:IsDrizzleTable");
+var Table = class {
+	static [entityKind] = "Table";
+	/** @internal */
+	static Symbol = {
+		Name: TableName,
+		Schema: TableSchema,
+		OriginalName,
+		Columns: TableColumns,
+		ExtraConfigColumns,
+		BaseName,
+		IsAlias,
+		ExtraConfigBuilder
+	};
+	/**
+	* @internal
+	* Can be changed if the table is aliased.
+	*/
+	[TableName];
+	/**
+	* @internal
+	* Used to store the original name of the table, before any aliasing.
+	*/
+	[OriginalName];
+	/** @internal */
+	[TableSchema];
+	/** @internal */
+	[TableColumns];
+	/** @internal */
+	[ExtraConfigColumns];
+	/**
+	*  @internal
+	* Used to store the table name before the transformation via the `tableCreator` functions.
+	*/
+	[BaseName];
+	/** @internal */
+	[IsAlias] = false;
+	/** @internal */
+	[IsDrizzleTable] = true;
+	/** @internal */
+	[ExtraConfigBuilder] = void 0;
+	constructor(name, schema, baseName) {
+		this[TableName] = this[OriginalName] = name;
+		this[TableSchema] = schema;
+		this[BaseName] = baseName;
+	}
+};
+function getTableName(table) {
+	return table[TableName];
+}
+//#endregion
+//#region node_modules/drizzle-orm/subquery.js
+var Subquery = class {
+	static [entityKind] = "Subquery";
+	constructor(sql, fields, alias, isWith = false, usedTables = []) {
+		this._ = {
+			brand: "Subquery",
+			sql,
+			selectedFields: fields,
+			alias,
+			isWith,
+			usedTables
+		};
+	}
+};
+var WithSubquery = class extends Subquery {
+	static [entityKind] = "WithSubquery";
+};
+//#endregion
+//#region node_modules/drizzle-orm/tracing.js
+/** @internal */
+var tracer = { startActiveSpan(name, fn) {
+	return fn();
+} };
+//#endregion
+//#region node_modules/drizzle-orm/view-common.js
+var ViewBaseConfig = Symbol.for("drizzle:ViewBaseConfig");
+//#endregion
+//#region node_modules/drizzle-orm/sql/sql.js
+function isSQLWrapper(value) {
+	return value !== null && value !== void 0 && typeof value.getSQL === "function";
+}
+function mergeQueries(queries) {
+	const result = {
+		sql: "",
+		params: []
+	};
+	for (const query of queries) {
+		result.sql += query.sql;
+		result.params.push(...query.params);
+	}
+	return result;
+}
+function _mergeQueries(queries) {
+	const result = {
+		sql: "",
+		params: []
+	};
+	const sqls = [];
+	for (const query of queries) {
+		sqls.push(query.sql);
+		result.params.push(...query.params);
+	}
+	result._sql = Object.assign(sqls, { raw: sqls });
+	return result;
+}
+var StringChunk = class {
+	static [entityKind] = "StringChunk";
+	value;
+	constructor(value) {
+		this.value = Array.isArray(value) ? value : [value];
+	}
+	getSQL() {
+		return new SQL([this]);
+	}
+};
+var SQL = class SQL {
+	static [entityKind] = "SQL";
+	/** @internal */
+	decoder = noopDecoder;
+	/** @internal */
+	shouldInlineParams = false;
+	/** @internal */
+	usedTables = [];
+	constructor(queryChunks) {
+		this.queryChunks = queryChunks;
+		for (const chunk of queryChunks) if (is(chunk, Table)) {
+			const schemaName = chunk[Table.Symbol.Schema];
+			this.usedTables.push(schemaName === void 0 ? chunk[Table.Symbol.Name] : schemaName + "." + chunk[Table.Symbol.Name]);
+		}
+	}
+	append(query) {
+		this.queryChunks.push(...query.queryChunks);
+		return this;
+	}
+	toQuery(config) {
+		return tracer.startActiveSpan("drizzle.buildSQL", (span) => {
+			const query = this.buildQueryFromSourceParams(this.queryChunks, config);
+			span?.setAttributes({
+				"drizzle.query.text": query.sql,
+				"drizzle.query.params": JSON.stringify(query.params)
+			});
+			return query;
+		});
+	}
+	buildQueryFromSourceParams(chunks, _config) {
+		const config = Object.assign({}, _config, {
+			inlineParams: _config.inlineParams || this.shouldInlineParams,
+			paramStartIndex: _config.paramStartIndex || { value: 0 }
+		});
+		const { escapeName, escapeParam, codecs, inlineParams, paramStartIndex, invokeSource } = config;
+		const mappedChunks = chunks.map((chunk) => {
+			if (is(chunk, StringChunk)) return {
+				sql: chunk.value.join(""),
+				params: []
+			};
+			if (is(chunk, Name)) return {
+				sql: escapeName(chunk.value),
+				params: []
+			};
+			if (chunk === void 0) return {
+				sql: "",
+				params: []
+			};
+			if (Array.isArray(chunk)) {
+				const result = [new StringChunk("(")];
+				for (const [i, p] of chunk.entries()) {
+					result.push(p);
+					if (i < chunk.length - 1) result.push(new StringChunk(", "));
+				}
+				result.push(new StringChunk(")"));
+				return this.buildQueryFromSourceParams(result, config);
+			}
+			if (is(chunk, SQL)) return this.buildQueryFromSourceParams(chunk.queryChunks, {
+				...config,
+				inlineParams: inlineParams || chunk.shouldInlineParams
+			});
+			if (is(chunk, Table)) {
+				const schemaName = chunk[Table.Symbol.Schema];
+				const tableName = chunk[Table.Symbol.Name];
+				if (invokeSource === "mssql-view-with-schemabinding") return {
+					sql: (schemaName === void 0 ? escapeName("dbo") : escapeName(schemaName)) + "." + escapeName(tableName),
+					params: []
+				};
+				return {
+					sql: schemaName === void 0 || chunk[IsAlias] ? escapeName(tableName) : escapeName(schemaName) + "." + escapeName(tableName),
+					params: []
+				};
+			}
+			if (is(chunk, Column)) {
+				const columnName = chunk.name;
+				if (_config.invokeSource === "indexes") return {
+					sql: escapeName(columnName),
+					params: []
+				};
+				const schemaName = invokeSource === "mssql-check" ? void 0 : chunk.table[Table.Symbol.Schema];
+				return {
+					sql: chunk.isAlias ? escapeName(chunk.name) : chunk.table[IsAlias] || schemaName === void 0 ? escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName) : escapeName(schemaName) + "." + escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName),
+					params: []
+				};
+			}
+			if (is(chunk, View)) {
+				const schemaName = chunk[ViewBaseConfig].schema;
+				const viewName = chunk[ViewBaseConfig].name;
+				return {
+					sql: schemaName === void 0 || chunk[ViewBaseConfig].isAlias ? escapeName(viewName) : escapeName(schemaName) + "." + escapeName(viewName),
+					params: []
+				};
+			}
+			if (is(chunk, Param)) {
+				if (is(chunk.value, SQL)) return this.buildQueryFromSourceParams([chunk.value], config);
+				const useCodecs = codecs && is(chunk.encoder, Column);
+				if (is(chunk.value, Placeholder)) {
+					const escaped = escapeParam(paramStartIndex.value++, chunk);
+					chunk.codec = useCodecs ? (value) => codecs.apply(chunk.encoder, "normalizeParam", value) : void 0;
+					return {
+						sql: useCodecs ? codecs.apply(chunk.encoder, "castParam", escaped) : escaped,
+						params: [chunk]
+					};
+				}
+				let mappedValue;
+				if (chunk.value === null) mappedValue = chunk.value;
+				else {
+					mappedValue = chunk.encoder.mapToDriverValue.isNoop ? chunk.value : chunk.encoder.mapToDriverValue(chunk.value);
+					if (is(mappedValue, SQL)) return this.buildQueryFromSourceParams([mappedValue], config);
+					if (useCodecs) mappedValue = codecs.apply(chunk.encoder, "normalizeParam", mappedValue);
+				}
+				if (inlineParams) return {
+					sql: this.mapInlineParam(mappedValue, config),
+					params: []
+				};
+				const escaped = escapeParam(paramStartIndex.value++, mappedValue);
+				return {
+					sql: useCodecs ? codecs.apply(chunk.encoder, "castParam", escaped) : escaped,
+					params: [mappedValue]
+				};
+			}
+			if (is(chunk, Placeholder)) return {
+				sql: escapeParam(paramStartIndex.value++, chunk),
+				params: [chunk]
+			};
+			if (is(chunk, SQL.Aliased) && chunk.fieldAlias !== void 0) return {
+				sql: (chunk.origin !== void 0 ? escapeName(chunk.origin) + "." : "") + escapeName(chunk.fieldAlias),
+				params: []
+			};
+			if (is(chunk, Subquery)) {
+				if (chunk._.isWith) return {
+					sql: escapeName(chunk._.alias),
+					params: []
+				};
+				return this.buildQueryFromSourceParams([
+					new StringChunk("("),
+					chunk._.sql,
+					new StringChunk(") "),
+					new Name(chunk._.alias)
+				], config);
+			}
+			if (typeof chunk === "function" && "enumName" in chunk) {
+				if ("schema" in chunk && chunk.schema) return {
+					sql: escapeName(chunk.schema) + "." + escapeName(chunk.enumName),
+					params: []
+				};
+				return {
+					sql: escapeName(chunk.enumName),
+					params: []
+				};
+			}
+			if (isSQLWrapper(chunk)) {
+				if (chunk.shouldOmitSQLParens?.()) return this.buildQueryFromSourceParams([chunk.getSQL()], config);
+				return this.buildQueryFromSourceParams([
+					new StringChunk("("),
+					chunk.getSQL(),
+					new StringChunk(")")
+				], config);
+			}
+			if (inlineParams) return {
+				sql: this.mapInlineParam(chunk, config),
+				params: []
+			};
+			return {
+				sql: escapeParam(paramStartIndex.value++, chunk),
+				params: [chunk]
+			};
+		});
+		if (_config.tagged) return _mergeQueries(mappedChunks);
+		return mergeQueries(mappedChunks);
+	}
+	mapInlineParam(chunk, { escapeString }) {
+		if (chunk === null) return "null";
+		if (typeof chunk === "number" || typeof chunk === "boolean" || typeof chunk === "bigint") return chunk.toString();
+		if (typeof chunk === "string") return escapeString(chunk);
+		if (typeof chunk === "object") {
+			const mappedValueAsString = chunk.toString();
+			if (mappedValueAsString === "[object Object]") return escapeString(JSON.stringify(chunk));
+			return escapeString(mappedValueAsString);
+		}
+		throw new Error("Unexpected param value: " + chunk);
+	}
+	getSQL() {
+		return this;
+	}
+	as(alias) {
+		if (alias === void 0) return this;
+		return new SQL.Aliased(this, alias);
+	}
+	mapWith(decoder) {
+		this.decoder = typeof decoder === "function" ? { mapFromDriverValue: decoder } : decoder;
+		return this;
+	}
+	nullable() {
+		return this;
+	}
+	inlineParams() {
+		this.shouldInlineParams = true;
+		return this;
+	}
+	/**
+	* This method is used to conditionally include a part of the query.
+	*
+	* @param condition - Condition to check
+	* @returns itself if the condition is `true`, otherwise `undefined`
+	*/
+	if(condition) {
+		return condition ? this : void 0;
+	}
+};
+/**
+* Any DB name (table, column, index etc.)
+*/
+var Name = class {
+	static [entityKind] = "Name";
+	brand;
+	constructor(value) {
+		this.value = value;
+	}
+	getSQL() {
+		return new SQL([this]);
+	}
+};
+function isDriverValueEncoder(value) {
+	return typeof value === "object" && value !== null && "mapToDriverValue" in value && typeof value.mapToDriverValue === "function";
+}
+var noopDecoder = { mapFromDriverValue: (value) => value };
+noopDecoder.mapFromDriverValue.isNoop = true;
+var noopEncoder = { mapToDriverValue: (value) => value };
+noopEncoder.mapToDriverValue.isNoop = true;
+({
+	...noopDecoder,
+	...noopEncoder
+});
+/** Parameter value that is optionally bound to an encoder (for example, a column). */
+var Param = class {
+	static [entityKind] = "Param";
+	brand;
+	/**
+	* @param value - Parameter value
+	* @param encoder - Encoder to convert the value to a driver parameter
+	*/
+	constructor(value, encoder = noopEncoder, codec) {
+		this.value = value;
+		this.encoder = encoder;
+		this.codec = codec;
+	}
+	getSQL() {
+		return new SQL([this]);
+	}
+};
+function sql(strings, ...params) {
+	const queryChunks = [];
+	if (params.length > 0 || strings.length > 0 && strings[0] !== "") queryChunks.push(new StringChunk(strings[0]));
+	for (const [paramIndex, param] of params.entries()) queryChunks.push(param, new StringChunk(strings[paramIndex + 1]));
+	return new SQL(queryChunks);
+}
+(function(_sql) {
+	function empty() {
+		return new SQL([]);
+	}
+	_sql.empty = empty;
+	function fromList(list) {
+		return new SQL(list);
+	}
+	_sql.fromList = fromList;
+	function raw(str) {
+		return new SQL([new StringChunk(str)]);
+	}
+	_sql.raw = raw;
+	function join(chunks, separator) {
+		const result = [];
+		for (const [i, chunk] of chunks.entries()) {
+			if (i > 0 && separator !== void 0) result.push(separator);
+			result.push(chunk);
+		}
+		return new SQL(result);
+	}
+	_sql.join = join;
+	function identifier(value) {
+		return new Name(value);
+	}
+	_sql.identifier = identifier;
+	function placeholder(name) {
+		return new Placeholder(name);
+	}
+	_sql.placeholder = placeholder;
+	function param(value, encoder) {
+		return new Param(value, encoder);
+	}
+	_sql.param = param;
+	function comment(input) {
+		const encoded = sqlCommenter(input);
+		if (!encoded.length) return void 0;
+		return sql.raw(encoded);
+	}
+	_sql.comment = comment;
+})(sql || (sql = {}));
+function sqlCommenter(input) {
+	const encoded = sqlCommenter.encodeInput(input);
+	if (!encoded.length) return "";
+	return `/*${encoded}*/`;
+}
+(function(_sqlCommenter) {
+	function merge(input1, input2) {
+		let encoded;
+		if (typeof input1 === "object" && typeof input2 === "object") encoded = encodeInput({
+			...input1,
+			...input2
+		});
+		else if (input1 && input2) encoded = [encodeInput(input1), encodeInput(input2)].filter((i) => i.length).join(",");
+		else if (input2) encoded = encodeInput(input2);
+		else if (input1) encoded = encodeInput(input1);
+		else return "";
+		if (!encoded.length) return "";
+		return `/*${encoded}*/`;
+	}
+	_sqlCommenter.merge = merge;
+	function encodeInput(input) {
+		if (typeof input === "string") {
+			if (!input.length) return input;
+			return sanitizeStringInput(input);
+		}
+		const parts = [];
+		for (const [key, value] of Object.entries(input)) {
+			if (value === null || value === void 0 || value === "") continue;
+			const encodedKey = sanitizeObjectElement(key);
+			const encodedValue = sanitizeObjectElement(String(value));
+			parts.push(`${encodedKey}='${encodedValue}'`);
+		}
+		if (!parts.length) return "";
+		return parts.sort().join(",");
+	}
+	_sqlCommenter.encodeInput = encodeInput;
+	function sanitizeObjectElement(key) {
+		return encodeURIComponent(key).replace(/'/g, `\\'`);
+	}
+	_sqlCommenter.sanitizeObjectElement = sanitizeObjectElement;
+	function sanitizeStringInput(input) {
+		return input.replace(/\/\*/g, "/ *").replace(/\*\//g, "* /");
+	}
+	_sqlCommenter.sanitizeStringInput = sanitizeStringInput;
+})(sqlCommenter || (sqlCommenter = {}));
+(function(_SQL) {
+	class Aliased {
+		static [entityKind] = "SQL.Aliased";
+		/** @internal */
+		isSelectionField = false;
+		/** @internal */
+		origin;
+		constructor(sql, fieldAlias) {
+			this.sql = sql;
+			this.fieldAlias = fieldAlias;
+		}
+		getSQL() {
+			return this.sql;
+		}
+		/** @internal */
+		clone() {
+			return new Aliased(this.sql, this.fieldAlias);
+		}
+	}
+	_SQL.Aliased = Aliased;
+})(SQL || (SQL = {}));
+var Placeholder = class {
+	static [entityKind] = "Placeholder";
+	constructor(name) {
+		this.name = name;
+	}
+	getSQL() {
+		return new SQL([this]);
+	}
+};
+function fillPlaceholders(params, values) {
+	return params.map((p) => {
+		if (is(p, Placeholder)) {
+			if (!(p.name in values)) throw new Error(`No value for placeholder "${p.name}" was provided`);
+			return values[p.name];
+		}
+		if (is(p, Param) && is(p.value, Placeholder)) {
+			if (!(p.value.name in values)) throw new Error(`No value for placeholder "${p.value.name}" was provided`);
+			const value = values[p.value.name];
+			if (value === null) return value;
+			const mapped = p.encoder.mapToDriverValue.isNoop ? value : p.encoder.mapToDriverValue(value);
+			return p.codec ? p.codec(mapped) : mapped;
+		}
+		return p;
+	});
+}
+var IsDrizzleView = Symbol.for("drizzle:IsDrizzleView");
+var View = class {
+	static [entityKind] = "View";
+	/** @internal */
+	[ViewBaseConfig];
+	/** @internal */
+	[IsDrizzleView] = true;
+	/** @internal */
+	get [TableName]() {
+		return this[ViewBaseConfig].name;
+	}
+	/** @internal */
+	get [TableSchema]() {
+		return this[ViewBaseConfig].schema;
+	}
+	/** @internal */
+	get [IsAlias]() {
+		return this[ViewBaseConfig].isAlias;
+	}
+	/** @internal */
+	get [OriginalName]() {
+		return this[ViewBaseConfig].originalName;
+	}
+	/** @internal */
+	get [TableColumns]() {
+		return this[ViewBaseConfig].selectedFields;
+	}
+	constructor({ name, schema, selectedFields, query }) {
+		this[ViewBaseConfig] = {
+			name,
+			originalName: name,
+			schema,
+			selectedFields,
+			query,
+			isExisting: !query,
+			isAlias: false
+		};
+	}
+};
+Column.prototype.getSQL = function() {
+	return new SQL([this]);
+};
+Subquery.prototype.getSQL = function() {
+	return new SQL([this]);
+};
+//#endregion
+//#region node_modules/drizzle-orm/logger.js
+var ConsoleLogWriter = class {
+	static [entityKind] = "ConsoleLogWriter";
+	write(message) {
+		console.log(message);
+	}
+};
+var DefaultLogger = class {
+	static [entityKind] = "DefaultLogger";
+	writer;
+	constructor(config) {
+		this.writer = config?.writer ?? new ConsoleLogWriter();
+	}
+	logQuery(query, params) {
+		const stringifiedParams = params.map((p) => {
+			try {
+				return JSON.stringify(p);
+			} catch {
+				return String(p);
+			}
+		});
+		const paramsStr = stringifiedParams.length ? ` -- params: [${stringifiedParams.join(", ")}]` : "";
+		this.writer.write(`Query: ${query}${paramsStr}`);
+	}
+};
+var NoopLogger = class {
+	static [entityKind] = "NoopLogger";
+	logQuery() {}
+};
+//#endregion
+//#region node_modules/drizzle-orm/utils.js
+/** @internal bypass bundle-time filtering */
+var FnConstructor = Object.getPrototypeOf(() => null).constructor;
+/** @internal */
+function makeJitQueryMapperInner(columns, joinsNotNullableMap = {}) {
+	const preFn = [];
+	const fn = [];
+	fn.push(`const [ ${columns.map((_, i) => `c${i}`).join(", ")} ] = rows[i];`);
+	const nullifyMap = {};
+	const objectIds = {};
+	const decodes = Array.from({ length: columns.length });
+	for (let idx = 0; idx < columns.length; ++idx) {
+		const { field, path, codec, arrayDimensions } = columns[idx];
+		let decoder;
+		let decoderStr;
+		let decoderFieldDestructure;
+		let isColumn = false;
+		if (is(field, Column)) {
+			isColumn = true;
+			decoder = field;
+			decoderFieldDestructure = `field: decoder${idx}`;
+		} else if (is(field, SQL)) {
+			decoder = field.decoder;
+			decoderFieldDestructure = `field: { decoder: decoder${idx} }`;
+		} else if (is(field, Subquery)) {
+			decoder = field._.sql.decoder;
+			decoderFieldDestructure = `field: { _: { sql: { decoder: decoder${idx} } } }`;
+		} else {
+			decoder = field.sql.decoder;
+			decoderFieldDestructure = `field: { sql: { decoder: decoder${idx} } }`;
+		}
+		decoderStr = `decoder${idx}.mapFromDriverValue`;
+		if (decoder.mapFromDriverValue.isNoop) decoderStr = "";
+		if (decoderStr) preFn.push(`const { ${decoderFieldDestructure}${codec ? `, codec: codec${idx}` : ""} } = columns[${idx}];`);
+		else if (codec) preFn.push(`const { codec: codec${idx} } = columns[${idx}];`);
+		const colStr = `c${idx}`;
+		let decodedValue = colStr;
+		if (codec) decodedValue = `codec${idx}(${decodedValue}, ${arrayDimensions})`;
+		if (decoderStr) decodedValue = `${decoderStr}(${decodedValue})`;
+		decodes[idx] = colStr === decodedValue ? `${colStr}` : `${colStr} === null ? ${colStr} : ${decodedValue}`;
+		if (path.length !== 2 || !isColumn) continue;
+		if (objectIds[path[0]] === void 0) objectIds[path[0]] = [`c${idx}`];
+		else objectIds[path[0]]?.push(`c${idx}`);
+		const [objectName] = path;
+		const tableName = getTableName(field.table);
+		nullifyMap[objectName] = joinsNotNullableMap[tableName] ? false : typeof nullifyMap[objectName] === "string" ? nullifyMap[objectName] === tableName ? tableName : false : tableName;
+	}
+	fn.push(`mapped[i] = {`);
+	let currentObjectPath = [];
+	for (let idx = 0; idx < columns.length; ++idx) {
+		const { path } = columns[idx];
+		const jsonPath = path.map((e) => JSON.stringify(e));
+		const decodedValue = decodes[idx];
+		const objectPath = path.slice(0, -1);
+		let commonLen = 0;
+		while (commonLen < currentObjectPath.length && commonLen < objectPath.length && currentObjectPath[commonLen] === objectPath[commonLen]) commonLen++;
+		for (let d = currentObjectPath.length - 1; d >= commonLen; --d) fn.push(`${"	".repeat(d + 1)}},`);
+		for (let d = commonLen; d < objectPath.length; ++d) fn.push(`${"	".repeat(d + 1)}${jsonPath[d]}: ${d === 0 && objectPath.length === 1 && typeof nullifyMap[path[0]] === "string" ? `${objectIds[path[0]]?.map((c) => `${c} === null`).join(" && ")} ? null : {` : "{"}`);
+		currentObjectPath = objectPath;
+		fn.push(`${"	".repeat(path.length)}${jsonPath[path.length - 1]}: ${decodedValue},`);
+	}
+	for (let d = currentObjectPath.length - 1; d >= 0; --d) fn.push(`${"	".repeat(d + 1)}},`);
+	fn.push(`};`);
+	return `${preFn.length ? `${preFn.join("\n	")}\n\t` : ""}for (let i = 0; i < length; ++i) {
+		${fn.join("\n		")}
+	}`;
+}
+function makeJitQueryMapper(columns, joinsNotNullableMap) {
+	const internals = `\t"use strict";
+	const { columns } = this;
+	const { length } = rows;
+	const mapped = Array.from({ length });
+	${makeJitQueryMapperInner(columns, joinsNotNullableMap)}
+	return mapped;
+	//# sourceURL=drizzle:jit-query-mapper`;
+	return Object.assign(new FnConstructor("rows", internals).bind({ columns }), { body: `function jitQueryMapper (rows) {\n${internals}\n}` });
+}
+/** @internal */
+function jitCompatCheck(isEnabled) {
+	if (!isEnabled) return false;
+	try {
+		const res = new FnConstructor("input", "\"use strict\"; return input;")(true);
+		if (res !== true) {
+			console.warn("Unable to use jit mappers due to incompatibility: corrupted jit function output.\nFalling back to premade mappers.\nError details:");
+			console.error(`Expected to receive \`true\`, got: ${res}`);
+		}
+		return true;
+	} catch (e) {
+		console.warn("Unable to use jit mappers due to incompatibility.\nFalling back to premade mappers.\nError details:");
+		console.error(e);
+		return false;
+	}
+}
+function makeDefaultQueryMapper(columns, joinsNotNullableMap) {
+	const interpretedData = columns.map(({ field, codec, arrayDimensions, path }) => {
+		let processNullifyMap;
+		let decoderSrc;
+		if (is(field, Column)) {
+			decoderSrc = field;
+			if (joinsNotNullableMap && path.length === 2) {
+				const objectName = path[0];
+				processNullifyMap = (nullifyMap, value) => {
+					if (!(objectName in nullifyMap)) nullifyMap[objectName] = value === null ? getTableName(field.table) : false;
+					else if (typeof nullifyMap[objectName] === "string" && nullifyMap[objectName] !== getTableName(field.table)) nullifyMap[objectName] = false;
+				};
+			}
+		} else if (is(field, SQL)) decoderSrc = field.decoder;
+		else if (is(field, Subquery)) decoderSrc = field._.sql.decoder;
+		else decoderSrc = field.sql.decoder;
+		let decoder;
+		if (decoderSrc.mapFromDriverValue.isNoop) decoder = codec ? (v) => codec(v, arrayDimensions) : void 0;
+		else decoder = codec ? (v) => decoderSrc.mapFromDriverValue(codec(v, arrayDimensions)) : (v) => decoderSrc.mapFromDriverValue(v);
+		return [decoder, processNullifyMap];
+	});
+	return ((rows) => rows.map((row) => {
+		const nullifyMap = {};
+		const result = columns.reduce((result, { path }, columnIndex) => {
+			let node = result;
+			for (const [pathChunkIndex, pathChunk] of path.entries()) if (pathChunkIndex < path.length - 1) {
+				if (!(pathChunk in node)) node[pathChunk] = {};
+				node = node[pathChunk];
+			} else {
+				const [decoder, processNullifyMap] = interpretedData[columnIndex];
+				const rawValue = row[columnIndex];
+				const value = node[pathChunk] = rawValue === null ? null : decoder ? decoder(rawValue) : rawValue;
+				processNullifyMap?.(nullifyMap, value);
+			}
+			return result;
+		}, {});
+		if (joinsNotNullableMap && Object.keys(nullifyMap).length > 0) {
+			for (const [objectName, tableName] of Object.entries(nullifyMap)) if (typeof tableName === "string" && !joinsNotNullableMap[tableName]) result[objectName] = null;
+		}
+		return result;
+	}));
+}
+/** @internal */
+function orderSelectedFields(fields, pathPrefix, codecs) {
+	return Object.entries(fields).reduce((result, [name, field]) => {
+		if (typeof name !== "string") return result;
+		const newPath = pathPrefix ? [...pathPrefix, name] : [name];
+		if (is(field, Column)) result.push({
+			path: newPath,
+			field,
+			codec: codecs?.get(field, "normalize"),
+			arrayDimensions: field.dimensions,
+			column: field
+		});
+		else if (is(field, SQL) || is(field, SQL.Aliased)) {
+			const col = getColumnFromDecoder(field);
+			result.push(col ? {
+				path: newPath,
+				field,
+				codec: codecs?.get(col, "normalize"),
+				arrayDimensions: col.dimensions,
+				column: col
+			} : {
+				path: newPath,
+				field
+			});
+		} else if (is(field, Subquery)) {
+			let column;
+			const entry = Object.values(field._.selectedFields)[0];
+			let fieldDecoder;
+			if (is(entry, Column)) {
+				column = entry;
+				fieldDecoder = entry;
+			} else if (is(entry, SQL)) {
+				column = getColumnFromDecoder(entry);
+				fieldDecoder = entry.decoder;
+			} else {
+				column = getColumnFromDecoder(entry);
+				fieldDecoder = entry.sql.decoder;
+			}
+			if (fieldDecoder) field._.sql.decoder = fieldDecoder;
+			result.push(column ? {
+				path: newPath,
+				field,
+				codec: codecs?.get(column, "normalize"),
+				arrayDimensions: column.dimensions,
+				column
+			} : {
+				path: newPath,
+				field
+			});
+		} else if (is(field, Table)) result.push(...orderSelectedFields(field[Table.Symbol.Columns], newPath, codecs));
+		else result.push(...orderSelectedFields(field, newPath, codecs));
+		return result;
+	}, []);
+}
+function getColumnFromDecoder(source) {
+	const query = source.getSQL();
+	if (is(query.decoder, Column)) return query.decoder;
+}
+function haveSameKeys(left, right) {
+	const leftKeys = Object.keys(left);
+	const rightKeys = Object.keys(right);
+	if (leftKeys.length !== rightKeys.length) return false;
+	for (const [index, key] of leftKeys.entries()) if (key !== rightKeys[index]) return false;
+	return true;
+}
+/** @internal */
+function mapUpdateSet(table, values) {
+	const entries = Object.entries(values).filter(([, value]) => value !== void 0).map(([key, value]) => {
+		if (is(value, SQL) || is(value, Column)) return [key, value];
+		else return [key, new Param(value, table[Table.Symbol.Columns][key])];
+	});
+	if (entries.length === 0) throw new Error("No values to set");
+	return Object.fromEntries(entries);
+}
+/** @internal */
+function applyMixins(baseClass, extendedClasses) {
+	for (const extendedClass of extendedClasses) for (const name of Object.getOwnPropertyNames(extendedClass.prototype)) {
+		if (name === "constructor") continue;
+		Object.defineProperty(baseClass.prototype, name, Object.getOwnPropertyDescriptor(extendedClass.prototype, name) || Object.create(null));
+	}
+}
+/**
+* @deprecated
+* Use `getColumns` instead
+*/
+function getTableColumns(table) {
+	return table[Table.Symbol.Columns];
+}
+/** @internal */
+function getTableLikeName(table) {
+	return is(table, Subquery) ? table._.alias : is(table, View) ? table[ViewBaseConfig].name : is(table, SQL) ? void 0 : table[Table.Symbol.IsAlias] ? table[Table.Symbol.Name] : table[Table.Symbol.BaseName];
+}
+/** @internal */
+function getColumnNameAndConfig(a, b) {
+	return {
+		name: typeof a === "string" && a.length > 0 ? a : "",
+		config: typeof a === "object" ? a : b
+	};
+}
+var textDecoder = typeof TextDecoder === "undefined" ? null : new TextDecoder();
+function assertUnreachable(_x) {
+	throw new Error("Didn't expect to get here");
+}
+//#endregion
+//#region node_modules/drizzle-orm/query-promise.js
+var QueryPromise = class {
+	static [entityKind] = "QueryPromise";
+	[Symbol.toStringTag] = "QueryPromise";
+	catch(onRejected) {
+		return this.then(void 0, onRejected);
+	}
+	finally(onFinally) {
+		return this.then((value) => {
+			onFinally?.();
+			return value;
+		}, (reason) => {
+			onFinally?.();
+			throw reason;
+		});
+	}
+	then(onFulfilled, onRejected) {
+		return this.execute().then(onFulfilled, onRejected);
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/count.js
+var SQLiteCountBuilder = class SQLiteCountBuilder extends SQL {
+	static [entityKind] = "SQLiteCountBuilder";
+	dialect;
+	session;
+	static buildCount(source, filters, parens) {
+		const query = sql`select count(*) from ${source}${sql` where ${filters}`.if(filters)}`;
+		return parens ? sql`(${query})` : query;
+	}
+	constructor(countConfig) {
+		super(SQLiteCountBuilder.buildCount(countConfig.source, countConfig.filters, true).queryChunks);
+		this.countConfig = countConfig;
+		this.dialect = countConfig.dialect;
+		this.session = countConfig.session;
+		this.mapWith((e) => {
+			if (typeof e === "number") return e;
+			return Number(e ?? 0);
+		});
+	}
+	executableSql;
+	build() {
+		if (!this.executableSql) {
+			const { source, filters } = this.countConfig;
+			this.executableSql = SQLiteCountBuilder.buildCount(source, filters);
+		}
+		return this.dialect.sqlToQuery(this.executableSql);
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/count.js
+var SQLiteAsyncCountBuilder = class extends SQLiteCountBuilder {
+	static [entityKind] = "SQLiteAsyncCountBuilder";
+	constructor(countConfig) {
+		super(countConfig);
+	}
+	/** @internal */
+	executeRaw(placeholderValues) {
+		return this.session.prepareQuery(this.build(), "arrays", false, "all", (rows) => {
+			const v = rows[0]?.[0];
+			if (typeof v === "number") return v;
+			return v ? Number(v) : 0;
+		}).execute(placeholderValues);
+	}
+	async execute(placeholderValues) {
+		return await this.executeRaw(placeholderValues);
+	}
+};
+applyMixins(SQLiteAsyncCountBuilder, [QueryPromise]);
+var SQLiteSyncCountBuilder = class extends SQLiteAsyncCountBuilder {
+	static [entityKind] = "SQLiteSyncCountBuilder";
+	sync(placeholderValues) {
+		return this.executeRaw(placeholderValues).sync();
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/query.js
+var RelationalQueryBuilder = class {
+	static [entityKind] = "SQLiteRelationalQueryBuilderV2";
+	constructor(mode, schema, table, tableConfig, dialect, session, forbidJsonb, builder = SQLiteRelationalQuery) {
+		this.mode = mode;
+		this.schema = schema;
+		this.table = table;
+		this.tableConfig = tableConfig;
+		this.dialect = dialect;
+		this.session = session;
+		this.forbidJsonb = forbidJsonb;
+		this.builder = builder;
+	}
+	findMany(config) {
+		return new this.builder(this.mode, this.schema, this.table, this.tableConfig, this.dialect, this.session, config ?? true, "many", this.forbidJsonb);
+	}
+	findFirst(config) {
+		return new this.builder(this.mode, this.schema, this.table, this.tableConfig, this.dialect, this.session, config ?? true, "first", this.forbidJsonb);
+	}
+};
+var SQLiteRelationalQuery = class {
+	static [entityKind] = "SQLiteRelationalQueryV2";
+	/** @internal */
+	mode;
+	/** @internal */
+	table;
+	/** @internal */
+	resultKind;
+	constructor(resultKind, schema, table, tableConfig, dialect, session, config, mode, forbidJsonb) {
+		this.schema = schema;
+		this.tableConfig = tableConfig;
+		this.dialect = dialect;
+		this.session = session;
+		this.config = config;
+		this.forbidJsonb = forbidJsonb;
+		this.resultKind = resultKind;
+		this.mode = mode;
+		this.table = table;
+	}
+	getSQL() {
+		return this._getQuery().sql;
+	}
+	_getQuery() {
+		const jsonb = this.forbidJsonb ? sql`json` : sql`jsonb`;
+		return this.dialect.buildRelationalQuery({
+			schema: this.schema,
+			table: this.table,
+			tableConfig: this.tableConfig,
+			queryConfig: this.config,
+			mode: this.mode,
+			jsonb
+		});
+	}
+	_toSQL() {
+		const query = this._getQuery();
+		return {
+			query,
+			builtQuery: this.dialect.sqlToQuery(query.sql)
+		};
+	}
+	toSQL() {
+		return this._toSQL().builtQuery;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/query.js
+var SQLiteAsyncRelationalQuery = class extends SQLiteRelationalQuery {
+	static [entityKind] = "SQLiteAsyncRelationalQueryV2";
+	/** @internal */
+	_prepare(prepare = false) {
+		const { query, builtQuery } = this._toSQL();
+		const mapper = this.dialect.mapperGenerators.relationalRows({
+			isFirst: this.mode === "first",
+			parseJson: true,
+			parseJsonIfString: false,
+			rootJsonMappers: false,
+			selection: query.selection,
+			arrayModeRoot: true
+		});
+		return this.session.prepareQuery(builtQuery, "arrays", prepare, "all", mapper);
+	}
+	prepare() {
+		return this._prepare(true);
+	}
+	async execute(placeholderValues) {
+		return this._prepare().execute(placeholderValues);
+	}
+};
+var SQLiteSyncRelationalQuery = class extends SQLiteAsyncRelationalQuery {
+	static [entityKind] = "SQLiteSyncRelationalQueryV2";
+	sync(placeholderValues) {
+		return this._prepare().execute(placeholderValues).sync();
+	}
+};
+applyMixins(SQLiteAsyncRelationalQuery, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/alias.js
+var ColumnTableAliasProxyHandler = class {
+	static [entityKind] = "ColumnTableAliasProxyHandler";
+	constructor(table, ignoreColumnAlias) {
+		this.table = table;
+		this.ignoreColumnAlias = ignoreColumnAlias;
+	}
+	get(columnObj, prop) {
+		if (prop === "table") return this.table;
+		if (prop === "isAlias" && this.ignoreColumnAlias) return false;
+		return columnObj[prop];
+	}
+};
+var ViewSelectionAliasProxyHandler = class {
+	static [entityKind] = "ViewSelectionAliasProxyHandler";
+	constructor(view, selection, ignoreColumnAlias) {
+		this.view = view;
+		this.selection = selection;
+		this.ignoreColumnAlias = ignoreColumnAlias;
+	}
+	get(selection, prop) {
+		const value = selection[prop];
+		if (is(value, Column)) return new Proxy(value, new ColumnTableAliasProxyHandler(this.view, this.ignoreColumnAlias));
+		if (is(value, Subquery) || is(value, SQL) || is(value, SQL.Aliased) || isSQLWrapper(value) || typeof value !== "object" || value === null) return value;
+		return new Proxy(value, this);
+	}
+};
+var TableAliasProxyHandler = class {
+	static [entityKind] = "TableAliasProxyHandler";
+	constructor(alias, replaceOriginalName, ignoreColumnAlias) {
+		this.alias = alias;
+		this.replaceOriginalName = replaceOriginalName;
+		this.ignoreColumnAlias = ignoreColumnAlias;
+	}
+	get(target, prop) {
+		if (prop === Table.Symbol.IsAlias) return true;
+		if (prop === Table.Symbol.Name) return this.alias;
+		if (this.replaceOriginalName && prop === Table.Symbol.OriginalName) return this.alias;
+		if (prop === ViewBaseConfig) return {
+			...target[ViewBaseConfig],
+			name: this.alias,
+			isAlias: true,
+			selectedFields: new Proxy(target[ViewBaseConfig].selectedFields, new ViewSelectionAliasProxyHandler(new Proxy(target, this), target[ViewBaseConfig].selectedFields, this.ignoreColumnAlias))
+		};
+		if (prop === Table.Symbol.Columns) {
+			const columns = target[Table.Symbol.Columns];
+			if (!columns) return columns;
+			if (is(target, View)) return new Proxy(target[Table.Symbol.Columns], new ViewSelectionAliasProxyHandler(new Proxy(target, this), target[Table.Symbol.Columns], this.ignoreColumnAlias));
+			const proxiedColumns = {};
+			Object.keys(columns).map((key) => {
+				proxiedColumns[key] = new Proxy(columns[key], new ColumnTableAliasProxyHandler(new Proxy(target, this), this.ignoreColumnAlias));
+			});
+			return proxiedColumns;
+		}
+		const value = target[prop];
+		if (is(value, Column)) return new Proxy(value, new ColumnTableAliasProxyHandler(new Proxy(target, this), this.ignoreColumnAlias));
+		return value;
+	}
+};
+var ColumnAliasProxyHandler = class {
+	static [entityKind] = "ColumnAliasProxyHandler";
+	constructor(alias) {
+		this.alias = alias;
+	}
+	get(target, prop) {
+		if (prop === "isAlias") return true;
+		if (prop === "name") return this.alias;
+		if (prop === "keyAsName") return false;
+		if (prop === OriginalColumn) return () => target;
+		return target[prop];
+	}
+};
+function aliasedTable(table, tableAlias) {
+	return new Proxy(table, new TableAliasProxyHandler(tableAlias, false, false));
+}
+function aliasedColumn(column, alias) {
+	return new Proxy(column, new ColumnAliasProxyHandler(alias));
+}
+Column.prototype.as = function(alias) {
+	return aliasedColumn(this, alias);
+};
+function getOriginalColumnFromAlias(column) {
+	return column[OriginalColumn]();
+}
+//#endregion
+//#region node_modules/drizzle-orm/selection-proxy.js
+var SelectionProxyHandler = class SelectionProxyHandler {
+	static [entityKind] = "SelectionProxyHandler";
+	config;
+	constructor(config) {
+		this.config = { ...config };
+	}
+	get(subquery, prop) {
+		if (prop === "_") return {
+			...subquery["_"],
+			selectedFields: new Proxy(subquery._.selectedFields, this)
+		};
+		if (prop === ViewBaseConfig) return {
+			...subquery[ViewBaseConfig],
+			selectedFields: new Proxy(subquery[ViewBaseConfig].selectedFields, this)
+		};
+		if (typeof prop === "symbol") return subquery[prop];
+		const value = (is(subquery, Subquery) ? subquery._.selectedFields : is(subquery, View) ? subquery[ViewBaseConfig].selectedFields : subquery)[prop];
+		if (is(value, SQL.Aliased)) {
+			if (this.config.sqlAliasedBehavior === "sql" && !value.isSelectionField) return value.sql;
+			const newValue = value.clone();
+			newValue.isSelectionField = true;
+			newValue.origin = this.config.alias;
+			return newValue;
+		}
+		if (is(value, SQL)) {
+			if (this.config.sqlBehavior === "sql") return value;
+			throw new Error(`You tried to reference "${prop}" field from a subquery, which is a raw SQL field, but it doesn't have an alias declared. Please add an alias to the field using ".as('alias')" method.`);
+		}
+		if (is(value, Column)) {
+			if (this.config.alias) return new Proxy(value, new ColumnTableAliasProxyHandler(new Proxy(value.table, new TableAliasProxyHandler(this.config.alias, this.config.replaceOriginalName ?? false, true)), true));
+			return value;
+		}
+		if (typeof value !== "object" || value === null) return value;
+		return new Proxy(value, new SelectionProxyHandler(this.config));
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/column-builder.js
+var ColumnBuilder = class {
+	static [entityKind] = "ColumnBuilder";
+	/** @internal */
+	config;
+	constructor(name, dataType, columnType) {
+		this.config = {
+			name,
+			keyAsName: name === "",
+			notNull: false,
+			default: void 0,
+			hasDefault: false,
+			primaryKey: false,
+			isUnique: false,
+			uniqueName: void 0,
+			uniqueType: void 0,
+			dataType,
+			columnType,
+			generated: void 0
+		};
+	}
+	/**
+	* Changes the data type of the column. Commonly used with `json` columns. Also, useful for branded types.
+	*
+	* @example
+	* ```ts
+	* const users = pgTable('users', {
+	* 	id: integer('id').$type<UserId>().primaryKey(),
+	* 	details: json('details').$type<UserDetails>().notNull(),
+	* });
+	* ```
+	*/
+	$type() {
+		return this;
+	}
+	/**
+	* Adds a `not null` clause to the column definition.
+	*
+	* Affects the `select` model of the table - columns *without* `not null` will be nullable on select.
+	*/
+	notNull() {
+		this.config.notNull = true;
+		return this;
+	}
+	/**
+	* Adds a `default <value>` clause to the column definition.
+	*
+	* Affects the `insert` model of the table - columns *with* `default` are optional on insert.
+	*
+	* If you need to set a dynamic default value, use {@link $defaultFn} instead.
+	*/
+	default(value) {
+		this.config.default = value;
+		this.config.hasDefault = true;
+		return this;
+	}
+	/**
+	* Adds a dynamic default value to the column.
+	* The function will be called when the row is inserted, and the returned value will be used as the column value.
+	*
+	* **Note:** This value does not affect the `drizzle-kit` behavior, it is only used at runtime in `drizzle-orm`.
+	*/
+	$defaultFn(fn) {
+		this.config.defaultFn = fn;
+		this.config.hasDefault = true;
+		return this;
+	}
+	/**
+	* Alias for {@link $defaultFn}.
+	*/
+	$default = this.$defaultFn;
+	/**
+	* Adds a dynamic update value to the column.
+	* The function will be called when the row is updated, and the returned value will be used as the column value if none is provided.
+	* If no `default` (or `$defaultFn`) value is provided, the function will be called when the row is inserted as well, and the returned value will be used as the column value.
+	*
+	* **Note:** This value does not affect the `drizzle-kit` behavior, it is only used at runtime in `drizzle-orm`.
+	*/
+	$onUpdateFn(fn) {
+		this.config.onUpdateFn = fn;
+		this.config.hasDefault = true;
+		return this;
+	}
+	/**
+	* Alias for {@link $onUpdateFn}.
+	*/
+	$onUpdate = this.$onUpdateFn;
+	/**
+	* Adds a `primary key` clause to the column definition. This implicitly makes the column `not null`.
+	*
+	* In SQLite, `integer primary key` implicitly makes the column auto-incrementing.
+	*/
+	primaryKey() {
+		this.config.primaryKey = true;
+		this.config.notNull = true;
+		return this;
+	}
+	/** @internal Sets the name of the column to the key within the table definition if a name was not given. */
+	setName(name, casingFn) {
+		if (this.config.name !== "") return;
+		this.config.name = casingFn(name);
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/foreign-keys.js
+var ForeignKeyBuilder = class {
+	static [entityKind] = "SQLiteForeignKeyBuilder";
+	/** @internal */
+	reference;
+	/** @internal */
+	_onUpdate;
+	/** @internal */
+	_onDelete;
+	constructor(config, actions) {
+		this.reference = () => {
+			const { name, columns, foreignColumns } = config();
+			return {
+				name,
+				columns,
+				foreignTable: foreignColumns[0].table,
+				foreignColumns
+			};
+		};
+		if (actions) {
+			this._onUpdate = actions.onUpdate;
+			this._onDelete = actions.onDelete;
+		}
+	}
+	onUpdate(action) {
+		this._onUpdate = action;
+		return this;
+	}
+	onDelete(action) {
+		this._onDelete = action;
+		return this;
+	}
+	/** @internal */
+	build(table) {
+		return new ForeignKey(table, this);
+	}
+};
+var ForeignKey = class {
+	static [entityKind] = "SQLiteForeignKey";
+	reference;
+	onUpdate;
+	onDelete;
+	constructor(table, builder) {
+		this.table = table;
+		this.reference = builder.reference;
+		this.onUpdate = builder._onUpdate;
+		this.onDelete = builder._onDelete;
+	}
+	getName() {
+		const { name, columns, foreignColumns } = this.reference();
+		const columnNames = columns.map((column) => column.name);
+		const foreignColumnNames = foreignColumns.map((column) => column.name);
+		const chunks = [
+			this.table[TableName],
+			...columnNames,
+			foreignColumns[0].table[TableName],
+			...foreignColumnNames
+		];
+		return name ?? `${chunks.join("_")}_fk`;
+	}
+	isNameExplicit() {
+		return !!this.reference().name;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/common.js
+var SQLiteColumnBuilder = class extends ColumnBuilder {
+	static [entityKind] = "SQLiteColumnBuilder";
+	foreignKeyConfigs = [];
+	references(ref, actions = {}) {
+		this.foreignKeyConfigs.push({
+			ref,
+			actions
+		});
+		return this;
+	}
+	unique(name) {
+		this.config.isUnique = true;
+		this.config.uniqueName = name;
+		return this;
+	}
+	generatedAlwaysAs(as, config) {
+		this.config.generated = {
+			as,
+			type: "always",
+			mode: config?.mode ?? "virtual"
+		};
+		return this;
+	}
+	/** @internal */
+	buildForeignKeys(column, table) {
+		return this.foreignKeyConfigs.map(({ ref, actions }) => {
+			return ((ref, actions) => {
+				const builder = new ForeignKeyBuilder(() => {
+					const foreignColumn = ref();
+					return {
+						columns: [column],
+						foreignColumns: [foreignColumn]
+					};
+				});
+				if (actions.onUpdate) builder.onUpdate(actions.onUpdate);
+				if (actions.onDelete) builder.onDelete(actions.onDelete);
+				return builder.build(table);
+			})(ref, actions);
+		});
+	}
+};
+var SQLiteColumn = class extends Column {
+	static [entityKind] = "SQLiteColumn";
+	/** @internal */
+	table;
+	constructor(table, config) {
+		super(table, config);
+		this.table = table;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/blob.js
+function hexToText(hexString) {
+	let result = "";
+	for (let i = 0; i < hexString.length; i += 2) {
+		const hexPair = hexString.slice(i, i + 2);
+		const decimalValue = Number.parseInt(hexPair, 16);
+		result += String.fromCodePoint(decimalValue);
+	}
+	return result;
+}
+var SQLiteBigIntBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteBigIntBuilder";
+	constructor(name) {
+		super(name, "bigint int64", "SQLiteBigInt");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteBigInt(table, this.config);
+	}
+};
+var SQLiteBigInt = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteBigInt";
+	getSQLType() {
+		return "blob";
+	}
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") return BigInt(hexToText(value));
+		if (typeof Buffer !== "undefined" && Buffer.from) {
+			const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
+			return BigInt(buf.toString("utf8"));
+		}
+		return BigInt(textDecoder.decode(value));
+	};
+	mapToDriverValue = (value) => {
+		return Buffer.from(value.toString());
+	};
+};
+var SQLiteBlobJsonBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteBlobJsonBuilder";
+	constructor(name) {
+		super(name, "object json", "SQLiteBlobJson");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteBlobJson(table, this.config);
+	}
+};
+var SQLiteBlobJson = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteBlobJson";
+	getSQLType() {
+		return "blob";
+	}
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") return JSON.parse(hexToText(value));
+		if (typeof Buffer !== "undefined" && Buffer.from) {
+			const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
+			return JSON.parse(buf.toString("utf8"));
+		}
+		return JSON.parse(textDecoder.decode(value));
+	};
+	mapToDriverValue = (value) => {
+		return Buffer.from(JSON.stringify(value));
+	};
+};
+var SQLiteBlobBufferBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteBlobBufferBuilder";
+	constructor(name) {
+		super(name, "object buffer", "SQLiteBlobBuffer");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteBlobBuffer(table, this.config);
+	}
+};
+var SQLiteBlobBuffer = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteBlobBuffer";
+	mapFromDriverValue = (value) => {
+		if (Buffer.isBuffer(value)) return value;
+		if (typeof value === "string") return Buffer.from(value, "hex");
+		return Buffer.from(value);
+	};
+	getSQLType() {
+		return "blob";
+	}
+};
+function blob(a, b) {
+	const { name, config } = getColumnNameAndConfig(a, b);
+	if (config?.mode === "bigint") return new SQLiteBigIntBuilder(name);
+	if (config?.mode === "buffer") return new SQLiteBlobBufferBuilder(name);
+	return new SQLiteBlobJsonBuilder(name);
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/custom.js
+var SQLiteCustomColumnBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteCustomColumnBuilder";
+	constructor(name, fieldConfig, customTypeParams) {
+		super(name, "custom", "SQLiteCustomColumn");
+		this.config.fieldConfig = fieldConfig;
+		this.config.customTypeParams = customTypeParams;
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteCustomColumn(table, this.config);
+	}
+};
+var SQLiteCustomColumn = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteCustomColumn";
+	sqlName;
+	mapTo;
+	mapFrom;
+	mapJson;
+	forJsonSelect;
+	constructor(table, config) {
+		super(table, config);
+		this.sqlName = config.customTypeParams.dataType(config.fieldConfig);
+		this.mapTo = config.customTypeParams.toDriver;
+		this.mapFrom = config.customTypeParams.fromDriver;
+		this.mapJson = config.customTypeParams.fromJson;
+		this.forJsonSelect = config.customTypeParams.forJsonSelect;
+	}
+	getSQLType() {
+		return this.sqlName;
+	}
+	mapFromDriverValue = (value) => {
+		return typeof this.mapFrom === "function" ? this.mapFrom(value) : value;
+	};
+	mapFromJsonValue(value) {
+		return typeof this.mapJson === "function" ? this.mapJson(value) : this.mapFromDriverValue(value);
+	}
+	jsonSelectIdentifier(identifier, sql) {
+		if (typeof this.forJsonSelect === "function") return this.forJsonSelect(identifier, sql);
+		const rawType = this.getSQLType().toLowerCase();
+		const parenPos = rawType.indexOf("(");
+		switch (parenPos + 1 ? rawType.slice(0, parenPos) : rawType) {
+			case "numeric":
+			case "decimal":
+			case "bigint": return sql`cast(${identifier} as text)`;
+			case "blob": return sql`hex(${identifier})`;
+			default: return identifier;
+		}
+	}
+	mapToDriverValue = (value) => {
+		return typeof this.mapTo === "function" ? this.mapTo(value) : value;
+	};
+};
+/**
+* Custom sqlite database data type generator
+*/
+function customType(customTypeParams) {
+	return (a, b) => {
+		const { name, config } = getColumnNameAndConfig(a, b);
+		return new SQLiteCustomColumnBuilder(name, config, customTypeParams);
+	};
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/integer.js
+var SQLiteBaseIntegerBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteBaseIntegerBuilder";
+	constructor(name, dataType, columnType) {
+		super(name, dataType, columnType);
+		this.config.autoIncrement = false;
+	}
+	primaryKey(config) {
+		if (config?.autoIncrement) this.config.autoIncrement = true;
+		this.config.hasDefault = true;
+		return super.primaryKey();
+	}
+};
+var SQLiteBaseInteger = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteBaseInteger";
+	autoIncrement = this.config.autoIncrement;
+	getSQLType() {
+		return "integer";
+	}
+};
+var SQLiteIntegerBuilder = class extends SQLiteBaseIntegerBuilder {
+	static [entityKind] = "SQLiteIntegerBuilder";
+	constructor(name) {
+		super(name, "number int53", "SQLiteInteger");
+	}
+	build(table) {
+		return new SQLiteInteger(table, this.config);
+	}
+};
+var SQLiteInteger = class extends SQLiteBaseInteger {
+	static [entityKind] = "SQLiteInteger";
+};
+var SQLiteTimestampBuilder = class extends SQLiteBaseIntegerBuilder {
+	static [entityKind] = "SQLiteTimestampBuilder";
+	constructor(name, mode) {
+		super(name, "object date", "SQLiteTimestamp");
+		this.config.mode = mode;
+	}
+	/**
+	* @deprecated Use `default()` with your own expression instead.
+	*
+	* Adds `DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))` to the column, which is the current epoch timestamp in milliseconds.
+	*/
+	defaultNow() {
+		return this.default(sql`(cast((julianday('now') - 2440587.5)*86400000 as integer))`);
+	}
+	build(table) {
+		return new SQLiteTimestamp(table, this.config);
+	}
+};
+var SQLiteTimestamp = class extends SQLiteBaseInteger {
+	static [entityKind] = "SQLiteTimestamp";
+	mode = this.config.mode;
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") return new Date(value.replaceAll("\"", ""));
+		if (this.config.mode === "timestamp") return /* @__PURE__ */ new Date(value * 1e3);
+		return new Date(value);
+	};
+	mapToDriverValue = (value) => {
+		if (typeof value === "number") return value;
+		const unix = value.getTime();
+		if (this.config.mode === "timestamp") return Math.floor(unix / 1e3);
+		return unix;
+	};
+};
+var SQLiteBooleanBuilder = class extends SQLiteBaseIntegerBuilder {
+	static [entityKind] = "SQLiteBooleanBuilder";
+	constructor(name, mode) {
+		super(name, "boolean", "SQLiteBoolean");
+		this.config.mode = mode;
+	}
+	build(table) {
+		return new SQLiteBoolean(table, this.config);
+	}
+};
+var SQLiteBoolean = class extends SQLiteBaseInteger {
+	static [entityKind] = "SQLiteBoolean";
+	mode = this.config.mode;
+	mapFromDriverValue = (value) => {
+		return Number(value) === 1;
+	};
+	mapToDriverValue = (value) => {
+		return value ? 1 : 0;
+	};
+};
+function integer(a, b) {
+	const { name, config } = getColumnNameAndConfig(a, b);
+	if (config?.mode === "timestamp" || config?.mode === "timestamp_ms") return new SQLiteTimestampBuilder(name, config.mode);
+	if (config?.mode === "boolean") return new SQLiteBooleanBuilder(name, config.mode);
+	return new SQLiteIntegerBuilder(name);
+}
+var int = integer;
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/numeric.js
+var SQLiteNumericBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteNumericBuilder";
+	constructor(name) {
+		super(name, "string numeric", "SQLiteNumeric");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteNumeric(table, this.config);
+	}
+};
+var SQLiteNumeric = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteNumeric";
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") return value;
+		return String(value);
+	};
+	getSQLType() {
+		return "numeric";
+	}
+};
+var SQLiteNumericNumberBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteNumericNumberBuilder";
+	constructor(name) {
+		super(name, "number", "SQLiteNumericNumber");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteNumericNumber(table, this.config);
+	}
+};
+var SQLiteNumericNumber = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteNumericNumber";
+	mapFromDriverValue = (value) => {
+		if (typeof value === "number") return value;
+		return Number(value);
+	};
+	mapToDriverValue = String;
+	getSQLType() {
+		return "numeric";
+	}
+};
+var SQLiteNumericBigIntBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteNumericBigIntBuilder";
+	constructor(name) {
+		super(name, "bigint int64", "SQLiteNumericBigInt");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteNumericBigInt(table, this.config);
+	}
+};
+var SQLiteNumericBigInt = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteNumericBigInt";
+	mapFromDriverValue = BigInt;
+	mapToDriverValue = String;
+	getSQLType() {
+		return "numeric";
+	}
+};
+function numeric(a, b) {
+	const { name, config } = getColumnNameAndConfig(a, b);
+	const mode = config?.mode;
+	return mode === "number" ? new SQLiteNumericNumberBuilder(name) : mode === "bigint" ? new SQLiteNumericBigIntBuilder(name) : new SQLiteNumericBuilder(name);
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/real.js
+var SQLiteRealBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteRealBuilder";
+	constructor(name) {
+		super(name, "number double", "SQLiteReal");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteReal(table, this.config);
+	}
+};
+var SQLiteReal = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteReal";
+	getSQLType() {
+		return "real";
+	}
+};
+function real(name) {
+	return new SQLiteRealBuilder(name ?? "");
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/text.js
+var SQLiteTextBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteTextBuilder";
+	constructor(name, config) {
+		super(name, config.enum?.length ? "string enum" : "string", "SQLiteText");
+		this.config.enumValues = config.enum;
+		this.config.length = config.length;
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteText(table, this.config);
+	}
+};
+var SQLiteText = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteText";
+	enumValues = this.config.enumValues;
+	constructor(table, config) {
+		super(table, config);
+	}
+	getSQLType() {
+		return `text${this.config.length ? `(${this.config.length})` : ""}`;
+	}
+};
+var SQLiteTextJsonBuilder = class extends SQLiteColumnBuilder {
+	static [entityKind] = "SQLiteTextJsonBuilder";
+	constructor(name) {
+		super(name, "object json", "SQLiteTextJson");
+	}
+	/** @internal */
+	build(table) {
+		return new SQLiteTextJson(table, this.config);
+	}
+};
+var SQLiteTextJson = class extends SQLiteColumn {
+	static [entityKind] = "SQLiteTextJson";
+	getSQLType() {
+		return "text";
+	}
+	mapFromDriverValue = (value) => {
+		return JSON.parse(value);
+	};
+	mapToDriverValue = (value) => {
+		return JSON.stringify(value);
+	};
+};
+function text(a, b = {}) {
+	const { name, config } = getColumnNameAndConfig(a, b);
+	if (config.mode === "json") return new SQLiteTextJsonBuilder(name);
+	return new SQLiteTextBuilder(name, config);
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/columns/all.js
+function getSQLiteColumnBuilders() {
+	return {
+		blob,
+		customType,
+		integer,
+		numeric,
+		real,
+		text
+	};
+}
+//#endregion
+//#region node_modules/drizzle-orm/casing.js
+function toSnakeCase(input) {
+	return (input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? []).map((word) => word.toLowerCase()).join("_");
+}
+function toCamelCase(input) {
+	return (input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? []).reduce((acc, word, i) => {
+		return acc + (i === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1)}`);
+	}, "");
+}
+function getCasingFn(casing) {
+	if (casing === "snake_case") return toSnakeCase;
+	if (casing === "camelCase") return toCamelCase;
+	return (name) => name;
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/table.js
+/** @internal */
+var InlineForeignKeys = Symbol.for("drizzle:SQLiteInlineForeignKeys");
+var SQLiteTable = class extends Table {
+	static [entityKind] = "SQLiteTable";
+	/** @internal */
+	static Symbol = Object.assign({}, Table.Symbol, { InlineForeignKeys });
+	/** @internal */
+	[Table.Symbol.Columns];
+	/** @internal */
+	[InlineForeignKeys] = [];
+	/** @internal */
+	[Table.Symbol.ExtraConfigBuilder] = void 0;
+};
+/** @internal */
+function sqliteTableBase(name, columns, extraConfig, schema, casing, baseName = name) {
+	const casingFn = getCasingFn(casing);
+	const rawTable = new SQLiteTable(name, schema, baseName);
+	const parsedColumns = typeof columns === "function" ? columns(getSQLiteColumnBuilders()) : columns;
+	const builtColumns = Object.fromEntries(Object.entries(parsedColumns).map(([name, colBuilderBase]) => {
+		const colBuilder = colBuilderBase;
+		colBuilder.setName(name, casingFn);
+		const column = colBuilder.build(rawTable).postBuild();
+		rawTable[InlineForeignKeys].push(...colBuilder.buildForeignKeys(column, rawTable));
+		return [name, column];
+	}));
+	const table = Object.assign(rawTable, builtColumns);
+	table[Table.Symbol.Columns] = builtColumns;
+	table[Table.Symbol.ExtraConfigColumns] = builtColumns;
+	if (extraConfig) table[SQLiteTable.Symbol.ExtraConfigBuilder] = extraConfig;
+	return table;
+}
+/** @internal */
+function sqliteTableWithCasing(casing) {
+	return (name, columns, extraConfig) => sqliteTableBase(name, columns, extraConfig, void 0, casing);
+}
+var sqliteTable = sqliteTableWithCasing(void 0);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/utils.js
+function extractUsedTable(table) {
+	if (is(table, SQLiteTable)) return [`${table[Table.Symbol.BaseName]}`];
+	if (is(table, Subquery)) return table._.usedTables ?? [];
+	if (is(table, SQL)) return table.usedTables ?? [];
+	return [];
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/delete.js
+var SQLiteDeleteBase = class {
+	static [entityKind] = "SQLiteDelete";
+	/** @internal */
+	config;
+	constructor(table, session, dialect, withList) {
+		this.table = table;
+		this.session = session;
+		this.dialect = dialect;
+		this.config = {
+			table,
+			withList
+		};
+	}
+	/**
+	* Adds a `where` clause to the query.
+	*
+	* Calling this method will delete only those rows that fulfill a specified condition.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/delete}
+	*
+	* @param where the `where` clause.
+	*
+	* @example
+	* You can use conditional operators and `sql function` to filter the rows to be deleted.
+	*
+	* ```ts
+	* // Delete all cars with green color
+	* db.delete(cars).where(eq(cars.color, 'green'));
+	* // or
+	* db.delete(cars).where(sql`${cars.color} = 'green'`)
+	* ```
+	*
+	* You can logically combine conditional operators with `and()` and `or()` operators:
+	*
+	* ```ts
+	* // Delete all BMW cars with a green color
+	* db.delete(cars).where(and(eq(cars.color, 'green'), eq(cars.brand, 'BMW')));
+	*
+	* // Delete all cars with the green or blue color
+	* db.delete(cars).where(or(eq(cars.color, 'green'), eq(cars.color, 'blue')));
+	* ```
+	*/
+	where(where) {
+		this.config.where = where;
+		return this;
+	}
+	orderBy(...columns) {
+		if (typeof columns[0] === "function") {
+			const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "sql"
+			})));
+			const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+			this.config.orderBy = orderByArray;
+		} else {
+			const orderByArray = columns;
+			this.config.orderBy = orderByArray;
+		}
+		return this;
+	}
+	limit(limit) {
+		this.config.limit = limit;
+		return this;
+	}
+	returning(fields = this.table[SQLiteTable.Symbol.Columns]) {
+		this.config.returning = orderSelectedFields(fields);
+		return this;
+	}
+	getSQL() {
+		return this.dialect.buildDeleteQuery(this.config);
+	}
+	toSQL() {
+		return this.dialect.sqlToQuery(this.getSQL());
+	}
+	$dynamic() {
+		return this;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/delete.js
+var SQLiteAsyncDeleteBase = class extends SQLiteDeleteBase {
+	static [entityKind] = "SQLiteAsyncDelete";
+	/** @internal */
+	_prepare(prepare = false) {
+		return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), "arrays", prepare, this.config.returning ? "all" : "run", this.config.returning ? this.dialect.mapperGenerators.rows(this.config.returning, void 0) : void 0, {
+			type: "delete",
+			tables: extractUsedTable(this.config.table)
+		});
+	}
+	prepare() {
+		return this._prepare(true);
+	}
+	run = (placeholderValues) => {
+		return this._prepare().run(placeholderValues);
+	};
+	all = (placeholderValues) => {
+		return this._prepare().all(placeholderValues);
+	};
+	get = (placeholderValues) => {
+		return this._prepare().get(placeholderValues);
+	};
+	values = (placeholderValues) => {
+		return this._prepare().values(placeholderValues);
+	};
+	async execute(placeholderValues) {
+		return this._prepare().execute(placeholderValues);
+	}
+};
+applyMixins(SQLiteAsyncDeleteBase, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/view-base.js
+var SQLiteViewBase = class extends View {
+	static [entityKind] = "SQLiteViewBase";
+};
+//#endregion
+//#region node_modules/drizzle-orm/query-builders/query-builder.js
+var TypedQueryBuilder = class {
+	static [entityKind] = "TypedQueryBuilder";
+	/** @internal */
+	getSelectedFields() {
+		return this._.selectedFields;
+	}
+	/** @internal */
+	withoutSelectionCastCodecs() {
+		return this;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/select.js
+var SQLiteSelectBuilder = class {
+	static [entityKind] = "SQLiteSelectBuilder";
+	fields;
+	session;
+	dialect;
+	withList;
+	distinct;
+	constructor(config, builder = SQLiteSelectBase) {
+		this.builder = builder;
+		this.fields = config.fields;
+		this.session = config.session;
+		this.dialect = config.dialect;
+		this.withList = config.withList;
+		this.distinct = config.distinct;
+	}
+	from(source) {
+		const isPartialSelect = !!this.fields;
+		let fields;
+		if (this.fields) fields = this.fields;
+		else if (is(source, Subquery)) fields = Object.fromEntries(Object.keys(source._.selectedFields).map((key) => [key, source[key]]));
+		else if (is(source, SQLiteViewBase)) fields = source[ViewBaseConfig].selectedFields;
+		else if (is(source, SQL)) fields = {};
+		else fields = getTableColumns(source);
+		return new this.builder({
+			table: source,
+			fields,
+			isPartialSelect,
+			session: this.session,
+			dialect: this.dialect,
+			withList: this.withList ?? [],
+			distinct: this.distinct
+		});
+	}
+};
+var SQLiteSelectBase = class extends TypedQueryBuilder {
+	static [entityKind] = "SQLiteSelectQueryBuilder";
+	_;
+	/** @internal */
+	config;
+	joinsNotNullableMap;
+	tableName;
+	isPartialSelect;
+	session;
+	dialect;
+	cacheConfig = void 0;
+	usedTables = /* @__PURE__ */ new Set();
+	constructor({ table, fields, isPartialSelect, session, dialect, withList, distinct }) {
+		super();
+		this.config = {
+			withList,
+			table,
+			fields: { ...fields },
+			distinct,
+			setOperators: []
+		};
+		this.isPartialSelect = isPartialSelect;
+		this.session = session;
+		this.dialect = dialect;
+		this._ = {
+			selectedFields: fields,
+			config: this.config
+		};
+		this.tableName = getTableLikeName(table);
+		this.joinsNotNullableMap = typeof this.tableName === "string" ? { [this.tableName]: true } : {};
+		for (const item of extractUsedTable(table)) this.usedTables.add(item);
+	}
+	/** @internal */
+	getUsedTables() {
+		return [...this.usedTables];
+	}
+	createJoin(joinType) {
+		return (table, on) => {
+			const baseTableName = this.tableName;
+			const tableName = getTableLikeName(table);
+			for (const item of extractUsedTable(table)) this.usedTables.add(item);
+			if (typeof tableName === "string" && this.config.joins?.some((join) => join.alias === tableName)) throw new Error(`Alias "${tableName}" is already used in this query`);
+			if (!this.isPartialSelect) {
+				if (Object.keys(this.joinsNotNullableMap).length === 1 && typeof baseTableName === "string") this.config.fields = { [baseTableName]: this.config.fields };
+				if (typeof tableName === "string" && !is(table, SQL)) {
+					const selection = is(table, Subquery) ? table._.selectedFields : is(table, View) ? table[ViewBaseConfig].selectedFields : table[Table.Symbol.Columns];
+					this.config.fields[tableName] = selection;
+				}
+			}
+			if (typeof on === "function") on = on(new Proxy(this.config.fields, new SelectionProxyHandler({
+				sqlAliasedBehavior: "sql",
+				sqlBehavior: "sql"
+			})));
+			if (!this.config.joins) this.config.joins = [];
+			this.config.joins.push({
+				on,
+				table,
+				joinType,
+				alias: tableName
+			});
+			if (typeof tableName === "string") switch (joinType) {
+				case "left":
+					this.joinsNotNullableMap[tableName] = false;
+					break;
+				case "right":
+					this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+					this.joinsNotNullableMap[tableName] = true;
+					break;
+				case "cross":
+				case "inner":
+					this.joinsNotNullableMap[tableName] = true;
+					break;
+				case "full":
+					this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+					this.joinsNotNullableMap[tableName] = false;
+			}
+			return this;
+		};
+	}
+	/**
+	* Executes a `left join` operation by adding another table to the current query.
+	*
+	* Calling this method associates each row of the table with the corresponding row from the joined table, if a match is found. If no matching row exists, it sets all columns of the joined table to null.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/joins#left-join}
+	*
+	* @param table the table to join.
+	* @param on the `on` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all users and their pets
+	* const usersWithPets: { user: User; pets: Pet | null; }[] = await db.select()
+	*   .from(users)
+	*   .leftJoin(pets, eq(users.id, pets.ownerId))
+	*
+	* // Select userId and petId
+	* const usersIdsAndPetIds: { userId: number; petId: number | null; }[] = await db.select({
+	*   userId: users.id,
+	*   petId: pets.id,
+	* })
+	*   .from(users)
+	*   .leftJoin(pets, eq(users.id, pets.ownerId))
+	* ```
+	*/
+	leftJoin = this.createJoin("left");
+	/**
+	* Executes a `right join` operation by adding another table to the current query.
+	*
+	* Calling this method associates each row of the joined table with the corresponding row from the main table, if a match is found. If no matching row exists, it sets all columns of the main table to null.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/joins#right-join}
+	*
+	* @param table the table to join.
+	* @param on the `on` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all users and their pets
+	* const usersWithPets: { user: User | null; pets: Pet; }[] = await db.select()
+	*   .from(users)
+	*   .rightJoin(pets, eq(users.id, pets.ownerId))
+	*
+	* // Select userId and petId
+	* const usersIdsAndPetIds: { userId: number | null; petId: number; }[] = await db.select({
+	*   userId: users.id,
+	*   petId: pets.id,
+	* })
+	*   .from(users)
+	*   .rightJoin(pets, eq(users.id, pets.ownerId))
+	* ```
+	*/
+	rightJoin = this.createJoin("right");
+	/**
+	* Executes an `inner join` operation, creating a new table by combining rows from two tables that have matching values.
+	*
+	* Calling this method retrieves rows that have corresponding entries in both joined tables. Rows without matching entries in either table are excluded, resulting in a table that includes only matching pairs.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/joins#inner-join}
+	*
+	* @param table the table to join.
+	* @param on the `on` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all users and their pets
+	* const usersWithPets: { user: User; pets: Pet; }[] = await db.select()
+	*   .from(users)
+	*   .innerJoin(pets, eq(users.id, pets.ownerId))
+	*
+	* // Select userId and petId
+	* const usersIdsAndPetIds: { userId: number; petId: number; }[] = await db.select({
+	*   userId: users.id,
+	*   petId: pets.id,
+	* })
+	*   .from(users)
+	*   .innerJoin(pets, eq(users.id, pets.ownerId))
+	* ```
+	*/
+	innerJoin = this.createJoin("inner");
+	/**
+	* Executes a `full join` operation by combining rows from two tables into a new table.
+	*
+	* Calling this method retrieves all rows from both main and joined tables, merging rows with matching values and filling in `null` for non-matching columns.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/joins#full-join}
+	*
+	* @param table the table to join.
+	* @param on the `on` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all users and their pets
+	* const usersWithPets: { user: User | null; pets: Pet | null; }[] = await db.select()
+	*   .from(users)
+	*   .fullJoin(pets, eq(users.id, pets.ownerId))
+	*
+	* // Select userId and petId
+	* const usersIdsAndPetIds: { userId: number | null; petId: number | null; }[] = await db.select({
+	*   userId: users.id,
+	*   petId: pets.id,
+	* })
+	*   .from(users)
+	*   .fullJoin(pets, eq(users.id, pets.ownerId))
+	* ```
+	*/
+	fullJoin = this.createJoin("full");
+	/**
+	* Executes a `cross join` operation by combining rows from two tables into a new table.
+	*
+	* Calling this method retrieves all rows from both main and joined tables, merging all rows from each table.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/joins#cross-join}
+	*
+	* @param table the table to join.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all users, each user with every pet
+	* const usersWithPets: { user: User; pets: Pet; }[] = await db.select()
+	*   .from(users)
+	*   .crossJoin(pets)
+	*
+	* // Select userId and petId
+	* const usersIdsAndPetIds: { userId: number; petId: number; }[] = await db.select({
+	*   userId: users.id,
+	*   petId: pets.id,
+	* })
+	*   .from(users)
+	*   .crossJoin(pets)
+	* ```
+	*/
+	crossJoin = this.createJoin("cross");
+	createSetOperator(type, isAll) {
+		return (rightSelection) => {
+			const rightSelect = typeof rightSelection === "function" ? rightSelection(getSQLiteSetOperators()) : rightSelection;
+			if (!haveSameKeys(this.getSelectedFields(), rightSelect.getSelectedFields())) throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
+			this.config.setOperators.push({
+				type,
+				isAll,
+				rightSelect
+			});
+			return this;
+		};
+	}
+	/**
+	* Adds `union` set operator to the query.
+	*
+	* Calling this method will combine the result sets of the `select` statements and remove any duplicate rows that appear across them.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/set-operations#union}
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all unique names from customers and users tables
+	* await db.select({ name: users.name })
+	*   .from(users)
+	*   .union(
+	*     db.select({ name: customers.name }).from(customers)
+	*   );
+	* // or
+	* import { union } from 'drizzle-orm/sqlite-core'
+	*
+	* await union(
+	*   db.select({ name: users.name }).from(users),
+	*   db.select({ name: customers.name }).from(customers)
+	* );
+	* ```
+	*/
+	union = this.createSetOperator("union", false);
+	/**
+	* Adds `union all` set operator to the query.
+	*
+	* Calling this method will combine the result-set of the `select` statements and keep all duplicate rows that appear across them.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/set-operations#union-all}
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all transaction ids from both online and in-store sales
+	* await db.select({ transaction: onlineSales.transactionId })
+	*   .from(onlineSales)
+	*   .unionAll(
+	*     db.select({ transaction: inStoreSales.transactionId }).from(inStoreSales)
+	*   );
+	* // or
+	* import { unionAll } from 'drizzle-orm/sqlite-core'
+	*
+	* await unionAll(
+	*   db.select({ transaction: onlineSales.transactionId }).from(onlineSales),
+	*   db.select({ transaction: inStoreSales.transactionId }).from(inStoreSales)
+	* );
+	* ```
+	*/
+	unionAll = this.createSetOperator("union", true);
+	/**
+	* Adds `intersect` set operator to the query.
+	*
+	* Calling this method will retain only the rows that are present in both result sets and eliminate duplicates.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/set-operations#intersect}
+	*
+	* @example
+	*
+	* ```ts
+	* // Select course names that are offered in both departments A and B
+	* await db.select({ courseName: depA.courseName })
+	*   .from(depA)
+	*   .intersect(
+	*     db.select({ courseName: depB.courseName }).from(depB)
+	*   );
+	* // or
+	* import { intersect } from 'drizzle-orm/sqlite-core'
+	*
+	* await intersect(
+	*   db.select({ courseName: depA.courseName }).from(depA),
+	*   db.select({ courseName: depB.courseName }).from(depB)
+	* );
+	* ```
+	*/
+	intersect = this.createSetOperator("intersect", false);
+	/**
+	* Adds `except` set operator to the query.
+	*
+	* Calling this method will retrieve all unique rows from the left query, except for the rows that are present in the result set of the right query.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/set-operations#except}
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all courses offered in department A but not in department B
+	* await db.select({ courseName: depA.courseName })
+	*   .from(depA)
+	*   .except(
+	*     db.select({ courseName: depB.courseName }).from(depB)
+	*   );
+	* // or
+	* import { except } from 'drizzle-orm/sqlite-core'
+	*
+	* await except(
+	*   db.select({ courseName: depA.courseName }).from(depA),
+	*   db.select({ courseName: depB.courseName }).from(depB)
+	* );
+	* ```
+	*/
+	except = this.createSetOperator("except", false);
+	/** @internal */
+	addSetOperators(setOperators) {
+		this.config.setOperators.push(...setOperators);
+		return this;
+	}
+	/**
+	* Adds a `where` clause to the query.
+	*
+	* Calling this method will select only those rows that fulfill a specified condition.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#filtering}
+	*
+	* @param where the `where` clause.
+	*
+	* @example
+	* You can use conditional operators and `sql function` to filter the rows to be selected.
+	*
+	* ```ts
+	* // Select all cars with green color
+	* await db.select().from(cars).where(eq(cars.color, 'green'));
+	* // or
+	* await db.select().from(cars).where(sql`${cars.color} = 'green'`)
+	* ```
+	*
+	* You can logically combine conditional operators with `and()` and `or()` operators:
+	*
+	* ```ts
+	* // Select all BMW cars with a green color
+	* await db.select().from(cars).where(and(eq(cars.color, 'green'), eq(cars.brand, 'BMW')));
+	*
+	* // Select all cars with the green or blue color
+	* await db.select().from(cars).where(or(eq(cars.color, 'green'), eq(cars.color, 'blue')));
+	* ```
+	*/
+	where(where) {
+		if (typeof where === "function") where = where(new Proxy(this.config.fields, new SelectionProxyHandler({
+			sqlAliasedBehavior: "sql",
+			sqlBehavior: "sql"
+		})));
+		this.config.where = where;
+		return this;
+	}
+	/**
+	* Adds a `having` clause to the query.
+	*
+	* Calling this method will select only those rows that fulfill a specified condition. It is typically used with aggregate functions to filter the aggregated data based on a specified condition.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#aggregations}
+	*
+	* @param having the `having` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Select all brands with more than one car
+	* await db.select({
+	* 	brand: cars.brand,
+	* 	count: sql<number>`cast(count(${cars.id}) as int)`,
+	* })
+	*   .from(cars)
+	*   .groupBy(cars.brand)
+	*   .having(({ count }) => gt(count, 1));
+	* ```
+	*/
+	having(having) {
+		if (typeof having === "function") having = having(new Proxy(this.config.fields, new SelectionProxyHandler({
+			sqlAliasedBehavior: "sql",
+			sqlBehavior: "sql"
+		})));
+		this.config.having = having;
+		return this;
+	}
+	groupBy(...columns) {
+		if (typeof columns[0] === "function") {
+			const groupBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "sql"
+			})));
+			this.config.groupBy = Array.isArray(groupBy) ? groupBy : [groupBy];
+		} else this.config.groupBy = columns;
+		return this;
+	}
+	orderBy(...columns) {
+		if (typeof columns[0] === "function") {
+			const orderBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "sql"
+			})));
+			const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+			if (this.config.setOperators.length > 0) this.config.setOperators.at(-1).orderBy = orderByArray;
+			else this.config.orderBy = orderByArray;
+		} else {
+			const orderByArray = columns;
+			if (this.config.setOperators.length > 0) this.config.setOperators.at(-1).orderBy = orderByArray;
+			else this.config.orderBy = orderByArray;
+		}
+		return this;
+	}
+	/**
+	* Adds a `limit` clause to the query.
+	*
+	* Calling this method will set the maximum number of rows that will be returned by this query.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#limit--offset}
+	*
+	* @param limit the `limit` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Get the first 10 people from this query.
+	* await db.select().from(people).limit(10);
+	* ```
+	*/
+	limit(limit) {
+		if (this.config.setOperators.length > 0) this.config.setOperators.at(-1).limit = limit;
+		else this.config.limit = limit;
+		return this;
+	}
+	/**
+	* Adds an `offset` clause to the query.
+	*
+	* Calling this method will skip a number of rows when returning results from this query.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#limit--offset}
+	*
+	* @param offset the `offset` clause.
+	*
+	* @example
+	*
+	* ```ts
+	* // Get the 10th-20th people from this query.
+	* await db.select().from(people).offset(10).limit(10);
+	* ```
+	*/
+	offset(offset) {
+		if (this.config.setOperators.length > 0) this.config.setOperators.at(-1).offset = offset;
+		else this.config.offset = offset;
+		return this;
+	}
+	$withCache(config) {
+		this.cacheConfig = config === void 0 ? {
+			config: {},
+			enabled: true,
+			autoInvalidate: true
+		} : config === false ? { enabled: false } : {
+			enabled: true,
+			autoInvalidate: true,
+			...config
+		};
+		return this;
+	}
+	getSQL() {
+		this.config.fieldsFlat = orderSelectedFields(this.config.fields);
+		return this.dialect.buildSelectQuery(this.config);
+	}
+	toSQL() {
+		return this.dialect.sqlToQuery(this.getSQL());
+	}
+	as(alias) {
+		const usedTables = [];
+		usedTables.push(...extractUsedTable(this.config.table));
+		if (this.config.joins) for (const it of this.config.joins) usedTables.push(...extractUsedTable(it.table));
+		return new Proxy(new Subquery(this.getSQL(), this.config.fields, alias, false, [...new Set(usedTables)]), new SelectionProxyHandler({
+			alias,
+			sqlAliasedBehavior: "alias",
+			sqlBehavior: "error"
+		}));
+	}
+	/** @internal */
+	getSelectedFields() {
+		return new Proxy(this.config.fields, new SelectionProxyHandler({
+			alias: this.tableName,
+			sqlAliasedBehavior: "alias",
+			sqlBehavior: "error"
+		}));
+	}
+	/** @internal */
+	withoutSelectionCastCodecs() {
+		return this;
+	}
+	$dynamic() {
+		return this;
+	}
+};
+function createSetOperator(type, isAll) {
+	return (leftSelect, rightSelect, ...restSelects) => {
+		const setOperators = [rightSelect, ...restSelects].map((select) => ({
+			type,
+			isAll,
+			rightSelect: select
+		}));
+		for (const setOperator of setOperators) if (!haveSameKeys(leftSelect.getSelectedFields(), setOperator.rightSelect.getSelectedFields())) throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
+		return leftSelect.addSetOperators(setOperators);
+	};
+}
+var getSQLiteSetOperators = () => ({
+	union,
+	unionAll,
+	intersect,
+	except
+});
+/**
+* Adds `union` set operator to the query.
+*
+* Calling this method will combine the result sets of the `select` statements and remove any duplicate rows that appear across them.
+*
+* See docs: {@link https://orm.drizzle.team/docs/set-operations#union}
+*
+* @example
+*
+* ```ts
+* // Select all unique names from customers and users tables
+* import { union } from 'drizzle-orm/sqlite-core'
+*
+* await union(
+*   db.select({ name: users.name }).from(users),
+*   db.select({ name: customers.name }).from(customers)
+* );
+* // or
+* await db.select({ name: users.name })
+*   .from(users)
+*   .union(
+*     db.select({ name: customers.name }).from(customers)
+*   );
+* ```
+*/
+var union = createSetOperator("union", false);
+/**
+* Adds `union all` set operator to the query.
+*
+* Calling this method will combine the result-set of the `select` statements and keep all duplicate rows that appear across them.
+*
+* See docs: {@link https://orm.drizzle.team/docs/set-operations#union-all}
+*
+* @example
+*
+* ```ts
+* // Select all transaction ids from both online and in-store sales
+* import { unionAll } from 'drizzle-orm/sqlite-core'
+*
+* await unionAll(
+*   db.select({ transaction: onlineSales.transactionId }).from(onlineSales),
+*   db.select({ transaction: inStoreSales.transactionId }).from(inStoreSales)
+* );
+* // or
+* await db.select({ transaction: onlineSales.transactionId })
+*   .from(onlineSales)
+*   .unionAll(
+*     db.select({ transaction: inStoreSales.transactionId }).from(inStoreSales)
+*   );
+* ```
+*/
+var unionAll = createSetOperator("union", true);
+/**
+* Adds `intersect` set operator to the query.
+*
+* Calling this method will retain only the rows that are present in both result sets and eliminate duplicates.
+*
+* See docs: {@link https://orm.drizzle.team/docs/set-operations#intersect}
+*
+* @example
+*
+* ```ts
+* // Select course names that are offered in both departments A and B
+* import { intersect } from 'drizzle-orm/sqlite-core'
+*
+* await intersect(
+*   db.select({ courseName: depA.courseName }).from(depA),
+*   db.select({ courseName: depB.courseName }).from(depB)
+* );
+* // or
+* await db.select({ courseName: depA.courseName })
+*   .from(depA)
+*   .intersect(
+*     db.select({ courseName: depB.courseName }).from(depB)
+*   );
+* ```
+*/
+var intersect = createSetOperator("intersect", false);
+/**
+* Adds `except` set operator to the query.
+*
+* Calling this method will retrieve all unique rows from the left query, except for the rows that are present in the result set of the right query.
+*
+* See docs: {@link https://orm.drizzle.team/docs/set-operations#except}
+*
+* @example
+*
+* ```ts
+* // Select all courses offered in department A but not in department B
+* import { except } from 'drizzle-orm/sqlite-core'
+*
+* await except(
+*   db.select({ courseName: depA.courseName }).from(depA),
+*   db.select({ courseName: depB.courseName }).from(depB)
+* );
+* // or
+* await db.select({ courseName: depA.courseName })
+*   .from(depA)
+*   .except(
+*     db.select({ courseName: depB.courseName }).from(depB)
+*   );
+* ```
+*/
+var except = createSetOperator("except", false);
+//#endregion
+//#region node_modules/drizzle-orm/errors.js
+var DrizzleError = class extends Error {
+	static [entityKind] = "DrizzleError";
+	constructor({ message, cause }) {
+		super(message);
+		this.name = "DrizzleError";
+		this.cause = cause;
+	}
+};
+var DrizzleQueryError = class DrizzleQueryError extends Error {
+	static [entityKind] = "DrizzleQueryError";
+	constructor(query, params, cause) {
+		super(`Failed query: ${query}\nparams: ${params}`);
+		this.query = query;
+		this.params = params;
+		this.cause = cause;
+		this.name = "DrizzleQueryError";
+		Error.captureStackTrace(this, DrizzleQueryError);
+		if (cause) this.cause = cause;
+	}
+};
+var TransactionRollbackError = class extends DrizzleError {
+	static [entityKind] = "TransactionRollbackError";
+	constructor() {
+		super({ message: "Rollback" });
+		this.name = "TransactionRollbackError";
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sql/expressions/conditions.js
+function bindIfParam(value, column) {
+	if (isDriverValueEncoder(column) && !isSQLWrapper(value) && !is(value, Param) && !is(value, Placeholder) && !is(value, Column) && !is(value, Table) && !is(value, View)) return new Param(value, column);
+	return value;
+}
+/**
+* Test that two values are equal.
+*
+* Remember that the SQL standard dictates that
+* two NULL values are not equal, so if you want to test
+* whether a value is null, you may want to use
+* `isNull` instead.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars made by Ford
+* db.select().from(cars)
+*   .where(eq(cars.make, 'Ford'))
+* ```
+*
+* @see isNull for a way to test equality to NULL.
+*/
+var eq = (left, right) => {
+	return sql`${left} = ${bindIfParam(right, left)}`;
+};
+/**
+* Test that two values are not equal.
+*
+* Remember that the SQL standard dictates that
+* two NULL values are not equal, so if you want to test
+* whether a value is not null, you may want to use
+* `isNotNull` instead.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars not made by Ford
+* db.select().from(cars)
+*   .where(ne(cars.make, 'Ford'))
+* ```
+*
+* @see isNotNull for a way to test whether a value is not null.
+*/
+var ne = (left, right) => {
+	return sql`${left} <> ${bindIfParam(right, left)}`;
+};
+function and(...unfilteredConditions) {
+	const conditions = unfilteredConditions.filter((c) => c !== void 0);
+	if (conditions.length === 0) return;
+	if (conditions.length === 1) return new SQL(conditions);
+	return new SQL([
+		new StringChunk("("),
+		sql.join(conditions.map((c) => sql`(${c})`), new StringChunk(" and ")),
+		new StringChunk(")")
+	]);
+}
+function or(...unfilteredConditions) {
+	const conditions = unfilteredConditions.filter((c) => c !== void 0);
+	if (conditions.length === 0) return;
+	if (conditions.length === 1) return new SQL(conditions);
+	return new SQL([
+		new StringChunk("("),
+		sql.join(conditions.map((c) => sql`(${c})`), new StringChunk(" or ")),
+		new StringChunk(")")
+	]);
+}
+/**
+* Negate the meaning of an expression using the `not` keyword.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars _not_ made by GM or Ford.
+* db.select().from(cars)
+*   .where(not(inArray(cars.make, ['GM', 'Ford'])))
+* ```
+*/
+function not(condition) {
+	return is(condition, SQL) ? sql`not (${condition})` : sql`not ${condition}`;
+}
+/**
+* Test that the first expression passed is greater than
+* the second expression.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars made after 2000.
+* db.select().from(cars)
+*   .where(gt(cars.year, 2000))
+* ```
+*
+* @see gte for greater-than-or-equal
+*/
+var gt = (left, right) => {
+	return sql`${left} > ${bindIfParam(right, left)}`;
+};
+/**
+* Test that the first expression passed is greater than
+* or equal to the second expression. Use `gt` to
+* test whether an expression is strictly greater
+* than another.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars made on or after 2000.
+* db.select().from(cars)
+*   .where(gte(cars.year, 2000))
+* ```
+*
+* @see gt for a strictly greater-than condition
+*/
+var gte = (left, right) => {
+	return sql`${left} >= ${bindIfParam(right, left)}`;
+};
+/**
+* Test that the first expression passed is less than
+* the second expression.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars made before 2000.
+* db.select().from(cars)
+*   .where(lt(cars.year, 2000))
+* ```
+*
+* @see lte for less-than-or-equal
+*/
+var lt = (left, right) => {
+	return sql`${left} < ${bindIfParam(right, left)}`;
+};
+/**
+* Test that the first expression passed is less than
+* or equal to the second expression.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars made before 2000.
+* db.select().from(cars)
+*   .where(lte(cars.year, 2000))
+* ```
+*
+* @see lt for a strictly less-than condition
+*/
+var lte = (left, right) => {
+	return sql`${left} <= ${bindIfParam(right, left)}`;
+};
+function inArray(column, values) {
+	if (Array.isArray(values)) {
+		if (values.length === 0) return sql`false`;
+		return sql`${column} in ${values.map((v) => bindIfParam(v, column))}`;
+	}
+	return sql`${column} in ${bindIfParam(values, column)}`;
+}
+function notInArray(column, values) {
+	if (Array.isArray(values)) {
+		if (values.length === 0) return sql`true`;
+		return sql`${column} not in ${values.map((v) => bindIfParam(v, column))}`;
+	}
+	return sql`${column} not in ${bindIfParam(values, column)}`;
+}
+/**
+* Test whether an expression is NULL. By the SQL standard,
+* NULL is neither equal nor not equal to itself, so
+* it's recommended to use `isNull` and `notIsNull` for
+* comparisons to NULL.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars that have no discontinuedAt date.
+* db.select().from(cars)
+*   .where(isNull(cars.discontinuedAt))
+* ```
+*
+* @see isNotNull for the inverse of this test
+*/
+function isNull(value) {
+	return sql`(${value} is null)`;
+}
+/**
+* Test whether an expression is not NULL. By the SQL standard,
+* NULL is neither equal nor not equal to itself, so
+* it's recommended to use `isNull` and `notIsNull` for
+* comparisons to NULL.
+*
+* ## Examples
+*
+* ```ts
+* // Select cars that have been discontinued.
+* db.select().from(cars)
+*   .where(isNotNull(cars.discontinuedAt))
+* ```
+*
+* @see isNull for the inverse of this test
+*/
+function isNotNull(value) {
+	return sql`(${value} is not null)`;
+}
+/**
+* Test whether a subquery evaluates to have any rows.
+*
+* ## Examples
+*
+* ```ts
+* // Users whose `homeCity` column has a match in a cities
+* // table.
+* db
+*   .select()
+*   .from(users)
+*   .where(
+*     exists(db.select()
+*       .from(cities)
+*       .where(eq(users.homeCity, cities.id))),
+*   );
+* ```
+*
+* @see notExists for the inverse of this test
+*/
+function exists(subquery) {
+	return sql`exists ${subquery}`;
+}
+/**
+* Test whether a subquery doesn't include any result
+* rows.
+*
+* ## Examples
+*
+* ```ts
+* // Users whose `homeCity` column doesn't match
+* // a row in the cities table.
+* db
+*   .select()
+*   .from(users)
+*   .where(
+*     notExists(db.select()
+*       .from(cities)
+*       .where(eq(users.homeCity, cities.id))),
+*   );
+* ```
+*
+* @see exists for the inverse of this test
+*/
+function notExists(subquery) {
+	return sql`not exists ${subquery}`;
+}
+function between(column, min, max) {
+	return sql`${column} between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
+}
+function notBetween(column, min, max) {
+	return sql`${column} not between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
+}
+/**
+* Compare a column to a pattern, which can include `%` and `_`
+* characters to match multiple variations. Including `%`
+* in the pattern matches zero or more characters, and including
+* `_` will match a single character.
+*
+* ## Examples
+*
+* ```ts
+* // Select all cars with 'Turbo' in their names.
+* db.select().from(cars)
+*   .where(like(cars.name, '%Turbo%'))
+* ```
+*
+* @see ilike for a case-insensitive version of this condition
+*/
+function like(column, value) {
+	return sql`${column} like ${value}`;
+}
+/**
+* The inverse of like - this tests that a given column
+* does not match a pattern, which can include `%` and `_`
+* characters to match multiple variations. Including `%`
+* in the pattern matches zero or more characters, and including
+* `_` will match a single character.
+*
+* ## Examples
+*
+* ```ts
+* // Select all cars that don't have "ROver" in their name.
+* db.select().from(cars)
+*   .where(notLike(cars.name, '%Rover%'))
+* ```
+*
+* @see like for the inverse condition
+* @see notIlike for a case-insensitive version of this condition
+*/
+function notLike(column, value) {
+	return sql`${column} not like ${value}`;
+}
+/**
+* Case-insensitively compare a column to a pattern,
+* which can include `%` and `_`
+* characters to match multiple variations. Including `%`
+* in the pattern matches zero or more characters, and including
+* `_` will match a single character.
+*
+* Unlike like, this performs a case-insensitive comparison.
+*
+* ## Examples
+*
+* ```ts
+* // Select all cars with 'Turbo' in their names.
+* db.select().from(cars)
+*   .where(ilike(cars.name, '%Turbo%'))
+* ```
+*
+* @see like for a case-sensitive version of this condition
+*/
+function ilike(column, value) {
+	return sql`${column} ilike ${value}`;
+}
+/**
+* The inverse of ilike - this case-insensitively tests that a given column
+* does not match a pattern, which can include `%` and `_`
+* characters to match multiple variations. Including `%`
+* in the pattern matches zero or more characters, and including
+* `_` will match a single character.
+*
+* ## Examples
+*
+* ```ts
+* // Select all cars that don't have "Rover" in their name.
+* db.select().from(cars)
+*   .where(notLike(cars.name, '%Rover%'))
+* ```
+*
+* @see ilike for the inverse condition
+* @see notLike for a case-sensitive version of this condition
+*/
+function notIlike(column, value) {
+	return sql`${column} not ilike ${value}`;
+}
+function arrayContains(column, values) {
+	if (Array.isArray(values)) {
+		if (values.length === 0) throw new Error("arrayContains requires at least one value");
+		const par = bindIfParam(values, column);
+		return sql`${column} @> ${sql`${Array.isArray(par) ? new Param(par) : par}`}`;
+	}
+	return sql`${column} @> ${bindIfParam(values, column)}`;
+}
+function arrayContained(column, values) {
+	if (Array.isArray(values)) {
+		if (values.length === 0) throw new Error("arrayContained requires at least one value");
+		const par = bindIfParam(values, column);
+		return sql`${column} <@ ${sql`${Array.isArray(par) ? new Param(par) : par}`}`;
+	}
+	return sql`${column} <@ ${bindIfParam(values, column)}`;
+}
+function arrayOverlaps(column, values) {
+	if (Array.isArray(values)) {
+		if (values.length === 0) throw new Error("arrayOverlaps requires at least one value");
+		const par = bindIfParam(values, column);
+		return sql`${column} && ${sql`${Array.isArray(par) ? new Param(par) : par}`}`;
+	}
+	return sql`${column} && ${bindIfParam(values, column)}`;
+}
+//#endregion
+//#region node_modules/drizzle-orm/sql/expressions/select.js
+/**
+* Used in sorting, this specifies that the given
+* column or expression should be sorted in ascending
+* order. By the SQL standard, ascending order is the
+* default, so it is not usually necessary to specify
+* ascending sort order.
+*
+* ## Examples
+*
+* ```ts
+* // Return cars, starting with the oldest models
+* // and going in ascending order to the newest.
+* db.select().from(cars)
+*   .orderBy(asc(cars.year));
+* ```
+*
+* @see desc to sort in descending order
+*/
+function asc(column) {
+	return sql`${column} asc`;
+}
+/**
+* Used in sorting, this specifies that the given
+* column or expression should be sorted in descending
+* order.
+*
+* ## Examples
+*
+* ```ts
+* // Select users, with the most recently created
+* // records coming first.
+* db.select().from(users)
+*   .orderBy(desc(users.createdAt));
+* ```
+*
+* @see asc to sort in ascending order
+*/
+function desc(column) {
+	return sql`${column} desc`;
+}
+//#endregion
+//#region node_modules/drizzle-orm/relations.js
+var Relation = class {
+	static [entityKind] = "RelationV2";
+	fieldName;
+	sourceColumns;
+	targetColumns;
+	alias;
+	where;
+	sourceTable;
+	targetTable;
+	through;
+	throughTable;
+	isReversed;
+	/** @internal */
+	sourceColumnTableNames = [];
+	/** @internal */
+	targetColumnTableNames = [];
+	constructor(targetTable, targetTableName) {
+		this.targetTableName = targetTableName;
+		this.targetTable = targetTable;
+	}
+};
+var One = class extends Relation {
+	static [entityKind] = "OneV2";
+	relationType = "one";
+	optional;
+	constructor(tables, targetTable, targetTableName, config) {
+		super(targetTable, targetTableName);
+		this.alias = config?.alias;
+		this.where = config?.where;
+		if (config?.from) this.sourceColumns = (Array.isArray(config.from) ? config.from : [config.from]).map((it) => {
+			this.throughTable ??= it._.through ? tables[it._.through._.tableName] : void 0;
+			this.sourceColumnTableNames.push(it._.tableName);
+			return it._.column;
+		});
+		if (config?.to) this.targetColumns = (Array.isArray(config.to) ? config.to : [config.to]).map((it) => {
+			this.throughTable ??= it._.through ? tables[it._.through._.tableName] : void 0;
+			this.targetColumnTableNames.push(it._.tableName);
+			return it._.column;
+		});
+		if (this.throughTable) this.through = {
+			source: (Array.isArray(config?.from) ? config.from : config?.from ? [config.from] : []).map((c) => c._.through),
+			target: (Array.isArray(config?.to) ? config.to : config?.to ? [config.to] : []).map((c) => c._.through)
+		};
+		this.optional = config?.optional ?? true;
+	}
+};
+var operators = {
+	and,
+	between,
+	eq,
+	exists,
+	gt,
+	gte,
+	ilike,
+	inArray,
+	arrayContains,
+	arrayContained,
+	arrayOverlaps,
+	isNull,
+	isNotNull,
+	like,
+	lt,
+	lte,
+	ne,
+	not,
+	notBetween,
+	notExists,
+	notLike,
+	notIlike,
+	notInArray,
+	or,
+	sql
+};
+var orderByOperators = {
+	sql,
+	asc,
+	desc
+};
+function mapRelationalRow(rows, isOne, buildQueryResultSelection, parseJson = false, parseJsonIfString = false, useJsonMappers = true) {
+	const maxIdx = isOne ? 1 : rows.length;
+	const decoders = buildQueryResultSelection.map(({ field, codec, arrayDimensions }) => {
+		let decoder;
+		if (is(field, Column)) decoder = field;
+		else if (is(field, SQL)) decoder = field.decoder;
+		else if (is(field, SQL.Aliased)) decoder = field.sql.decoder;
+		else if (is(field, Table) || is(field, View)) decoder = noopDecoder;
+		else decoder = field.getSQL().decoder;
+		if (useJsonMappers && field.mapFromJsonValue) return (v) => field.mapFromJsonValue(v);
+		return decoder.mapFromDriverValue.isNoop ? codec ? (value) => codec(value, arrayDimensions) : void 0 : codec ? (value) => decoder.mapFromDriverValue(codec(value, arrayDimensions)) : (value) => decoder.mapFromDriverValue(value);
+	});
+	for (let i = 0; i < maxIdx; ++i) {
+		const row = isOne ? rows : rows[i];
+		for (let selectionItemIdx = 0; selectionItemIdx < buildQueryResultSelection.length; ++selectionItemIdx) {
+			const selectionItem = buildQueryResultSelection[selectionItemIdx];
+			if (selectionItem.selection) {
+				if (row[selectionItem.key] === null) continue;
+				if (parseJson) {
+					row[selectionItem.key] = JSON.parse(row[selectionItem.key]);
+					if (row[selectionItem.key] === null) continue;
+				} else if (parseJsonIfString && typeof row[selectionItem.key] === "string") row[selectionItem.key] = JSON.parse(row[selectionItem.key]);
+				if (selectionItem.isArray) {
+					mapRelationalRow(row[selectionItem.key], false, selectionItem.selection, false, parseJsonIfString);
+					continue;
+				}
+				mapRelationalRow(row[selectionItem.key], true, selectionItem.selection, false, parseJsonIfString);
+				continue;
+			}
+			if (row[selectionItem.key] === null) continue;
+			const decoder = decoders[selectionItemIdx];
+			if (!decoder) continue;
+			row[selectionItem.key] = decoder(row[selectionItem.key]);
+		}
+	}
+	return rows;
+}
+function mapRelationalRowFromArrays(rows, isOne, buildQueryResultSelection, parseJson = false, parseJsonIfString = false) {
+	const maxIdx = isOne ? 1 : rows.length;
+	const decoders = buildQueryResultSelection.map(({ field, codec, arrayDimensions }) => {
+		let decoder;
+		if (is(field, Column)) decoder = field;
+		else if (is(field, SQL)) decoder = field.decoder;
+		else if (is(field, SQL.Aliased)) decoder = field.sql.decoder;
+		else if (is(field, Table) || is(field, View)) decoder = noopDecoder;
+		else decoder = field.getSQL().decoder;
+		return decoder.mapFromDriverValue.isNoop ? codec ? (value) => codec(value, arrayDimensions) : void 0 : codec ? (value) => decoder.mapFromDriverValue(codec(value, arrayDimensions)) : (value) => decoder.mapFromDriverValue(value);
+	});
+	const results = Array.from({ length: maxIdx });
+	for (let i = 0; i < maxIdx; ++i) {
+		const row = isOne ? rows : rows[i];
+		const result = {};
+		for (let selectionItemIdx = 0; selectionItemIdx < buildQueryResultSelection.length; ++selectionItemIdx) {
+			const selectionItem = buildQueryResultSelection[selectionItemIdx];
+			let value = row[selectionItemIdx];
+			if (selectionItem.selection) {
+				if (value === null) {
+					result[selectionItem.key] = null;
+					continue;
+				}
+				if (parseJson) {
+					value = JSON.parse(value);
+					if (value === null) {
+						result[selectionItem.key] = null;
+						continue;
+					}
+				} else if (parseJsonIfString && typeof value === "string") value = JSON.parse(value);
+				if (selectionItem.isArray) mapRelationalRow(value, false, selectionItem.selection, false, parseJsonIfString);
+				else mapRelationalRow(value, true, selectionItem.selection, false, parseJsonIfString);
+				result[selectionItem.key] = value;
+				continue;
+			}
+			if (value === null) {
+				result[selectionItem.key] = null;
+				continue;
+			}
+			const decoder = decoders[selectionItemIdx];
+			result[selectionItem.key] = decoder ? decoder(value) : value;
+		}
+		results[i] = result;
+	}
+	return isOne ? results[0] : results;
+}
+function makeDefaultRqbMapper({ selection, isFirst, parseJson, parseJsonIfString, rootJsonMappers, arrayModeRoot }) {
+	return ((rows) => {
+		if (isFirst && !rows[0]) return rows[0];
+		return arrayModeRoot ? mapRelationalRowFromArrays(isFirst ? rows[0] : rows, isFirst, selection, parseJson, parseJsonIfString) : mapRelationalRow(isFirst ? rows[0] : rows, isFirst, selection, parseJson, parseJsonIfString, rootJsonMappers);
+	});
+}
+function makeJitRqbMapperInner(selection, rowExpr, selectionVar, parseJson, parseJsonIfString, useJsonMappers, preFn, counter, accessByIdx) {
+	const bodyStmts = [];
+	const literalEntries = [];
+	let hasWork = false;
+	const fieldVars = selection.map(() => `c${counter.n++}`);
+	const destructurePieces = selection.map((item, idx) => accessByIdx ? fieldVars[idx] : `${JSON.stringify(item.key)}: ${fieldVars[idx]}`);
+	bodyStmts.push(accessByIdx ? `let [ ${destructurePieces.join(", ")} ] = ${rowExpr};` : `let { ${destructurePieces.join(", ")} } = ${rowExpr};`);
+	for (const [idx, { field, key, codec, isArray, selection: innerSelection, arrayDimensions }] of selection.entries()) {
+		const sel = `${selectionVar}[${idx}]`;
+		const keyStr = JSON.stringify(key);
+		const slot = fieldVars[idx];
+		if (innerSelection) {
+			if (parseJson) {
+				bodyStmts.push(`if (${slot} !== null) ${slot} = JSON.parse(${slot});`);
+				hasWork = true;
+			} else if (parseJsonIfString) {
+				bodyStmts.push(`if (typeof ${slot} === 'string') ${slot} = JSON.parse(${slot});`);
+				hasWork = true;
+			}
+			const nestedSelVar = `s${counter.n++}`;
+			const savedPreFnLen = preFn.length;
+			preFn.push(`const { selection: ${nestedSelVar} } = ${sel};`);
+			if (isArray) {
+				const j = `j${counter.n++}`;
+				const inner = makeJitRqbMapperInner(innerSelection, `${slot}[${j}]`, nestedSelVar, false, parseJsonIfString, true, preFn, counter, false);
+				if (inner.hasWork) {
+					hasWork = true;
+					bodyStmts.push(`if (${slot} !== null) {`);
+					bodyStmts.push(`\tfor (let ${j} = 0; ${j} < ${slot}.length; ++${j}) {`);
+					for (const s of inner.bodyStmts) bodyStmts.push(`\t\t${s}`);
+					bodyStmts.push(`\t\t${slot}[${j}] = ${inner.literal};`);
+					bodyStmts.push(`\t}`);
+					bodyStmts.push(`}`);
+				} else preFn.splice(savedPreFnLen, 1);
+			} else {
+				const inner = makeJitRqbMapperInner(innerSelection, slot, nestedSelVar, false, parseJsonIfString, true, preFn, counter, false);
+				if (inner.hasWork) {
+					hasWork = true;
+					bodyStmts.push(`if (${slot} !== null) {`);
+					for (const s of inner.bodyStmts) bodyStmts.push(`\t${s}`);
+					bodyStmts.push(`\t${slot} = ${inner.literal};`);
+					bodyStmts.push(`}`);
+				} else preFn.splice(savedPreFnLen, 1);
+			}
+			literalEntries.push(`${keyStr}: ${slot}`);
+			continue;
+		}
+		let decoderExpr = "";
+		let destructure = "";
+		let bypassCodecs = false;
+		if (is(field, Column)) {
+			if (useJsonMappers && field.mapFromJsonValue) {
+				bypassCodecs = true;
+				const id = counter.n++;
+				destructure = `field: dec${id}`;
+				decoderExpr = `dec${id}.mapFromJsonValue`;
+			} else if (!field.mapFromDriverValue.isNoop) {
+				const id = counter.n++;
+				destructure = `field: dec${id}`;
+				decoderExpr = `dec${id}.mapFromDriverValue`;
+			}
+		} else if (is(field, SQL)) {
+			if (useJsonMappers && field.decoder.mapFromJsonValue) {
+				bypassCodecs = true;
+				const id = counter.n++;
+				destructure = `field: { decoder: dec${id} }`;
+				decoderExpr = `dec${id}.mapFromJsonValue`;
+			} else if (!field.decoder.mapFromDriverValue.isNoop) {
+				const id = counter.n++;
+				destructure = `field: { decoder: dec${id} }`;
+				decoderExpr = `dec${id}.mapFromDriverValue`;
+			}
+		} else if (is(field, SQL.Aliased)) {
+			if (useJsonMappers && field.sql.decoder.mapFromJsonValue) {
+				bypassCodecs = true;
+				const id = counter.n++;
+				destructure = `field: { sql: { decoder: dec${id} } }`;
+				decoderExpr = `dec${id}.mapFromJsonValue`;
+			} else if (!field.sql.decoder.mapFromDriverValue.isNoop) {
+				const id = counter.n++;
+				destructure = `field: { sql: { decoder: dec${id} } }`;
+				decoderExpr = `dec${id}.mapFromDriverValue`;
+			}
+		} else if (is(field, Table) || is(field, View)) {} else {
+			const sqlExpr = field.getSQL();
+			if (useJsonMappers && sqlExpr.decoder.mapFromJsonValue) {
+				bypassCodecs = true;
+				const id = counter.n++;
+				preFn.push(`const dec${id} = ${sel}.field.getSQL().decoder;`);
+				decoderExpr = `dec${id}.mapFromJsonValue`;
+			} else if (!sqlExpr.decoder.mapFromDriverValue.isNoop) {
+				const id = counter.n++;
+				preFn.push(`const dec${id} = ${sel}.field.getSQL().decoder;`);
+				decoderExpr = `dec${id}.mapFromDriverValue`;
+			}
+		}
+		let codecVar = "";
+		if (!bypassCodecs && codec) codecVar = `codec${counter.n++}`;
+		if (destructure || codecVar) {
+			const parts = [];
+			if (destructure) parts.push(destructure);
+			if (codecVar) parts.push(`codec: ${codecVar}`);
+			preFn.push(`const { ${parts.join(", ")} } = ${sel};`);
+		}
+		if (decoderExpr || codecVar) {
+			hasWork = true;
+			let decoded = slot;
+			if (codecVar) decoded = `${codecVar}(${decoded}, ${arrayDimensions})`;
+			if (decoderExpr) decoded = `${decoderExpr}(${decoded})`;
+			literalEntries.push(`${keyStr}: ${slot} === null ? null : ${decoded}`);
+		} else literalEntries.push(`${keyStr}: ${slot}`);
+	}
+	return {
+		bodyStmts,
+		literal: `{ ${literalEntries.join(", ")} }`,
+		hasWork
+	};
+}
+function makeJitRqbMapper({ selection, isFirst, parseJson, parseJsonIfString, rootJsonMappers, arrayModeRoot }) {
+	const preFn = [];
+	const inner = makeJitRqbMapperInner(selection, "row", "selection", parseJson, parseJsonIfString, arrayModeRoot ? false : rootJsonMappers, preFn, { n: 0 }, !!arrayModeRoot);
+	const lines = [];
+	lines.push(`\t"use strict";
+	const { selection } = this;`);
+	for (const p of preFn) lines.push(`\t${p}`);
+	if (arrayModeRoot) if (isFirst) {
+		lines.push(`\tconst row = rows[0];`);
+		lines.push(`\tif (!row) return undefined;`);
+		for (const s of inner.bodyStmts) lines.push(`\t${s}`);
+		lines.push(`\treturn ${inner.literal};`);
+	} else {
+		lines.push(`\tconst { length } = rows;`);
+		lines.push(`\tconst mapped = Array.from({ length });`);
+		lines.push(`\tfor (let i = 0; i < length; ++i) {`);
+		lines.push(`\t\tconst row = rows[i];`);
+		for (const s of inner.bodyStmts) lines.push(`\t\t${s}`);
+		lines.push(`\t\tmapped[i] = ${inner.literal};`);
+		lines.push(`\t}`);
+		lines.push(`\treturn mapped;`);
+	}
+	else if (!inner.hasWork) lines.push(isFirst ? `\treturn rows[0];` : `\treturn rows;`);
+	else if (isFirst) {
+		lines.push(`\tconst row = rows[0];`);
+		lines.push(`\tif (!row) return undefined;`);
+		for (const s of inner.bodyStmts) lines.push(`\t${s}`);
+		lines.push(`\trows[0] = ${inner.literal};`);
+		lines.push(`\treturn rows[0];`);
+	} else {
+		lines.push(`\tfor (let i = 0; i < rows.length; ++i) {`);
+		lines.push(`\t\tconst row = rows[i];`);
+		for (const s of inner.bodyStmts) lines.push(`\t\t${s}`);
+		lines.push(`\t\trows[i] = ${inner.literal};`);
+		lines.push(`\t}`);
+		lines.push(`\treturn rows;`);
+	}
+	lines.push("	//# sourceURL=drizzle:jit-relational-query-mapper");
+	const compiled = lines.join("\n");
+	return Object.assign(new FnConstructor("rows", compiled).bind({ selection }), { body: `function jitRqbMapper (rows) {\n${compiled}\n}` });
+}
+/** @internal */
+function fieldSelectionToSQL(table, target) {
+	const field = table[TableColumns][target];
+	return field ? is(field, Column) ? field : is(field, SQL.Aliased) ? sql`${table}.${sql.identifier(field.fieldAlias)}` : sql`${table}.${sql.identifier(target)}` : sql`${table}.${sql.identifier(target)}`;
+}
+function relationsFieldFilterToSQL(column, filter) {
+	if (typeof filter !== "object" || is(filter, Placeholder)) return eq(column, filter);
+	const entries = Object.entries(filter);
+	if (!entries.length) return void 0;
+	const parts = [];
+	for (const [target, value] of entries) {
+		if (value === void 0) continue;
+		switch (target) {
+			case "NOT": {
+				const res = relationsFieldFilterToSQL(column, value);
+				if (!res) continue;
+				parts.push(not(res));
+				continue;
+			}
+			case "OR":
+				if (!value.length) continue;
+				parts.push(or(...value.map((subFilter) => relationsFieldFilterToSQL(column, subFilter))));
+				continue;
+			case "AND":
+				if (!value.length) continue;
+				parts.push(and(...value.map((subFilter) => relationsFieldFilterToSQL(column, subFilter))));
+				continue;
+			case "isNotNull":
+			case "isNull":
+				if (!value) continue;
+				parts.push(operators[target](column));
+				continue;
+			case "in":
+				parts.push(operators.inArray(column, value));
+				continue;
+			case "notIn":
+				parts.push(operators.notInArray(column, value));
+				continue;
+			default:
+				parts.push(operators[target](column, value));
+				continue;
+		}
+	}
+	if (!parts.length) return void 0;
+	return and(...parts);
+}
+function relationsFilterToSQL(table, filter, tableRelations = {}, tablesRelations = {}, depth = 0) {
+	const entries = Object.entries(filter);
+	if (!entries.length) return void 0;
+	const parts = [];
+	for (const [target, value] of entries) {
+		if (value === void 0) continue;
+		switch (target) {
+			case "RAW": {
+				const processed = typeof value === "function" ? value(table, operators) : value.getSQL();
+				parts.push(processed);
+				continue;
+			}
+			case "OR":
+				if (!value?.length) continue;
+				parts.push(or(...value.map((subFilter) => relationsFilterToSQL(table, subFilter, tableRelations, tablesRelations, depth))));
+				continue;
+			case "AND":
+				if (!value?.length) continue;
+				parts.push(and(...value.map((subFilter) => relationsFilterToSQL(table, subFilter, tableRelations, tablesRelations, depth))));
+				continue;
+			case "NOT": {
+				if (value === void 0) continue;
+				const built = relationsFilterToSQL(table, value, tableRelations, tablesRelations, depth);
+				if (!built) continue;
+				parts.push(not(built));
+				continue;
+			}
+			default: {
+				if (table[TableColumns][target]) {
+					const colFilter = relationsFieldFilterToSQL(fieldSelectionToSQL(table, target), value);
+					if (colFilter) parts.push(colFilter);
+					continue;
+				}
+				const relation = tableRelations[target];
+				if (!relation) throw new DrizzleError({ message: `Unknown relational filter field: "${target}"` });
+				const targetTable = aliasedTable(relation.targetTable, `f${depth}`);
+				const throughTable = relation.throughTable ? aliasedTable(relation.throughTable, `ft${depth}`) : void 0;
+				const targetConfig = tablesRelations[relation.targetTableName];
+				const { filter: relationFilter, joinCondition } = relationToSQL(relation, table, targetTable, throughTable);
+				const filter = and(relationFilter, typeof value === "boolean" ? void 0 : relationsFilterToSQL(targetTable, value, targetConfig.relations, tablesRelations, depth + 1));
+				const subquery = throughTable ? sql`(select * from ${getTableAsAliasSQL(targetTable)} inner join ${getTableAsAliasSQL(throughTable)} on ${joinCondition}${sql` where ${filter}`.if(filter)} limit 1)` : sql`(select * from ${getTableAsAliasSQL(targetTable)}${sql` where ${filter}`.if(filter)} limit 1)`;
+				if (filter) parts.push((value ? exists : notExists)(subquery));
+			}
+		}
+	}
+	return and(...parts);
+}
+function relationsOrderToSQL(table, orders) {
+	if (typeof orders === "function") {
+		const data = orders(table, orderByOperators);
+		return is(data, SQL) ? data : Array.isArray(data) ? data.length ? sql.join(data.map((o) => is(o, SQL) ? o : asc(o)), sql`, `) : void 0 : is(data, Column) ? asc(data) : void 0;
+	}
+	const entries = Object.entries(orders).filter(([_, value]) => value);
+	if (!entries.length) return void 0;
+	return sql.join(entries.map(([target, value]) => (value === "asc" ? asc : desc)(fieldSelectionToSQL(table, target))), sql`, `);
+}
+function relationExtrasToSQL(table, extras, codecs, inJson) {
+	const subqueries = [];
+	const selection = [];
+	for (const [key, field] of Object.entries(extras)) {
+		if (!field) continue;
+		const subq = (typeof field === "function" ? field(table, { sql: operators.sql }) : field).getSQL();
+		const column = codecs ? getColumnFromDecoder(subq) : void 0;
+		const query = column && (!inJson || !column.jsonSelectIdentifier) ? sql`${codecs.apply(column, inJson ? "castInJson" : "cast", sql`(${subq})`)} as ${sql.identifier(key)}` : sql`(${subq}) as ${sql.identifier(key)}`;
+		query.decoder = subq.decoder;
+		subqueries.push(query);
+		selection.push(column && (!inJson || !column.mapFromJsonValue) ? {
+			key,
+			field: query,
+			codec: codecs.get(column, inJson ? "normalizeInJson" : "normalize"),
+			arrayDimensions: column.dimensions
+		} : {
+			key,
+			field: query
+		});
+	}
+	return {
+		sql: subqueries.length ? sql.join(subqueries, sql`, `) : void 0,
+		selection
+	};
+}
+function relationToSQL(relation, sourceTable, targetTable, throughTable) {
+	if (relation.through) {
+		const outerColumnWhere = relation.sourceColumns.map((s, i) => {
+			const t = relation.through.source[i];
+			return eq(sql`${sourceTable}.${sql.identifier(s.name)}`, sql`${throughTable}.${sql.identifier(is(t._.column, Column) ? t._.column.name : t._.key)}`);
+		});
+		const innerColumnWhere = relation.targetColumns.map((s, i) => {
+			const t = relation.through.target[i];
+			return eq(sql`${throughTable}.${sql.identifier(is(t._.column, Column) ? t._.column.name : t._.key)}`, sql`${targetTable}.${sql.identifier(s.name)}`);
+		});
+		return {
+			filter: and(relation.where ? relationsFilterToSQL(relation.isReversed ? sourceTable : targetTable, relation.where) : void 0, ...outerColumnWhere),
+			joinCondition: and(...innerColumnWhere)
+		};
+	}
+	return { filter: and(...relation.sourceColumns.map((s, i) => {
+		const t = relation.targetColumns[i];
+		return eq(sql`${sourceTable}.${sql.identifier(s.name)}`, sql`${targetTable}.${sql.identifier(t.name)}`);
+	}), relation.where ? relationsFilterToSQL(relation.isReversed ? sourceTable : targetTable, relation.where) : void 0) };
+}
+function getTableAsAliasSQL(table) {
+	return sql`${table[IsAlias] ? sql`${sql`${sql.identifier(table[TableSchema] ?? "")}.`.if(table[TableSchema])}${sql.identifier(table[OriginalName])} as ${table}` : table}`;
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/dialect.js
+var SQLiteDialect = class {
+	static [entityKind] = "SQLiteDialect";
+	mapperGenerators;
+	constructor(config) {
+		this.mapperGenerators = config?.useJitMappers ? {
+			rows: makeJitQueryMapper,
+			relationalRows: makeJitRqbMapper
+		} : {
+			rows: makeDefaultQueryMapper,
+			relationalRows: makeDefaultRqbMapper
+		};
+	}
+	escapeName(name) {
+		return `"${name.replace(/"/g, "\"\"")}"`;
+	}
+	escapeParam(_num) {
+		return "?";
+	}
+	escapeString(str) {
+		return `'${str.replace(/'/g, "''")}'`;
+	}
+	buildWithCTE(queries) {
+		if (!queries?.length) return void 0;
+		const withSqlChunks = [sql`with `];
+		for (const [i, w] of queries.entries()) {
+			withSqlChunks.push(sql`${sql.identifier(w._.alias)} as (${w._.sql})`);
+			if (i < queries.length - 1) withSqlChunks.push(sql`, `);
+		}
+		withSqlChunks.push(sql` `);
+		return sql.join(withSqlChunks);
+	}
+	buildDeleteQuery({ table, where, returning, withList, limit, orderBy }) {
+		const withSql = this.buildWithCTE(withList);
+		const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : void 0;
+		return sql`${withSql}delete from ${table}${where ? sql` where ${where}` : void 0}${returningSql}${this.buildOrderBy(orderBy)}${this.buildLimit(limit)}`;
+	}
+	buildUpdateSet(table, set) {
+		const tableColumns = table[Table.Symbol.Columns];
+		const columnNames = Object.keys(tableColumns).filter((colName) => set[colName] !== void 0 || tableColumns[colName]?.onUpdateFn !== void 0);
+		const setLength = columnNames.length;
+		return sql.join(columnNames.flatMap((colName, i) => {
+			const col = tableColumns[colName];
+			const onUpdateFnResult = col.onUpdateFn?.();
+			const value = set[colName] ?? (is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col));
+			const res = sql`${sql.identifier(col.name)} = ${value}`;
+			if (i < setLength - 1) return [res, sql.raw(", ")];
+			return [res];
+		}));
+	}
+	buildUpdateQuery({ table, set, where, returning, withList, joins, from, limit, orderBy }) {
+		const withSql = this.buildWithCTE(withList);
+		const setSql = this.buildUpdateSet(table, set);
+		const fromSql = from && sql.join([sql.raw(" from "), this.buildFromTable(from)]);
+		const joinsSql = this.buildJoins(joins);
+		const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : void 0;
+		return sql`${withSql}update ${table} set ${setSql}${fromSql}${joinsSql}${where ? sql` where ${where}` : void 0}${returningSql}${this.buildOrderBy(orderBy)}${this.buildLimit(limit)}`;
+	}
+	/**
+	* Builds selection SQL with provided fields/expressions
+	*
+	* Examples:
+	*
+	* `select <selection> from`
+	*
+	* `insert ... returning <selection>`
+	*
+	* If `isSingleTable` is true, then columns won't be prefixed with table name
+	*/
+	buildSelection(fields, { isSingleTable = false } = {}) {
+		const columnsLen = fields.length;
+		const chunks = fields.flatMap(({ field }, i) => {
+			const chunk = [];
+			if (is(field, SQL.Aliased)) if (field.isSelectionField) {
+				if (!isSingleTable && field.origin !== void 0) chunk.push(sql.identifier(field.origin), sql.raw("."));
+				chunk.push(sql.identifier(field.fieldAlias));
+			} else {
+				const query = field.sql;
+				if (isSingleTable) {
+					const newSql = new SQL(query.queryChunks.map((c) => {
+						if (is(c, Column)) return sql.identifier(c.name);
+						return c;
+					}));
+					chunk.push(query.shouldInlineParams ? newSql.inlineParams() : newSql);
+				} else chunk.push(query);
+				chunk.push(sql` as ${sql.identifier(field.fieldAlias)}`);
+			}
+			else if (is(field, SQL)) {
+				const query = field;
+				if (isSingleTable) {
+					const newSql = new SQL(query.queryChunks.map((c) => {
+						if (is(c, Column)) return sql.identifier(c.name);
+						return c;
+					}));
+					chunk.push(query.shouldInlineParams ? newSql.inlineParams() : newSql);
+				} else chunk.push(query);
+			} else if (is(field, Column)) if (field.columnType === "SQLiteNumericBigInt" || field.columnType === "SQLiteNumeric") if (isSingleTable) chunk.push(field.isAlias ? sql`cast(${sql.identifier(getOriginalColumnFromAlias(field).name)} as text) as ${field}` : sql`cast(${sql.identifier(field.name)} as text)`);
+			else chunk.push(field.isAlias ? sql`cast(${getOriginalColumnFromAlias(field)} as text) as ${field}` : sql`cast(${field} as text)`);
+			else if (isSingleTable) chunk.push(field.isAlias ? sql`${sql.identifier(getOriginalColumnFromAlias(field).name)} as ${field}` : sql.identifier(field.name));
+			else chunk.push(field.isAlias ? sql`${getOriginalColumnFromAlias(field)} as ${field}` : field);
+			else if (is(field, Subquery)) if (!field._.isWith) chunk.push(sql`(${field._.sql}) ${sql.identifier(field._.alias)}`);
+			else chunk.push(field);
+			if (i < columnsLen - 1) chunk.push(sql`, `);
+			return chunk;
+		});
+		return sql.join(chunks);
+	}
+	buildJoins(joins) {
+		if (!joins || joins.length === 0) return;
+		const joinsArray = [];
+		if (joins) for (const [index, joinMeta] of joins.entries()) {
+			if (index === 0) joinsArray.push(sql` `);
+			const table = joinMeta.table;
+			const onSql = joinMeta.on ? sql` on ${joinMeta.on}` : void 0;
+			if (is(table, SQLiteTable)) {
+				const tableName = table[SQLiteTable.Symbol.Name];
+				const tableSchema = table[SQLiteTable.Symbol.Schema];
+				const origTableName = table[SQLiteTable.Symbol.OriginalName];
+				const alias = tableName === origTableName ? void 0 : joinMeta.alias;
+				joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${tableSchema ? sql`${sql.identifier(tableSchema)}.` : void 0}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`}${onSql}`);
+			} else joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${table}${onSql}`);
+			if (index < joins.length - 1) joinsArray.push(sql` `);
+		}
+		return sql.join(joinsArray);
+	}
+	buildLimit(limit) {
+		return typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : void 0;
+	}
+	buildOrderBy(orderBy) {
+		const orderByList = [];
+		if (orderBy) for (const [index, orderByValue] of orderBy.entries()) {
+			orderByList.push(orderByValue);
+			if (index < orderBy.length - 1) orderByList.push(sql`, `);
+		}
+		return orderByList.length > 0 ? sql` order by ${sql.join(orderByList)}` : void 0;
+	}
+	buildFromTable(table) {
+		if (is(table, Table) && table[Table.Symbol.IsAlias]) return sql`${sql`${sql.identifier(table[Table.Symbol.Schema] ?? "")}.`.if(table[Table.Symbol.Schema])}${sql.identifier(table[Table.Symbol.OriginalName])} ${sql.identifier(table[Table.Symbol.Name])}`;
+		if (is(table, View) && table[ViewBaseConfig].isAlias) {
+			let fullName = sql`${sql.identifier(table[ViewBaseConfig].originalName)}`;
+			if (table[ViewBaseConfig].schema) fullName = sql`${sql.identifier(table[ViewBaseConfig].schema)}.${fullName}`;
+			return sql`${fullName} ${sql.identifier(table[ViewBaseConfig].name)}`;
+		}
+		return table;
+	}
+	buildSelectQuery({ withList, fields, fieldsFlat, where, having, table, joins, orderBy, groupBy, limit, offset, distinct, setOperators }) {
+		const fieldsList = fieldsFlat ?? orderSelectedFields(fields);
+		for (const f of fieldsList) if (is(f.field, Column) && getTableName(f.field.table) !== (is(table, Subquery) ? table._.alias : is(table, SQLiteViewBase) ? table[ViewBaseConfig].name : is(table, SQL) ? void 0 : getTableName(table)) && !((table) => joins?.some(({ alias }) => alias === (table[Table.Symbol.IsAlias] ? getTableName(table) : table[Table.Symbol.BaseName])))(f.field.table)) {
+			const tableName = getTableName(f.field.table);
+			throw new Error(`Your "${f.path.join("->")}" field references a column "${tableName}"."${f.field.name}", but the table "${tableName}" is not part of the query! Did you forget to join it?`);
+		}
+		const isSingleTable = !joins || joins.length === 0;
+		const withSql = this.buildWithCTE(withList);
+		const distinctSql = distinct ? sql` distinct` : void 0;
+		const selection = this.buildSelection(fieldsList, { isSingleTable });
+		const tableSql = this.buildFromTable(table);
+		const joinsSql = this.buildJoins(joins);
+		const whereSql = where ? sql` where ${where}` : void 0;
+		const havingSql = having ? sql` having ${having}` : void 0;
+		const groupByList = [];
+		if (groupBy) for (const [index, groupByValue] of groupBy.entries()) {
+			groupByList.push(groupByValue);
+			if (index < groupBy.length - 1) groupByList.push(sql`, `);
+		}
+		const finalQuery = sql`${withSql}select${distinctSql} ${selection} from ${tableSql}${joinsSql}${whereSql}${groupByList.length > 0 ? sql` group by ${sql.join(groupByList)}` : void 0}${havingSql}${this.buildOrderBy(orderBy)}${this.buildLimit(limit)}${offset ? sql` offset ${offset}` : void 0}`;
+		if (setOperators.length > 0) return this.buildSetOperations(finalQuery, setOperators);
+		return finalQuery;
+	}
+	buildSetOperations(leftSelect, setOperators) {
+		const [setOperator, ...rest] = setOperators;
+		if (!setOperator) throw new Error("Cannot pass undefined values to any set operator");
+		if (rest.length === 0) return this.buildSetOperationQuery({
+			leftSelect,
+			setOperator
+		});
+		return this.buildSetOperations(this.buildSetOperationQuery({
+			leftSelect,
+			setOperator
+		}), rest);
+	}
+	buildSetOperationQuery({ leftSelect, setOperator: { type, isAll, rightSelect, limit, orderBy, offset } }) {
+		const leftChunk = sql`${leftSelect.getSQL()} `;
+		const rightChunk = sql`${rightSelect.getSQL()}`;
+		let orderBySql;
+		if (orderBy && orderBy.length > 0) {
+			const orderByValues = [];
+			for (const singleOrderBy of orderBy) if (is(singleOrderBy, SQLiteColumn)) orderByValues.push(sql.identifier(singleOrderBy.name));
+			else if (is(singleOrderBy, SQL)) {
+				for (let i = 0; i < singleOrderBy.queryChunks.length; i++) {
+					const chunk = singleOrderBy.queryChunks[i];
+					if (is(chunk, SQLiteColumn)) singleOrderBy.queryChunks[i] = sql.identifier(chunk.name);
+				}
+				orderByValues.push(sql`${singleOrderBy}`);
+			} else orderByValues.push(sql`${singleOrderBy}`);
+			orderBySql = sql` order by ${sql.join(orderByValues, sql`, `)}`;
+		}
+		const limitSql = typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : void 0;
+		const operatorChunk = sql.raw(`${type} ${isAll ? "all " : ""}`);
+		const offsetSql = offset ? sql` offset ${offset}` : void 0;
+		return sql`${leftChunk}${operatorChunk}${rightChunk}${orderBySql}${limitSql}${offsetSql}`;
+	}
+	buildInsertQuery({ table, values: valuesOrSelect, onConflict, returning, withList, select }) {
+		const valuesSqlList = [];
+		const columns = table[Table.Symbol.Columns];
+		const colEntries = Object.entries(columns);
+		const colEntriesFiltered = select && !is(valuesOrSelect, SQL) ? Object.keys(valuesOrSelect.getSelectedFields()).map((key) => [key, columns[key]]) : colEntries.filter(([_, col]) => !col.shouldDisableInsert());
+		const insertOrder = colEntriesFiltered.map(([, column]) => sql.identifier(column.name));
+		if (select) {
+			const select = valuesOrSelect;
+			if (is(select, SQL)) valuesSqlList.push(select);
+			else valuesSqlList.push(select.getSQL());
+		} else {
+			const values = valuesOrSelect;
+			valuesSqlList.push(sql.raw("values "));
+			for (const [valueIndex, value] of values.entries()) {
+				const valueList = [];
+				for (const [fieldName, col] of colEntriesFiltered) {
+					const colValue = value[fieldName];
+					if (colValue === void 0 || is(colValue, Param) && colValue.value === void 0) {
+						let defaultValue;
+						if (col.default !== null && col.default !== void 0) defaultValue = is(col.default, SQL) ? col.default : sql.param(col.default, col);
+						else if (col.defaultFn !== void 0) {
+							const defaultFnResult = col.defaultFn();
+							defaultValue = is(defaultFnResult, SQL) ? defaultFnResult : sql.param(defaultFnResult, col);
+						} else if (!col.default && col.onUpdateFn !== void 0) {
+							const onUpdateFnResult = col.onUpdateFn();
+							defaultValue = is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col);
+						} else defaultValue = sql`null`;
+						valueList.push(defaultValue);
+					} else valueList.push(colValue);
+				}
+				valuesSqlList.push(valueList);
+				if (valueIndex < values.length - 1) valuesSqlList.push(sql`, `);
+			}
+		}
+		const withSql = this.buildWithCTE(withList);
+		const valuesSql = sql.join(valuesSqlList);
+		const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : void 0;
+		return sql`${withSql}insert into ${table} ${insertOrder} ${valuesSql}${onConflict?.length ? sql.join(onConflict) : void 0}${returningSql}`;
+	}
+	sqlToQuery(sql, invokeSource) {
+		return sql.toQuery({
+			escapeName: this.escapeName,
+			escapeParam: this.escapeParam,
+			escapeString: this.escapeString,
+			invokeSource
+		});
+	}
+	nestedSelectionerror() {
+		throw new DrizzleError({ message: `Views with nested selections are not supported by the relational query builder` });
+	}
+	buildRqbColumn(table, column, key, inJson) {
+		if (is(column, Column)) {
+			const name = sql`${table}.${sql.identifier(column.name)}`;
+			switch (column.columnType) {
+				case "SQLiteBigInt":
+				case "SQLiteBlobJson":
+				case "SQLiteBlobBuffer":
+					if (!inJson) return sql`${name} as ${sql.identifier(key)}`;
+					return sql`hex(${name}) as ${sql.identifier(key)}`;
+				case "SQLiteNumeric":
+				case "SQLiteNumericNumber":
+				case "SQLiteNumericBigInt": return sql`cast(${name} as text) as ${sql.identifier(key)}`;
+				case "SQLiteCustomColumn":
+					if (!inJson) return sql`${name} as ${sql.identifier(key)}`;
+					return sql`${column.jsonSelectIdentifier(name, sql)} as ${sql.identifier(key)}`;
+				default: return sql`${name} as ${sql.identifier(key)}`;
+			}
+		}
+		return sql`${table}.${is(column, SQL.Aliased) ? sql.identifier(column.fieldAlias) : isSQLWrapper(column) ? sql.identifier(key) : this.nestedSelectionerror()} as ${sql.identifier(key)}`;
+	}
+	unwrapAllColumns = (table, selection, inJson) => {
+		return sql.join(Object.entries(table[TableColumns]).map(([k, v]) => {
+			selection.push({
+				key: k,
+				field: v
+			});
+			return this.buildRqbColumn(table, v, k, inJson);
+		}), sql`, `);
+	};
+	getSelectedTableColumns = (table, columns) => {
+		const selectedColumns = [];
+		const columnContainer = table[TableColumns];
+		const entries = Object.entries(columns);
+		let colSelectionMode;
+		for (const [k, v] of entries) {
+			if (v === void 0) continue;
+			colSelectionMode = colSelectionMode || v;
+			if (v) {
+				const column = columnContainer[k];
+				selectedColumns.push({
+					column,
+					tsName: k
+				});
+			}
+		}
+		if (colSelectionMode === false) for (const [k, v] of Object.entries(columnContainer)) {
+			if (columns[k] === false) continue;
+			selectedColumns.push({
+				column: v,
+				tsName: k
+			});
+		}
+		return selectedColumns;
+	};
+	buildColumns = (table, selection, inJson, params) => params?.columns ? (() => {
+		const columnIdentifiers = [];
+		const selectedColumns = this.getSelectedTableColumns(table, params?.columns);
+		for (const { column, tsName } of selectedColumns) {
+			columnIdentifiers.push(this.buildRqbColumn(table, column, tsName, inJson));
+			selection.push({
+				key: tsName,
+				field: column
+			});
+		}
+		return columnIdentifiers.length ? sql.join(columnIdentifiers, sql`, `) : void 0;
+	})() : this.unwrapAllColumns(table, selection, inJson);
+	buildRelationalQuery({ schema, table, tableConfig, queryConfig: config, relationWhere, mode, isNested, errorPath, depth, throughJoin, jsonb }) {
+		const selection = [];
+		const isSingle = mode === "first";
+		const params = config === true ? void 0 : config;
+		const currentPath = errorPath ?? "";
+		const currentDepth = depth ?? 0;
+		if (!currentDepth) table = aliasedTable(table, `d${currentDepth}`);
+		const limit = isSingle ? 1 : params?.limit;
+		const offset = params?.offset;
+		const columns = this.buildColumns(table, selection, !!isNested, params);
+		const where = params?.where && relationWhere ? and(relationsFilterToSQL(table, params.where, tableConfig.relations, schema), relationWhere) : params?.where ? relationsFilterToSQL(table, params.where, tableConfig.relations, schema) : relationWhere;
+		const order = params?.orderBy ? relationsOrderToSQL(table, params.orderBy) : void 0;
+		const extras = params?.extras ? relationExtrasToSQL(table, params.extras) : void 0;
+		if (extras) selection.push(...extras.selection);
+		const joins = params ? (() => {
+			const { with: joins } = params;
+			if (!joins) return;
+			const withEntries = Object.entries(joins).filter(([_, v]) => v);
+			if (!withEntries.length) return;
+			return sql.join(withEntries.map(([k, join]) => {
+				const relation = tableConfig.relations[k];
+				const isSingle = is(relation, One);
+				const targetTable = aliasedTable(relation.targetTable, `d${currentDepth + 1}`);
+				const throughTable = relation.throughTable ? aliasedTable(relation.throughTable, `tr${currentDepth}`) : void 0;
+				const { filter, joinCondition } = relationToSQL(relation, table, targetTable, throughTable);
+				const throughJoin = throughTable ? sql` inner join ${getTableAsAliasSQL(throughTable)} on ${joinCondition}` : void 0;
+				const innerQuery = this.buildRelationalQuery({
+					table: targetTable,
+					mode: isSingle ? "first" : "many",
+					schema,
+					queryConfig: join,
+					tableConfig: schema[relation.targetTableName],
+					relationWhere: filter,
+					isNested: true,
+					errorPath: `${currentPath.length ? `${currentPath}.` : ""}${k}`,
+					depth: currentDepth + 1,
+					throughJoin,
+					jsonb
+				});
+				selection.push({
+					field: targetTable,
+					key: k,
+					selection: innerQuery.selection,
+					isArray: !isSingle,
+					isOptional: (relation.optional ?? false) || join !== true && !!join.where
+				});
+				const jsonColumns = sql.join(innerQuery.selection.map((s) => {
+					return sql`${sql.raw(this.escapeString(s.key))}, ${s.selection ? sql`${jsonb}(${sql.identifier(s.key)})` : sql.identifier(s.key)}`;
+				}), sql`, `);
+				const json = isNested ? jsonb : sql`json`;
+				return isSingle ? sql`(select ${json}_object(${jsonColumns}) as ${sql.identifier("r")} from (${innerQuery.sql}) as ${sql.identifier("t")}) as ${sql.identifier(k)}` : sql`coalesce((select ${json}_group_array(json_object(${jsonColumns})) as ${sql.identifier("r")} from (${innerQuery.sql}) as ${sql.identifier("t")}), ${jsonb}_array()) as ${sql.identifier(k)}`;
+			}), sql`, `);
+		})() : void 0;
+		const selectionArr = [
+			columns,
+			extras?.sql,
+			joins
+		].filter((e) => e !== void 0);
+		if (!selectionArr.length) throw new DrizzleError({ message: `No fields selected for table "${tableConfig.name}"${currentPath ? ` ("${currentPath}")` : ""}` });
+		return {
+			sql: sql`select ${sql.join(selectionArr, sql`, `)} from ${getTableAsAliasSQL(table)}${throughJoin}${sql` where ${where}`.if(where)}${sql` order by ${order}`.if(order)}${sql` limit ${limit}`.if(limit !== void 0)}${sql` offset ${offset}`.if(offset !== void 0)}`,
+			selection
+		};
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/query-builder.js
+var QueryBuilder = class {
+	static [entityKind] = "SQLiteQueryBuilder";
+	dialect;
+	dialectConfig;
+	constructor(dialect) {
+		this.dialect = is(dialect, SQLiteDialect) ? dialect : void 0;
+		this.dialectConfig = is(dialect, SQLiteDialect) ? void 0 : dialect;
+	}
+	$with = (alias, selection) => {
+		const queryBuilder = this;
+		const as = (qb) => {
+			if (typeof qb === "function") qb = qb(queryBuilder);
+			return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({
+				alias,
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "error"
+			}));
+		};
+		return { as };
+	};
+	with(...queries) {
+		const self = this;
+		function select(fields) {
+			return new SQLiteSelectBuilder({
+				fields: fields ?? void 0,
+				session: void 0,
+				dialect: self.getDialect(),
+				withList: queries
+			});
+		}
+		function selectDistinct(fields) {
+			return new SQLiteSelectBuilder({
+				fields: fields ?? void 0,
+				session: void 0,
+				dialect: self.getDialect(),
+				withList: queries,
+				distinct: true
+			});
+		}
+		return {
+			select,
+			selectDistinct
+		};
+	}
+	select(fields) {
+		return new SQLiteSelectBuilder({
+			fields: fields ?? void 0,
+			session: void 0,
+			dialect: this.getDialect()
+		});
+	}
+	selectDistinct(fields) {
+		return new SQLiteSelectBuilder({
+			fields: fields ?? void 0,
+			session: void 0,
+			dialect: this.getDialect(),
+			distinct: true
+		});
+	}
+	getDialect() {
+		if (!this.dialect) this.dialect = new SQLiteDialect(this.dialectConfig);
+		return this.dialect;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/insert.js
+var SQLiteInsertBuilder = class {
+	static [entityKind] = "SQLiteInsertBuilder";
+	constructor(table, session, dialect, withList, builder = SQLiteInsertBase) {
+		this.table = table;
+		this.session = session;
+		this.dialect = dialect;
+		this.withList = withList;
+		this.builder = builder;
+	}
+	values(values) {
+		values = Array.isArray(values) ? values : [values];
+		if (values.length === 0) throw new Error("values() must be called with at least one value");
+		const mappedValues = values.map((entry) => {
+			const result = {};
+			const cols = this.table[Table.Symbol.Columns];
+			for (const colKey of Object.keys(entry)) {
+				const colValue = entry[colKey];
+				result[colKey] = is(colValue, SQL) ? colValue : new Param(colValue, cols[colKey]);
+			}
+			return result;
+		});
+		return new this.builder(this.table, mappedValues, this.session, this.dialect, this.withList);
+	}
+	select(selectQuery) {
+		const select = typeof selectQuery === "function" ? selectQuery(new QueryBuilder()) : selectQuery;
+		if (!is(select, SQL)) {
+			const insertCols = Object.keys(this.table[Table.Symbol.Columns]);
+			const selected = Object.keys(select._.selectedFields);
+			for (const col of selected) if (!insertCols.includes(col)) throw new Error(`Insert select error: column "${col}" does not exist in table "${this.table[Table.Symbol.Name]}"`);
+		}
+		return new this.builder(this.table, select, this.session, this.dialect, this.withList, true);
+	}
+};
+var SQLiteInsertBase = class {
+	static [entityKind] = "SQLiteInsert";
+	/** @internal */
+	config;
+	constructor(table, values, session, dialect, withList, select) {
+		this.session = session;
+		this.dialect = dialect;
+		this.config = {
+			table,
+			values,
+			withList,
+			select
+		};
+	}
+	returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
+		this.config.returning = orderSelectedFields(fields);
+		return this;
+	}
+	/**
+	* Adds an `on conflict do nothing` clause to the query.
+	*
+	* Calling this method simply avoids inserting a row as its alternative action.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/insert#on-conflict-do-nothing}
+	*
+	* @param config The `target` and `where` clauses.
+	*
+	* @example
+	* ```ts
+	* // Insert one row and cancel the insert if there's a conflict
+	* await db.insert(cars)
+	*   .values({ id: 1, brand: 'BMW' })
+	*   .onConflictDoNothing();
+	*
+	* // Explicitly specify conflict target
+	* await db.insert(cars)
+	*   .values({ id: 1, brand: 'BMW' })
+	*   .onConflictDoNothing({ target: cars.id });
+	* ```
+	*/
+	onConflictDoNothing(config = {}) {
+		if (!this.config.onConflict) this.config.onConflict = [];
+		if (config.target === void 0) this.config.onConflict.push(sql` on conflict do nothing`);
+		else {
+			const targetSql = Array.isArray(config.target) ? sql`${config.target}` : sql`${[config.target]}`;
+			const whereSql = config.where ? sql` where ${config.where}` : sql``;
+			this.config.onConflict.push(sql` on conflict ${targetSql} do nothing${whereSql}`);
+		}
+		return this;
+	}
+	/**
+	* Adds an `on conflict do update` clause to the query.
+	*
+	* Calling this method will update the existing row that conflicts with the row proposed for insertion as its alternative action.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/insert#upserts-and-conflicts}
+	*
+	* @param config The `target`, `set` and `where` clauses.
+	*
+	* @example
+	* ```ts
+	* // Update the row if there's a conflict
+	* await db.insert(cars)
+	*   .values({ id: 1, brand: 'BMW' })
+	*   .onConflictDoUpdate({
+	*     target: cars.id,
+	*     set: { brand: 'Porsche' }
+	*   });
+	*
+	* // Upsert with 'where' clause
+	* await db.insert(cars)
+	*   .values({ id: 1, brand: 'BMW' })
+	*   .onConflictDoUpdate({
+	*     target: cars.id,
+	*     set: { brand: 'newBMW' },
+	*     where: sql`${cars.createdAt} > '2023-01-01'::date`,
+	*   });
+	* ```
+	*/
+	onConflictDoUpdate(config) {
+		if (config.where && (config.targetWhere || config.setWhere)) throw new Error("You cannot use both \"where\" and \"targetWhere\"/\"setWhere\" at the same time - \"where\" is deprecated, use \"targetWhere\" or \"setWhere\" instead.");
+		if (!this.config.onConflict) this.config.onConflict = [];
+		const whereSql = config.where ? sql` where ${config.where}` : void 0;
+		const targetWhereSql = config.targetWhere ? sql` where ${config.targetWhere}` : void 0;
+		const setWhereSql = config.setWhere ? sql` where ${config.setWhere}` : void 0;
+		const targetSql = Array.isArray(config.target) ? sql`${config.target}` : sql`${[config.target]}`;
+		const setSql = this.dialect.buildUpdateSet(this.config.table, mapUpdateSet(this.config.table, config.set));
+		this.config.onConflict.push(sql` on conflict ${targetSql}${targetWhereSql} do update set ${setSql}${whereSql}${setWhereSql}`);
+		return this;
+	}
+	getSQL() {
+		return this.dialect.buildInsertQuery(this.config);
+	}
+	toSQL() {
+		return this.dialect.sqlToQuery(this.getSQL());
+	}
+	$dynamic() {
+		return this;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/insert.js
+var SQLiteAsyncInsertBase = class extends SQLiteInsertBase {
+	static [entityKind] = "SQLiteAsyncInsert";
+	/** @internal */
+	_prepare(prepare = false) {
+		return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), "arrays", prepare, this.config.returning ? "all" : "run", this.config.returning ? this.dialect.mapperGenerators.rows(this.config.returning, void 0) : void 0, {
+			type: "insert",
+			tables: extractUsedTable(this.config.table)
+		});
+	}
+	prepare() {
+		return this._prepare(true);
+	}
+	run = (placeholderValues) => {
+		return this._prepare().run(placeholderValues);
+	};
+	all = (placeholderValues) => {
+		return this._prepare().all(placeholderValues);
+	};
+	get = (placeholderValues) => {
+		return this._prepare().get(placeholderValues);
+	};
+	values = (placeholderValues) => {
+		return this._prepare().values(placeholderValues);
+	};
+	async execute() {
+		return this._prepare().execute();
+	}
+};
+applyMixins(SQLiteAsyncInsertBase, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/raw.js
+var SQLiteRaw = class {
+	static [entityKind] = "SQLiteRaw";
+	constructor(prepared, sql, query) {
+		this.prepared = prepared;
+		this.sql = sql;
+		this.query = query;
+	}
+	getSQL() {
+		return this.sql;
+	}
+	getQuery() {
+		return this.query;
+	}
+	_prepare() {
+		return this.prepared;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/raw.js
+var SQLiteAsyncRaw = class extends SQLiteRaw {
+	static [entityKind] = "SQLiteAsyncRaw";
+	constructor(prepared, sql, query) {
+		super(prepared, sql, query);
+	}
+	execute(placeholderValues) {
+		return this.prepared.execute(placeholderValues);
+	}
+};
+applyMixins(SQLiteAsyncRaw, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/select.js
+var SQLiteAsyncSelectBase = class extends SQLiteSelectBase {
+	static [entityKind] = "SQLiteAsyncSelect";
+	/** @internal */
+	_prepare(prepare = false) {
+		const query = this.dialect.sqlToQuery(this.getSQL());
+		const fieldsList = this.config.fieldsFlat;
+		const mapper = this.dialect.mapperGenerators.rows(fieldsList, this.joinsNotNullableMap);
+		return this.session.prepareQuery(query, "arrays", prepare, "all", mapper, {
+			type: "select",
+			tables: [...this.usedTables]
+		}, this.cacheConfig);
+	}
+	prepare() {
+		return this._prepare(true);
+	}
+	run = (placeholderValues) => {
+		return this._prepare().run(placeholderValues);
+	};
+	all = (placeholderValues) => {
+		return this._prepare().all(placeholderValues);
+	};
+	get = (placeholderValues) => {
+		return this._prepare().get(placeholderValues);
+	};
+	values = (placeholderValues) => {
+		return this._prepare().values(placeholderValues);
+	};
+	async execute() {
+		return this._prepare().execute();
+	}
+};
+applyMixins(SQLiteAsyncSelectBase, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/query-builders/update.js
+var SQLiteUpdateBuilder = class {
+	static [entityKind] = "SQLiteUpdateBuilder";
+	constructor(table, session, dialect, withList, builder = SQLiteUpdateBase) {
+		this.table = table;
+		this.session = session;
+		this.dialect = dialect;
+		this.withList = withList;
+		this.builder = builder;
+	}
+	set(values) {
+		return new this.builder(this.table, mapUpdateSet(this.table, values), this.session, this.dialect, this.withList);
+	}
+};
+var SQLiteUpdateBase = class {
+	static [entityKind] = "SQLiteUpdate";
+	/** @internal */
+	config;
+	constructor(table, set, session, dialect, withList) {
+		this.session = session;
+		this.dialect = dialect;
+		this.config = {
+			set,
+			table,
+			withList,
+			joins: []
+		};
+	}
+	from(source) {
+		this.config.from = source;
+		return this;
+	}
+	createJoin(joinType) {
+		return ((table, on) => {
+			const tableName = getTableLikeName(table);
+			if (typeof tableName === "string" && this.config.joins.some((join) => join.alias === tableName)) throw new Error(`Alias "${tableName}" is already used in this query`);
+			if (typeof on === "function") {
+				const from = this.config.from ? is(table, SQLiteTable) ? table[Table.Symbol.Columns] : is(table, Subquery) ? table._.selectedFields : is(table, SQLiteViewBase) ? table[ViewBaseConfig].selectedFields : void 0 : void 0;
+				on = on(new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({
+					sqlAliasedBehavior: "sql",
+					sqlBehavior: "sql"
+				})), from && new Proxy(from, new SelectionProxyHandler({
+					sqlAliasedBehavior: "sql",
+					sqlBehavior: "sql"
+				})));
+			}
+			this.config.joins.push({
+				on,
+				table,
+				joinType,
+				alias: tableName
+			});
+			return this;
+		});
+	}
+	leftJoin = this.createJoin("left");
+	rightJoin = this.createJoin("right");
+	innerJoin = this.createJoin("inner");
+	fullJoin = this.createJoin("full");
+	/**
+	* Adds a 'where' clause to the query.
+	*
+	* Calling this method will update only those rows that fulfill a specified condition.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/update}
+	*
+	* @param where the 'where' clause.
+	*
+	* @example
+	* You can use conditional operators and `sql function` to filter the rows to be updated.
+	*
+	* ```ts
+	* // Update all cars with green color
+	* db.update(cars).set({ color: 'red' })
+	*   .where(eq(cars.color, 'green'));
+	* // or
+	* db.update(cars).set({ color: 'red' })
+	*   .where(sql`${cars.color} = 'green'`)
+	* ```
+	*
+	* You can logically combine conditional operators with `and()` and `or()` operators:
+	*
+	* ```ts
+	* // Update all BMW cars with a green color
+	* db.update(cars).set({ color: 'red' })
+	*   .where(and(eq(cars.color, 'green'), eq(cars.brand, 'BMW')));
+	*
+	* // Update all cars with the green or blue color
+	* db.update(cars).set({ color: 'red' })
+	*   .where(or(eq(cars.color, 'green'), eq(cars.color, 'blue')));
+	* ```
+	*/
+	where(where) {
+		this.config.where = where;
+		return this;
+	}
+	orderBy(...columns) {
+		if (typeof columns[0] === "function") {
+			const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "sql"
+			})));
+			const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+			this.config.orderBy = orderByArray;
+		} else {
+			const orderByArray = columns;
+			this.config.orderBy = orderByArray;
+		}
+		return this;
+	}
+	limit(limit) {
+		this.config.limit = limit;
+		return this;
+	}
+	returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
+		this.config.returning = orderSelectedFields(fields);
+		return this;
+	}
+	getSQL() {
+		return this.dialect.buildUpdateQuery(this.config);
+	}
+	toSQL() {
+		return this.dialect.sqlToQuery(this.getSQL());
+	}
+	$dynamic() {
+		return this;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/update.js
+var SQLiteAsyncUpdateBase = class extends SQLiteUpdateBase {
+	static [entityKind] = "SQLiteAsyncUpdate";
+	/** @internal */
+	_prepare(prepare = false) {
+		return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), "arrays", prepare, this.config.returning ? "all" : "run", this.config.returning ? this.dialect.mapperGenerators.rows(this.config.returning, void 0) : void 0, {
+			type: "update",
+			tables: extractUsedTable(this.config.table)
+		});
+	}
+	prepare() {
+		return this._prepare(true);
+	}
+	run = (placeholderValues) => {
+		return this._prepare().run(placeholderValues);
+	};
+	all = (placeholderValues) => {
+		return this._prepare().all(placeholderValues);
+	};
+	get = (placeholderValues) => {
+		return this._prepare().get(placeholderValues);
+	};
+	values = (placeholderValues) => {
+		return this._prepare().values(placeholderValues);
+	};
+	async execute() {
+		return this.config.returning ? this.all() : this.run();
+	}
+};
+applyMixins(SQLiteAsyncUpdateBase, [QueryPromise]);
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/db.js
+var SQLiteAsyncDatabase = class {
+	static [entityKind] = "BaseSQLiteDatabase";
+	query;
+	constructor(resultKind, dialect, session, relations, forbidJsonb) {
+		this.resultKind = resultKind;
+		this.dialect = dialect;
+		this.session = session;
+		this.forbidJsonb = forbidJsonb;
+		this._ = {
+			relations,
+			session,
+			resultKind
+		};
+		this.query = {};
+		for (const [tableName, relation] of Object.entries(relations)) this.query[tableName] = new RelationalQueryBuilder(resultKind, relations, relations[relation.name].table, relation, dialect, session, forbidJsonb, resultKind === "sync" ? SQLiteSyncRelationalQuery : SQLiteAsyncRelationalQuery);
+		this.$cache = { invalidate: async (_params) => {} };
+	}
+	/**
+	* Creates a subquery that defines a temporary named result set as a CTE.
+	*
+	* It is useful for breaking down complex queries into simpler parts and for reusing the result set in subsequent parts of the query.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#with-clause}
+	*
+	* @param alias The alias for the subquery.
+	*
+	* Failure to provide an alias will result in a DrizzleTypeError, preventing the subquery from being referenced in other queries.
+	*
+	* @example
+	*
+	* ```ts
+	* // Create a subquery with alias 'sq' and use it in the select query
+	* const sq = db.$with('sq').as(db.select().from(users).where(eq(users.id, 42)));
+	*
+	* const result = await db.with(sq).select().from(sq);
+	* ```
+	*
+	* To select arbitrary SQL values as fields in a CTE and reference them in other CTEs or in the main query, you need to add aliases to them:
+	*
+	* ```ts
+	* // Select an arbitrary SQL value as a field in a CTE and reference it in the main query
+	* const sq = db.$with('sq').as(db.select({
+	*   name: sql<string>`upper(${users.name})`.as('name'),
+	* })
+	* .from(users));
+	*
+	* const result = await db.with(sq).select({ name: sq.name }).from(sq);
+	* ```
+	*/
+	$with = (alias, selection) => {
+		const self = this;
+		const as = (qb) => {
+			if (typeof qb === "function") qb = qb(new QueryBuilder(self.dialect));
+			return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({
+				alias,
+				sqlAliasedBehavior: "alias",
+				sqlBehavior: "error"
+			}));
+		};
+		return { as };
+	};
+	$count(source, filters) {
+		return this.resultKind === "async" ? new SQLiteAsyncCountBuilder({
+			source,
+			filters,
+			session: this.session,
+			dialect: this.dialect
+		}) : new SQLiteSyncCountBuilder({
+			source,
+			filters,
+			session: this.session,
+			dialect: this.dialect
+		});
+	}
+	/**
+	* Incorporates a previously defined CTE (using `$with`) into the main query.
+	*
+	* This method allows the main query to reference a temporary named result set.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/select#with-clause}
+	*
+	* @param queries The CTEs to incorporate into the main query.
+	*
+	* @example
+	*
+	* ```ts
+	* // Define a subquery 'sq' as a CTE using $with
+	* const sq = db.$with('sq').as(db.select().from(users).where(eq(users.id, 42)));
+	*
+	* // Incorporate the CTE 'sq' into the main query and select from it
+	* const result = await db.with(sq).select().from(sq);
+	* ```
+	*/
+	with(...queries) {
+		const self = this;
+		function select(fields) {
+			return new SQLiteSelectBuilder({
+				fields: fields ?? void 0,
+				session: self.session,
+				dialect: self.dialect,
+				withList: queries
+			}, SQLiteAsyncSelectBase);
+		}
+		function selectDistinct(fields) {
+			return new SQLiteSelectBuilder({
+				fields: fields ?? void 0,
+				session: self.session,
+				dialect: self.dialect,
+				withList: queries,
+				distinct: true
+			}, SQLiteAsyncSelectBase);
+		}
+		/**
+		* Creates an update query.
+		*
+		* Calling this method without `.where()` clause will update all rows in a table. The `.where()` clause specifies which rows should be updated.
+		*
+		* Use `.set()` method to specify which values to update.
+		*
+		* See docs: {@link https://orm.drizzle.team/docs/update}
+		*
+		* @param table The table to update.
+		*
+		* @example
+		*
+		* ```ts
+		* // Update all rows in the 'cars' table
+		* await db.update(cars).set({ color: 'red' });
+		*
+		* // Update rows with filters and conditions
+		* await db.update(cars).set({ color: 'red' }).where(eq(cars.brand, 'BMW'));
+		*
+		* // Update with returning clause
+		* const updatedCar: Car[] = await db.update(cars)
+		*   .set({ color: 'red' })
+		*   .where(eq(cars.id, 1))
+		*   .returning();
+		* ```
+		*/
+		function update(table) {
+			return new SQLiteUpdateBuilder(table, self.session, self.dialect, queries, SQLiteAsyncUpdateBase);
+		}
+		/**
+		* Creates an insert query.
+		*
+		* Calling this method will create new rows in a table. Use `.values()` method to specify which values to insert.
+		*
+		* See docs: {@link https://orm.drizzle.team/docs/insert}
+		*
+		* @param table The table to insert into.
+		*
+		* @example
+		*
+		* ```ts
+		* // Insert one row
+		* await db.insert(cars).values({ brand: 'BMW' });
+		*
+		* // Insert multiple rows
+		* await db.insert(cars).values([{ brand: 'BMW' }, { brand: 'Porsche' }]);
+		*
+		* // Insert with returning clause
+		* const insertedCar: Car[] = await db.insert(cars)
+		*   .values({ brand: 'BMW' })
+		*   .returning();
+		* ```
+		*/
+		function insert(into) {
+			return new SQLiteInsertBuilder(into, self.session, self.dialect, queries, SQLiteAsyncInsertBase);
+		}
+		/**
+		* Creates a delete query.
+		*
+		* Calling this method without `.where()` clause will delete all rows in a table. The `.where()` clause specifies which rows should be deleted.
+		*
+		* See docs: {@link https://orm.drizzle.team/docs/delete}
+		*
+		* @param table The table to delete from.
+		*
+		* @example
+		*
+		* ```ts
+		* // Delete all rows in the 'cars' table
+		* await db.delete(cars);
+		*
+		* // Delete rows with filters and conditions
+		* await db.delete(cars).where(eq(cars.color, 'green'));
+		*
+		* // Delete with returning clause
+		* const deletedCar: Car[] = await db.delete(cars)
+		*   .where(eq(cars.id, 1))
+		*   .returning();
+		* ```
+		*/
+		function delete_(from) {
+			return new SQLiteAsyncDeleteBase(from, self.session, self.dialect, queries);
+		}
+		return {
+			select,
+			selectDistinct,
+			update,
+			insert,
+			delete: delete_
+		};
+	}
+	select(fields) {
+		return new SQLiteSelectBuilder({
+			fields: fields ?? void 0,
+			session: this.session,
+			dialect: this.dialect
+		}, SQLiteAsyncSelectBase);
+	}
+	selectDistinct(fields) {
+		return new SQLiteSelectBuilder({
+			fields: fields ?? void 0,
+			session: this.session,
+			dialect: this.dialect,
+			distinct: true
+		}, SQLiteAsyncSelectBase);
+	}
+	/**
+	* Creates an update query.
+	*
+	* Calling this method without `.where()` clause will update all rows in a table. The `.where()` clause specifies which rows should be updated.
+	*
+	* Use `.set()` method to specify which values to update.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/update}
+	*
+	* @param table The table to update.
+	*
+	* @example
+	*
+	* ```ts
+	* // Update all rows in the 'cars' table
+	* await db.update(cars).set({ color: 'red' });
+	*
+	* // Update rows with filters and conditions
+	* await db.update(cars).set({ color: 'red' }).where(eq(cars.brand, 'BMW'));
+	*
+	* // Update with returning clause
+	* const updatedCar: Car[] = await db.update(cars)
+	*   .set({ color: 'red' })
+	*   .where(eq(cars.id, 1))
+	*   .returning();
+	* ```
+	*/
+	update(table) {
+		return new SQLiteUpdateBuilder(table, this.session, this.dialect, void 0, SQLiteAsyncUpdateBase);
+	}
+	$cache;
+	/**
+	* Creates an insert query.
+	*
+	* Calling this method will create new rows in a table. Use `.values()` method to specify which values to insert.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/insert}
+	*
+	* @param table The table to insert into.
+	*
+	* @example
+	*
+	* ```ts
+	* // Insert one row
+	* await db.insert(cars).values({ brand: 'BMW' });
+	*
+	* // Insert multiple rows
+	* await db.insert(cars).values([{ brand: 'BMW' }, { brand: 'Porsche' }]);
+	*
+	* // Insert with returning clause
+	* const insertedCar: Car[] = await db.insert(cars)
+	*   .values({ brand: 'BMW' })
+	*   .returning();
+	* ```
+	*/
+	insert(into) {
+		return new SQLiteInsertBuilder(into, this.session, this.dialect, void 0, SQLiteAsyncInsertBase);
+	}
+	/**
+	* Creates a delete query.
+	*
+	* Calling this method without `.where()` clause will delete all rows in a table. The `.where()` clause specifies which rows should be deleted.
+	*
+	* See docs: {@link https://orm.drizzle.team/docs/delete}
+	*
+	* @param table The table to delete from.
+	*
+	* @example
+	*
+	* ```ts
+	* // Delete all rows in the 'cars' table
+	* await db.delete(cars);
+	*
+	* // Delete rows with filters and conditions
+	* await db.delete(cars).where(eq(cars.color, 'green'));
+	*
+	* // Delete with returning clause
+	* const deletedCar: Car[] = await db.delete(cars)
+	*   .where(eq(cars.id, 1))
+	*   .returning();
+	* ```
+	*/
+	delete(from) {
+		return new SQLiteAsyncDeleteBase(from, this.session, this.dialect);
+	}
+	run(query) {
+		const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+		const builtQuery = this.dialect.sqlToQuery(sequel);
+		const prepared = this.session.prepareQuery(builtQuery, "raw", false, "run");
+		if (this.resultKind === "async") return new SQLiteAsyncRaw(prepared, sequel, builtQuery);
+		return this.session.run(sequel);
+	}
+	all(query) {
+		const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+		const builtQuery = this.dialect.sqlToQuery(sequel);
+		const prepared = this.session.prepareQuery(builtQuery, "objects", false, "all");
+		if (this.resultKind === "async") return new SQLiteAsyncRaw(prepared, sequel, builtQuery);
+		return this.session.objects(sequel);
+	}
+	get(query) {
+		const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+		const builtQuery = this.dialect.sqlToQuery(sequel);
+		const prepared = this.session.prepareQuery(builtQuery, "objects", false, "get");
+		if (this.resultKind === "async") return new SQLiteAsyncRaw(prepared, sequel, builtQuery);
+		return this.session.object(sequel);
+	}
+	values(query) {
+		const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+		const builtQuery = this.dialect.sqlToQuery(sequel);
+		const prepared = this.session.prepareQuery(builtQuery, "objects", false, "values");
+		if (this.resultKind === "async") return new SQLiteAsyncRaw(prepared, sequel, builtQuery);
+		return this.session.arrays(sequel);
+	}
+	transaction(transaction, config) {
+		return this.session.transaction(transaction, config);
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/cache/core/cache.js
+var Cache = class {
+	static [entityKind] = "Cache";
+};
+var NoopCache = class extends Cache {
+	static [entityKind] = "NoopCache";
+	strategy() {
+		return "all";
+	}
+	async get(_key) {}
+	async put(_hashedQuery, _response, _tables, _config) {}
+	async onMutate(_params) {}
+};
+var strategyFor = async (query, params, queryMetadata, withCacheConfig) => {
+	if (!queryMetadata) return { type: "skip" };
+	const { type, tables } = queryMetadata;
+	if ((type === "insert" || type === "update" || type === "delete") && tables.length > 0) return {
+		type: "invalidate",
+		tables
+	};
+	if (!withCacheConfig) return { type: "skip" };
+	if (!withCacheConfig.enabled) return { type: "skip" };
+	if (type === "select") return {
+		type: "try",
+		key: withCacheConfig.tag ?? await hashQuery(query, params),
+		isTag: typeof withCacheConfig.tag !== "undefined",
+		autoInvalidate: withCacheConfig.autoInvalidate,
+		tables: queryMetadata.tables,
+		config: withCacheConfig.config
+	};
+	return { type: "skip" };
+};
+async function hashQuery(sql, params) {
+	const dataToHash = `${sql}-${JSON.stringify(params, (_, v) => typeof v === "bigint" ? `${v}n` : v)}`;
+	const data = new TextEncoder().encode(dataToHash);
+	const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+	return [...new Uint8Array(hashBuffer)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/session.js
+var SQLitePreparedQuery = class {
+	static [entityKind] = "SQLiteBasePreparedQuery";
+	/** @internal */
+	mapper;
+	/** @internal */
+	executeMethod;
+	constructor(executeMethod, query, mapper, mode) {
+		this.query = query;
+		this.mode = mode;
+		this.mapper = mapper;
+		this.executeMethod = executeMethod;
+	}
+	getQuery() {
+		return this.query;
+	}
+};
+var SQLiteSession = class {
+	static [entityKind] = "SQLiteSession";
+	constructor(dialect) {
+		this.dialect = dialect;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/sqlite-core/async/session.js
+var ExecuteResultSync = class extends QueryPromise {
+	static [entityKind] = "ExecuteResultSync";
+	constructor(resultCb) {
+		super();
+		this.resultCb = resultCb;
+	}
+	async execute() {
+		return this.resultCb();
+	}
+	sync() {
+		return this.resultCb();
+	}
+};
+var SQLiteAsyncPreparedQuery = class extends SQLitePreparedQuery {
+	static [entityKind] = "SQLiteAsyncPreparedQuery";
+	fastPath;
+	constructor(resultKind, executeMethod = "all", executors, query, mapper, mode, logger, cache, queryMetadata, cacheConfig) {
+		super(executeMethod, query, mapper, mode);
+		this.resultKind = resultKind;
+		this.executors = executors;
+		this.logger = logger;
+		this.cache = cache;
+		this.queryMetadata = queryMetadata;
+		this.cacheConfig = cacheConfig;
+		if (cache && cache.strategy() === "all" && cacheConfig === void 0) this.cacheConfig = {
+			enabled: true,
+			autoInvalidate: true
+		};
+		if (!this.cacheConfig?.enabled) this.cacheConfig = void 0;
+		this.fastPath = cacheConfig === void 0 && (cache === void 0 || is(cache, NoopCache));
+	}
+	/** @internal */
+	async queryWithCache(queryString, params, executeMethod, query) {
+		const cacheStrat = this.cache !== void 0 && !is(this.cache, NoopCache) ? await strategyFor(queryString, params, this.queryMetadata, this.cacheConfig) : { type: "skip" };
+		if (cacheStrat.type === "skip") return query().catch((e) => {
+			throw new DrizzleQueryError(queryString, params, e);
+		});
+		const cache = this.cache;
+		if (cacheStrat.type === "invalidate") return Promise.all([query(), cache.onMutate({ tables: cacheStrat.tables })]).then((res) => res[0]).catch((e) => {
+			throw new DrizzleQueryError(queryString, params, e);
+		});
+		if (cacheStrat.type === "try") {
+			const { tables, key: _key, isTag, autoInvalidate, config } = cacheStrat;
+			const key = `${executeMethod}_${_key}`;
+			const fromCache = await cache.get(key, tables, isTag, autoInvalidate);
+			if (fromCache === void 0) {
+				const result = await query().catch((e) => {
+					throw new DrizzleQueryError(queryString, params, e);
+				});
+				await cache.put(key, result, autoInvalidate ? tables : [], isTag, config);
+				return result;
+			}
+			return fromCache;
+		}
+		assertUnreachable(cacheStrat);
+	}
+	run(placeholderValues = {}) {
+		const { query, logger, executors, fastPath, resultKind } = this;
+		const sql = query._sql ? query._sql.join(" ") : query.sql;
+		const params = query.params.length === 0 ? query.params : fillPlaceholders(query.params, placeholderValues);
+		logger.logQuery(sql, params);
+		if (resultKind === "sync") try {
+			return executors.run(params);
+		} catch (e) {
+			throw new DrizzleQueryError(sql, params, e);
+		}
+		return fastPath ? executors.run(params).catch((e) => {
+			throw new DrizzleQueryError(sql, params, e);
+		}) : this.queryWithCache(sql, params, "run", () => executors.run(params));
+	}
+	all(placeholderValues = {}) {
+		const { query, logger, executors, mapper, fastPath, resultKind } = this;
+		const sql = query._sql ? query._sql.join(" ") : query.sql;
+		const params = query.params.length === 0 ? query.params : fillPlaceholders(query.params, placeholderValues);
+		logger.logQuery(sql, params);
+		if (resultKind === "sync") {
+			let res;
+			try {
+				res = executors.all(params);
+			} catch (e) {
+				throw new DrizzleQueryError(sql, params, e);
+			}
+			if (!mapper) return res;
+			return mapper(res);
+		}
+		const res = fastPath ? executors.all(params).catch((e) => {
+			throw new DrizzleQueryError(sql, params, e);
+		}) : this.queryWithCache(sql, params, "all", () => executors.all(params));
+		if (!mapper) return res;
+		return res.then((rows) => mapper(rows));
+	}
+	get(placeholderValues = {}) {
+		const { query, logger, executors, mapper, fastPath, resultKind } = this;
+		const sql = query._sql ? query._sql.join(" ") : query.sql;
+		const params = query.params.length === 0 ? query.params : fillPlaceholders(query.params, placeholderValues);
+		logger.logQuery(sql, params);
+		if (resultKind === "sync") {
+			let res;
+			try {
+				res = executors.get(params);
+			} catch (e) {
+				throw new DrizzleQueryError(sql, params, e);
+			}
+			if (!res) return void 0;
+			if (!mapper) return res;
+			return mapper([res])[0];
+		}
+		const res = fastPath ? executors.get(params).catch((e) => {
+			throw new DrizzleQueryError(sql, params, e);
+		}) : this.queryWithCache(sql, params, "get", () => executors.get(params));
+		if (!mapper) return res.then((row) => row ? row : void 0);
+		return res.then((row) => row ? mapper([row])[0] : void 0);
+	}
+	values(placeholderValues = {}) {
+		const { query, logger, executors, fastPath, resultKind } = this;
+		const sql = query._sql ? query._sql.join(" ") : query.sql;
+		const params = query.params.length === 0 ? query.params : fillPlaceholders(query.params, placeholderValues);
+		logger.logQuery(sql, params);
+		if (resultKind === "sync") try {
+			return executors.values(params);
+		} catch (e) {
+			throw new DrizzleQueryError(sql, params, e);
+		}
+		return fastPath ? executors.values(params).catch((e) => {
+			throw new DrizzleQueryError(sql, params, e);
+		}) : this.queryWithCache(sql, params, "values", () => executors.values(params));
+	}
+	execute(placeholderValues) {
+		if (this.resultKind === "async") return this[this.executeMethod](placeholderValues);
+		return new ExecuteResultSync(() => this[this.executeMethod](placeholderValues));
+	}
+};
+var SQLiteAsyncSession = class extends SQLiteSession {
+	static [entityKind] = "SQLiteAsyncSession";
+	constructor(dialect, resultKind) {
+		super(dialect);
+		this.resultKind = resultKind;
+	}
+	run(query) {
+		return this.prepareQuery(this.dialect.sqlToQuery(query), "raw", false).run();
+	}
+	objects(query) {
+		return this.prepareQuery(this.dialect.sqlToQuery(query), "objects", false).all();
+	}
+	object(query) {
+		return this.prepareQuery(this.dialect.sqlToQuery(query), "objects", false).get();
+	}
+	arrays(query) {
+		return this.prepareQuery(this.dialect.sqlToQuery(query), "arrays", false).all();
+	}
+	array(query) {
+		return this.prepareQuery(this.dialect.sqlToQuery(query), "arrays", false).get();
+	}
+};
+var SQLiteAsyncTransaction = class extends SQLiteAsyncDatabase {
+	static [entityKind] = "SQLiteAsyncTransaction";
+	constructor(resultType, dialect, session, relations, nestedIndex = 0, forbidJsonb) {
+		super(resultType, dialect, session, relations, forbidJsonb);
+		this.nestedIndex = nestedIndex;
+	}
+	rollback() {
+		throw new TransactionRollbackError();
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/libsql/session.js
+var LibSQLSession = class LibSQLSession extends SQLiteAsyncSession {
+	static [entityKind] = "LibSQLSession";
+	logger;
+	cache;
+	constructor(client, dialect, relations, options, tx) {
+		super(dialect, "async");
+		this.client = client;
+		this.relations = relations;
+		this.options = options;
+		this.tx = tx;
+		this.logger = options.logger ?? new NoopLogger();
+		this.cache = options.cache ?? new NoopCache();
+	}
+	prepareQuery(query, mode, _prepare, executeMethod, mapper, queryMetadata, cacheConfig) {
+		const client = this.tx ?? this.client;
+		return new SQLiteAsyncPreparedQuery("async", executeMethod, {
+			all: (params) => client.execute({
+				sql: query.sql,
+				args: params
+			}).then(({ rows }) => mode === "arrays" ? rows.map(toArrayRow) : rows.map(normalizeRow)),
+			get: (params) => client.execute({
+				sql: query.sql,
+				args: params
+			}).then(({ rows }) => rows[0] ? mode === "arrays" ? toArrayRow(rows[0]) : normalizeRow(rows[0]) : void 0),
+			run: (params) => client.execute({
+				sql: query.sql,
+				args: params
+			}),
+			values: (params) => client.execute({
+				sql: query.sql,
+				args: params
+			}).then(({ rows }) => rows.map(toArrayRow))
+		}, query, mapper, mode, this.logger, this.cache, queryMetadata, cacheConfig);
+	}
+	/** @internal */
+	async batch(queries, isMigration) {
+		const preparedQueries = [];
+		const builtQueries = [];
+		for (const query of queries) {
+			const preparedQuery = query._prepare();
+			const builtQuery = preparedQuery.getQuery();
+			preparedQueries.push(preparedQuery);
+			builtQueries.push({
+				sql: builtQuery.sql,
+				args: builtQuery.params
+			});
+		}
+		return (await (isMigration ? this.client.migrate(builtQueries) : (this.tx ?? this.client).batch(builtQueries))).map((result, i) => {
+			const { executeMethod, mapper, mode } = preparedQueries[i];
+			if (executeMethod === "run") return result;
+			if (executeMethod === "values") return result.rows;
+			if (executeMethod === "get") {
+				const value = result.rows[0];
+				if (!value) return;
+				const mapped = mode === "arrays" ? toArrayRow(value) : normalizeRow(value);
+				if (!mapper) return mapped;
+				return mapper([mapped])[0];
+			}
+			const { rows } = result;
+			const mapped = mode === "arrays" ? rows.map(toArrayRow) : rows.map(normalizeRow);
+			if (!mapper) return mapped;
+			return mapper(mapped);
+		});
+	}
+	async migrate(queries) {
+		return this.batch(queries, true);
+	}
+	async transaction(transaction, _config) {
+		const libsqlTx = await this.client.transaction();
+		const session = new LibSQLSession(this.client, this.dialect, this.relations, this.options, libsqlTx);
+		const tx = new LibSQLTransaction("async", this.dialect, session, this.relations);
+		try {
+			const result = await transaction(tx);
+			await libsqlTx.commit();
+			return result;
+		} catch (err) {
+			await libsqlTx.rollback();
+			throw err;
+		}
+	}
+};
+var LibSQLTransaction = class LibSQLTransaction extends SQLiteAsyncTransaction {
+	static [entityKind] = "LibSQLTransaction";
+	async transaction(transaction) {
+		const savepointName = `sp${this.nestedIndex}`;
+		const tx = new LibSQLTransaction("async", this.dialect, this.session, this._.relations, this.nestedIndex + 1);
+		await this.session.run(sql.raw(`savepoint ${savepointName}`));
+		try {
+			const result = await transaction(tx);
+			await this.session.run(sql.raw(`release savepoint ${savepointName}`));
+			return result;
+		} catch (err) {
+			await this.session.run(sql.raw(`rollback to savepoint ${savepointName}`));
+			throw err;
+		}
+	}
+};
+function toArrayRow(obj) {
+	return Array.prototype.slice.call(obj);
+}
+function normalizeRow(obj) {
+	return Object.keys(obj).reduce((acc, key) => {
+		if (Object.prototype.propertyIsEnumerable.call(obj, key)) acc[key] = obj[key];
+		return acc;
+	}, {});
+}
+//#endregion
+//#region node_modules/drizzle-orm/libsql/driver-core.js
+var LibSQLDatabase = class extends SQLiteAsyncDatabase {
+	static [entityKind] = "LibSQLDatabase";
+	async batch(batch) {
+		return this.session.batch(batch);
+	}
+};
+/** @internal */
+function construct(client, config = {}) {
+	const dialect = new SQLiteDialect({ useJitMappers: jitCompatCheck(config.jit) });
+	let logger;
+	if (config.logger === true) logger = new DefaultLogger();
+	else if (config.logger !== false) logger = config.logger;
+	const relations = config.relations ?? {};
+	const db = new LibSQLDatabase("async", dialect, new LibSQLSession(client, dialect, relations, {
+		logger,
+		cache: config.cache
+	}, void 0), relations);
+	db.$client = client;
+	db.$cache = config.cache;
+	if (db.$cache) db.$cache["invalidate"] = config.cache?.onMutate;
+	return db;
+}
+//#endregion
+//#region node_modules/@libsql/core/lib-esm/api.js
+/** Error thrown by the client. */
+var LibsqlError = class extends Error {
+	/** Machine-readable error code. */
+	code;
+	/** Extended error code with more specific information (e.g., SQLITE_CONSTRAINT_PRIMARYKEY). */
+	extendedCode;
+	/** Raw numeric error code */
+	rawCode;
+	constructor(message, code, extendedCode, rawCode, cause) {
+		if (code !== void 0) message = `${code}: ${message}`;
+		super(message, { cause });
+		this.code = code;
+		this.extendedCode = extendedCode;
+		this.rawCode = rawCode;
+		this.name = "LibsqlError";
+	}
+};
+/** Error thrown by the client during batch operations. */
+var LibsqlBatchError = class extends LibsqlError {
+	/** The zero-based index of the statement that failed in the batch. */
+	statementIndex;
+	constructor(message, statementIndex, code, extendedCode, rawCode, cause) {
+		super(message, code, extendedCode, rawCode, cause);
+		this.statementIndex = statementIndex;
+		this.name = "LibsqlBatchError";
+	}
+};
+//#endregion
+//#region node_modules/@libsql/core/lib-esm/uri.js
+function parseUri(text) {
+	const match = URI_RE.exec(text);
+	if (match === null) throw new LibsqlError(`The URL '${text}' is not in a valid format`, "URL_INVALID");
+	const groups = match.groups;
+	return {
+		scheme: groups["scheme"],
+		authority: groups["authority"] !== void 0 ? parseAuthority(groups["authority"]) : void 0,
+		path: percentDecode(groups["path"]),
+		query: groups["query"] !== void 0 ? parseQuery(groups["query"]) : void 0,
+		fragment: groups["fragment"] !== void 0 ? percentDecode(groups["fragment"]) : void 0
+	};
+}
+var URI_RE = (() => {
+	return new RegExp(`^(?<scheme>[A-Za-z][A-Za-z.+-]*):(//(?<authority>[^/?#]*))?(?<path>[^?#]*)(\\?(?<query>[^#]*))?(#(?<fragment>.*))?$`, "su");
+})();
+function parseAuthority(text) {
+	const match = AUTHORITY_RE.exec(text);
+	if (match === null) throw new LibsqlError("The authority part of the URL is not in a valid format", "URL_INVALID");
+	const groups = match.groups;
+	return {
+		host: percentDecode(groups["host_br"] ?? groups["host"]),
+		port: groups["port"] ? parseInt(groups["port"], 10) : void 0,
+		userinfo: groups["username"] !== void 0 ? {
+			username: percentDecode(groups["username"]),
+			password: groups["password"] !== void 0 ? percentDecode(groups["password"]) : void 0
+		} : void 0
+	};
+}
+var AUTHORITY_RE = (() => {
+	return new RegExp(`^((?<username>[^:]*)(:(?<password>.*))?@)?((?<host>[^:\\[\\]]*)|(\\[(?<host_br>[^\\[\\]]*)\\]))(:(?<port>[0-9]*))?$`, "su");
+})();
+function parseQuery(text) {
+	const sequences = text.split("&");
+	const pairs = [];
+	for (const sequence of sequences) {
+		if (sequence === "") continue;
+		let key;
+		let value;
+		const splitIdx = sequence.indexOf("=");
+		if (splitIdx < 0) {
+			key = sequence;
+			value = "";
+		} else {
+			key = sequence.substring(0, splitIdx);
+			value = sequence.substring(splitIdx + 1);
+		}
+		pairs.push({
+			key: percentDecode(key.replaceAll("+", " ")),
+			value: percentDecode(value.replaceAll("+", " "))
+		});
+	}
+	return { pairs };
+}
+function percentDecode(text) {
+	try {
+		return decodeURIComponent(text);
+	} catch (e) {
+		if (e instanceof URIError) throw new LibsqlError(`URL component has invalid percent encoding: ${e}`, "URL_INVALID", void 0, void 0, e);
+		throw e;
+	}
+}
+function encodeBaseUrl(scheme, authority, path) {
+	if (authority === void 0) throw new LibsqlError(`URL with scheme ${JSON.stringify(scheme + ":")} requires authority (the "//" part)`, "URL_INVALID");
+	const schemeText = `${scheme}:`;
+	const hostText = encodeHost(authority.host);
+	const portText = encodePort(authority.port);
+	const authorityText = `//${encodeUserinfo(authority.userinfo)}${hostText}${portText}`;
+	let pathText = path.split("/").map(encodeURIComponent).join("/");
+	if (pathText !== "" && !pathText.startsWith("/")) pathText = "/" + pathText;
+	return new URL(`${schemeText}${authorityText}${pathText}`);
+}
+function encodeHost(host) {
+	return host.includes(":") ? `[${encodeURI(host)}]` : encodeURI(host);
+}
+function encodePort(port) {
+	return port !== void 0 ? `:${port}` : "";
+}
+function encodeUserinfo(userinfo) {
+	if (userinfo === void 0) return "";
+	return `${encodeURIComponent(userinfo.username)}${userinfo.password !== void 0 ? `:${encodeURIComponent(userinfo.password)}` : ""}@`;
+}
+//#endregion
+//#region node_modules/js-base64/base64.mjs
+/**
+*  base64.ts
+*
+*  Licensed under the BSD 3-Clause License.
+*    http://opensource.org/licenses/BSD-3-Clause
+*
+*  References:
+*    http://en.wikipedia.org/wiki/Base64
+*
+* @author Dan Kogai (https://github.com/dankogai)
+*/
+var version = "3.9.4";
+/**
+* @deprecated use lowercase `version`.
+*/
+var VERSION = version;
+var _TD = typeof TextDecoder === "function" ? new TextDecoder("utf-8", { ignoreBOM: true }) : void 0;
+var _TE = typeof TextEncoder === "function" ? new TextEncoder() : void 0;
+var b64chs = Array.prototype.slice.call("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=");
+var b64tab = ((a) => {
+	let tab = {};
+	a.forEach((c, i) => tab[c] = i);
+	return tab;
+})(b64chs);
+var b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
+var _fromCC = String.fromCharCode.bind(String);
+var _U8Afrom = typeof Uint8Array.from === "function" ? Uint8Array.from.bind(Uint8Array) : (it) => new Uint8Array(Array.prototype.slice.call(it, 0));
+var _mkUriSafe = (src) => src.replace(/=/g, "").replace(/[+\/]/g, (m0) => m0 == "+" ? "-" : "_");
+var _tidyB64 = (s) => s.replace(/[^A-Za-z0-9\+\/]/g, "");
+/**
+* polyfill version of `btoa`
+*/
+var btoaPolyfill = (bin) => {
+	let u32, c0, c1, c2, asc = "";
+	const pad = bin.length % 3;
+	for (let i = 0; i < bin.length;) {
+		if ((c0 = bin.charCodeAt(i++)) > 255 || (c1 = bin.charCodeAt(i++)) > 255 || (c2 = bin.charCodeAt(i++)) > 255) throw new TypeError("invalid character found");
+		u32 = c0 << 16 | c1 << 8 | c2;
+		asc += b64chs[u32 >> 18 & 63] + b64chs[u32 >> 12 & 63] + b64chs[u32 >> 6 & 63] + b64chs[u32 & 63];
+	}
+	return pad ? asc.slice(0, pad - 3) + "===".substring(pad) : asc;
+};
+/**
+* does what `window.btoa` of web browsers do.
+* @param {String} bin binary string
+* @returns {string} Base64-encoded string
+*/
+var _btoa = typeof btoa === "function" ? (bin) => btoa(bin) : btoaPolyfill;
+var _fromUint8Array = typeof Uint8Array.prototype.toBase64 === "function" ? (u8a) => u8a.toBase64() : (u8a) => {
+	const maxargs = 4096;
+	let strs = [];
+	for (let i = 0, l = u8a.length; i < l; i += maxargs) strs.push(_fromCC.apply(null, u8a.subarray(i, i + maxargs)));
+	return _btoa(strs.join(""));
+};
+/**
+* converts a Uint8Array to a Base64 string.
+* @param {boolean} [urlsafe] URL-and-filename-safe a la RFC4648 §5
+* @returns {string} Base64 string
+*/
+var fromUint8Array = (u8a, urlsafe = false) => urlsafe ? _mkUriSafe(_fromUint8Array(u8a)) : _fromUint8Array(u8a);
+var cb_utob = (c) => {
+	if (c.length < 2) {
+		var cc = c.charCodeAt(0);
+		return cc < 128 ? c : cc < 2048 ? _fromCC(192 | cc >>> 6) + _fromCC(128 | cc & 63) : _fromCC(224 | cc >>> 12 & 15) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
+	} else {
+		var cc = 65536 + (c.charCodeAt(0) - 55296) * 1024 + (c.charCodeAt(1) - 56320);
+		return _fromCC(240 | cc >>> 18 & 7) + _fromCC(128 | cc >>> 12 & 63) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
+	}
+};
+var re_utob = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\x00-\x7F]/g;
+/**
+* @deprecated should have been internal use only.
+* @param {string} src UTF-8 string
+* @returns {string} UTF-16 string
+*/
+var utob = (u) => u.replace(re_utob, cb_utob);
+var _encode = _TE ? (s) => _fromUint8Array(_TE.encode(s)) : (s) => _btoa(utob(s));
+/**
+* converts a UTF-8-encoded string to a Base64 string.
+* @param {boolean} [urlsafe] if `true` make the result URL-safe
+* @returns {string} Base64 string
+*/
+var encode = (src, urlsafe = false) => urlsafe ? _mkUriSafe(_encode(src)) : _encode(src);
+/**
+* converts a UTF-8-encoded string to URL-safe Base64 RFC4648 §5.
+* @returns {string} Base64 string
+*/
+var encodeURI$1 = (src) => encode(src, true);
+var re_btou = /[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}/g;
+var cb_btou = (cccc) => {
+	switch (cccc.length) {
+		case 4:
+			var offset = ((7 & cccc.charCodeAt(0)) << 18 | (63 & cccc.charCodeAt(1)) << 12 | (63 & cccc.charCodeAt(2)) << 6 | 63 & cccc.charCodeAt(3)) - 65536;
+			return _fromCC((offset >>> 10) + 55296) + _fromCC((offset & 1023) + 56320);
+		case 3: return _fromCC((15 & cccc.charCodeAt(0)) << 12 | (63 & cccc.charCodeAt(1)) << 6 | 63 & cccc.charCodeAt(2));
+		default: return _fromCC((31 & cccc.charCodeAt(0)) << 6 | 63 & cccc.charCodeAt(1));
+	}
+};
+/**
+* @deprecated should have been internal use only.
+* @param {string} src UTF-16 string
+* @returns {string} UTF-8 string
+*/
+var btou = (b) => b.replace(re_btou, cb_btou);
+/**
+* polyfill version of `atob`
+*/
+var atobPolyfill = (asc) => {
+	asc = asc.replace(/\s+/g, "");
+	if (!b64re.test(asc)) throw new TypeError("malformed base64.");
+	asc += "==".slice(2 - (asc.length & 3));
+	let u24, r1, r2;
+	let binArray = [];
+	for (let i = 0; i < asc.length;) {
+		u24 = b64tab[asc.charAt(i++)] << 18 | b64tab[asc.charAt(i++)] << 12 | (r1 = b64tab[asc.charAt(i++)]) << 6 | (r2 = b64tab[asc.charAt(i++)]);
+		if (r1 === 64) binArray.push(_fromCC(u24 >> 16 & 255));
+		else if (r2 === 64) binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255));
+		else binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255, u24 & 255));
+	}
+	return binArray.join("");
+};
+/**
+* does what `window.atob` of web browsers do.
+* @param {String} asc Base64-encoded string
+* @returns {string} binary string
+*/
+var _atob = typeof atob === "function" ? (asc) => atob(_tidyB64(asc)) : atobPolyfill;
+var _toUint8Array = typeof Uint8Array.fromBase64 === "function" ? (a) => Uint8Array.fromBase64(a) : (a) => _U8Afrom(_atob(a).split("").map((c) => c.charCodeAt(0)));
+/**
+* converts a Base64 string to a Uint8Array.
+*/
+var toUint8Array = (a) => _toUint8Array(_unURI(a));
+var _decode = _TD ? (a) => _TD.decode(_toUint8Array(a)) : (a) => btou(_atob(a));
+var _unURI = (a) => _tidyB64(a.replace(/[-_]/g, (m0) => m0 == "-" ? "+" : "/"));
+/**
+* converts a Base64 string to a UTF-8 string.
+* @param {String} src Base64 string.  Both normal and URL-safe are supported
+* @returns {string} UTF-8 string
+*/
+var decode = (src) => _decode(_unURI(src));
+/**
+* check if a value is a valid Base64 string
+* @param {String} src a value to check
+*/
+var isValid = (src) => {
+	if (typeof src !== "string") return false;
+	const s = src.replace(/\s+/g, "").replace(/={0,2}$/, "");
+	return !/[^\s0-9a-zA-Z\+/]/.test(s) || !/[^\s0-9a-zA-Z\-_]/.test(s);
+};
+var _noEnum = (v) => {
+	return {
+		value: v,
+		enumerable: false,
+		writable: true,
+		configurable: true
+	};
+};
+/**
+* extend String.prototype with relevant methods
+*/
+var extendString = function() {
+	const _add = (name, body) => Object.defineProperty(String.prototype, name, _noEnum(body));
+	_add("fromBase64", function() {
+		return decode(this);
+	});
+	_add("toBase64", function(urlsafe) {
+		return encode(this, urlsafe);
+	});
+	_add("toBase64URI", function() {
+		return encode(this, true);
+	});
+	_add("toBase64URL", function() {
+		return encode(this, true);
+	});
+	_add("toUint8Array", function() {
+		return toUint8Array(this);
+	});
+};
+/**
+* extend Uint8Array.prototype with relevant methods
+*/
+var extendUint8Array = function() {
+	const _add = (name, body) => Object.defineProperty(Uint8Array.prototype, name, _noEnum(body));
+	_add("toBase64", function(urlsafe) {
+		return fromUint8Array(this, urlsafe);
+	});
+	_add("toBase64URI", function() {
+		return fromUint8Array(this, true);
+	});
+	_add("toBase64URL", function() {
+		return fromUint8Array(this, true);
+	});
+};
+/**
+* extend Builtin prototypes with relevant methods
+*/
+var extendBuiltins = () => {
+	extendString();
+	extendUint8Array();
+};
+var gBase64 = {
+	version,
+	VERSION,
+	atob: _atob,
+	atobPolyfill,
+	btoa: _btoa,
+	btoaPolyfill,
+	fromBase64: decode,
+	toBase64: encode,
+	encode,
+	encodeURI: encodeURI$1,
+	encodeURL: encodeURI$1,
+	utob,
+	btou,
+	decode,
+	isValid,
+	fromUint8Array,
+	toUint8Array,
+	extendString,
+	extendUint8Array,
+	extendBuiltins
+};
+//#endregion
+//#region node_modules/@libsql/core/lib-esm/util.js
+var supportedUrlLink = "https://github.com/libsql/libsql-client-ts#supported-urls";
+function transactionModeToBegin(mode) {
+	if (mode === "write") return "BEGIN IMMEDIATE";
+	else if (mode === "read") return "BEGIN TRANSACTION READONLY";
+	else if (mode === "deferred") return "BEGIN DEFERRED";
+	else throw RangeError("Unknown transaction mode, supported values are \"write\", \"read\" and \"deferred\"");
+}
+var ResultSetImpl = class {
+	columns;
+	columnTypes;
+	rows;
+	rowsAffected;
+	lastInsertRowid;
+	constructor(columns, columnTypes, rows, rowsAffected, lastInsertRowid) {
+		this.columns = columns;
+		this.columnTypes = columnTypes;
+		this.rows = rows;
+		this.rowsAffected = rowsAffected;
+		this.lastInsertRowid = lastInsertRowid;
+	}
+	toJSON() {
+		return {
+			columns: this.columns,
+			columnTypes: this.columnTypes,
+			rows: this.rows.map(rowToJson),
+			rowsAffected: this.rowsAffected,
+			lastInsertRowid: this.lastInsertRowid !== void 0 ? "" + this.lastInsertRowid : null
+		};
+	}
+};
+function rowToJson(row) {
+	return Array.prototype.map.call(row, valueToJson);
+}
+function valueToJson(value) {
+	if (typeof value === "bigint") return "" + value;
+	else if (value instanceof ArrayBuffer) return gBase64.fromUint8Array(new Uint8Array(value));
+	else return value;
+}
+//#endregion
+//#region node_modules/@libsql/core/lib-esm/config.js
+var inMemoryMode = ":memory:";
+function isInMemoryConfig(config) {
+	return config.scheme === "file" && (config.path === ":memory:" || config.path.startsWith(":memory:?"));
+}
+function expandConfig(config, preferHttp) {
+	if (typeof config !== "object") throw new TypeError(`Expected client configuration as object, got ${typeof config}`);
+	let { url, authToken, tls, intMode, concurrency } = config;
+	concurrency = Math.max(0, concurrency || 20);
+	intMode ??= "number";
+	let connectionQueryParams = [];
+	if (url === inMemoryMode) url = "file::memory:";
+	const uri = parseUri(url);
+	const originalUriScheme = uri.scheme.toLowerCase();
+	const isInMemoryMode = originalUriScheme === "file" && uri.path === inMemoryMode && uri.authority === void 0;
+	let queryParamsDef;
+	if (isInMemoryMode) queryParamsDef = { cache: {
+		values: ["shared", "private"],
+		update: (key, value) => connectionQueryParams.push(`${key}=${value}`)
+	} };
+	else queryParamsDef = {
+		tls: {
+			values: ["0", "1"],
+			update: (_, value) => tls = value === "1"
+		},
+		authToken: { update: (_, value) => authToken = value }
+	};
+	for (const { key, value } of uri.query?.pairs ?? []) {
+		if (!Object.hasOwn(queryParamsDef, key)) throw new LibsqlError(`Unsupported URL query parameter ${JSON.stringify(key)}`, "URL_PARAM_NOT_SUPPORTED");
+		const queryParamDef = queryParamsDef[key];
+		if (queryParamDef.values !== void 0 && !queryParamDef.values.includes(value)) throw new LibsqlError(`Unknown value for the "${key}" query argument: ${JSON.stringify(value)}. Supported values are: [${queryParamDef.values.map((x) => "\"" + x + "\"").join(", ")}]`, "URL_INVALID");
+		if (queryParamDef.update !== void 0) queryParamDef?.update(key, value);
+	}
+	const connectionQueryParamsString = connectionQueryParams.length === 0 ? "" : `?${connectionQueryParams.join("&")}`;
+	const path = uri.path + connectionQueryParamsString;
+	let scheme;
+	if (originalUriScheme === "libsql") {
+		if (tls === false) {
+			if (uri.authority?.port === void 0) throw new LibsqlError("A \"libsql:\" URL with ?tls=0 must specify an explicit port", "URL_INVALID");
+			scheme = preferHttp ? "http" : "ws";
+		} else scheme = preferHttp ? "https" : "wss";
+	} else scheme = originalUriScheme;
+	if (scheme === "http" || scheme === "ws") tls ??= false;
+	else tls ??= true;
+	if (scheme !== "http" && scheme !== "ws" && scheme !== "https" && scheme !== "wss" && scheme !== "file") throw new LibsqlError(`The client supports only "libsql:", "wss:", "ws:", "https:", "http:" and "file:" URLs, got ${JSON.stringify(uri.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+	if (intMode !== "number" && intMode !== "bigint" && intMode !== "string") throw new TypeError(`Invalid value for intMode, expected "number", "bigint" or "string", got ${JSON.stringify(intMode)}`);
+	if (uri.fragment !== void 0) throw new LibsqlError(`URL fragments are not supported: ${JSON.stringify("#" + uri.fragment)}`, "URL_INVALID");
+	if (isInMemoryMode) return {
+		scheme: "file",
+		tls: false,
+		path,
+		intMode,
+		concurrency,
+		syncUrl: config.syncUrl,
+		syncInterval: config.syncInterval,
+		readYourWrites: config.readYourWrites,
+		offline: config.offline,
+		fetch: config.fetch,
+		timeout: config.timeout,
+		authToken: void 0,
+		encryptionKey: void 0,
+		remoteEncryptionKey: void 0,
+		authority: void 0
+	};
+	return {
+		scheme,
+		tls,
+		authority: uri.authority,
+		path,
+		authToken,
+		intMode,
+		concurrency,
+		encryptionKey: config.encryptionKey,
+		remoteEncryptionKey: config.remoteEncryptionKey,
+		syncUrl: config.syncUrl,
+		syncInterval: config.syncInterval,
+		readYourWrites: config.readYourWrites,
+		offline: config.offline,
+		fetch: config.fetch,
+		timeout: config.timeout
+	};
+}
+//#endregion
+//#region node_modules/@neon-rs/load/dist/index.js
+var require_dist = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
+		if (k2 === void 0) k2 = k;
+		var desc = Object.getOwnPropertyDescriptor(m, k);
+		if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) desc = {
+			enumerable: true,
+			get: function() {
+				return m[k];
+			}
+		};
+		Object.defineProperty(o, k2, desc);
+	}) : (function(o, m, k, k2) {
+		if (k2 === void 0) k2 = k;
+		o[k2] = m[k];
+	}));
+	var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? (function(o, v) {
+		Object.defineProperty(o, "default", {
+			enumerable: true,
+			value: v
+		});
+	}) : function(o, v) {
+		o["default"] = v;
+	});
+	var __importStar = exports && exports.__importStar || function(mod) {
+		if (mod && mod.__esModule) return mod;
+		var result = {};
+		if (mod != null) {
+			for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+		}
+		__setModuleDefault(result, mod);
+		return result;
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.load = exports.currentTarget = void 0;
+	var path$1 = __importStar(__require("path"));
+	var fs$1 = __importStar(__require("fs"));
+	function currentTarget() {
+		let os = null;
+		switch (process.platform) {
+			case "android":
+				switch (process.arch) {
+					case "arm": return "android-arm-eabi";
+					case "arm64": return "android-arm64";
+				}
+				os = "Android";
+				break;
+			case "win32":
+				switch (process.arch) {
+					case "x64": return "win32-x64-msvc";
+					case "arm64": return "win32-arm64-msvc";
+					case "ia32": return "win32-ia32-msvc";
+				}
+				os = "Windows";
+				break;
+			case "darwin":
+				switch (process.arch) {
+					case "x64": return "darwin-x64";
+					case "arm64": return "darwin-arm64";
+				}
+				os = "macOS";
+				break;
+			case "linux":
+				switch (process.arch) {
+					case "x64":
+					case "arm64": return isGlibc() ? `linux-${process.arch}-gnu` : `linux-${process.arch}-musl`;
+					case "arm": return "linux-arm-gnueabihf";
+				}
+				os = "Linux";
+				break;
+			case "freebsd":
+				if (process.arch === "x64") return "freebsd-x64";
+				os = "FreeBSD";
+		}
+		if (os) throw new Error(`Neon: unsupported ${os} architecture: ${process.arch}`);
+		throw new Error(`Neon: unsupported system: ${process.platform}`);
+	}
+	exports.currentTarget = currentTarget;
+	function isGlibc() {
+		const report = process.report?.getReport();
+		if (typeof report !== "object" || !report || !("header" in report)) return false;
+		const header = report.header;
+		return typeof header === "object" && !!header && "glibcVersionRuntime" in header;
+	}
+	function load(dirname) {
+		const m = path$1.join(dirname, "index.node");
+		return fs$1.existsSync(m) ? __require(m) : null;
+	}
+	exports.load = load;
+}));
+//#endregion
+//#region node_modules/libsql/node_modules/detect-libc/lib/process.js
+var require_process = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var isLinux = () => process.platform === "linux";
+	var report = null;
+	var getReport = () => {
+		if (!report)
+ /* istanbul ignore next */
+		report = isLinux() && process.report ? process.report.getReport() : {};
+		return report;
+	};
+	module.exports = {
+		isLinux,
+		getReport
+	};
+}));
+//#endregion
+//#region node_modules/libsql/node_modules/detect-libc/lib/filesystem.js
+var require_filesystem = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var fs = __require("fs");
+	/**
+	* The path where we can find the ldd
+	*/
+	var LDD_PATH = "/usr/bin/ldd";
+	/**
+	* Read the content of a file synchronous
+	*
+	* @param {string} path
+	* @returns {string}
+	*/
+	var readFileSync = (path) => fs.readFileSync(path, "utf-8");
+	/**
+	* Read the content of a file
+	*
+	* @param {string} path
+	* @returns {Promise<string>}
+	*/
+	var readFile = (path) => new Promise((resolve, reject) => {
+		fs.readFile(path, "utf-8", (err, data) => {
+			if (err) reject(err);
+			else resolve(data);
+		});
+	});
+	module.exports = {
+		LDD_PATH,
+		readFileSync,
+		readFile
+	};
+}));
+//#endregion
+//#region node_modules/libsql/node_modules/detect-libc/lib/detect-libc.js
+var require_detect_libc = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var childProcess = __require("child_process");
+	var { isLinux, getReport } = require_process();
+	var { LDD_PATH, readFile, readFileSync } = require_filesystem();
+	var cachedFamilyFilesystem;
+	var cachedVersionFilesystem;
+	var command = "getconf GNU_LIBC_VERSION 2>&1 || true; ldd --version 2>&1 || true";
+	var commandOut = "";
+	var safeCommand = () => {
+		if (!commandOut) return new Promise((resolve) => {
+			childProcess.exec(command, (err, out) => {
+				commandOut = err ? " " : out;
+				resolve(commandOut);
+			});
+		});
+		return commandOut;
+	};
+	var safeCommandSync = () => {
+		if (!commandOut) try {
+			commandOut = childProcess.execSync(command, { encoding: "utf8" });
+		} catch (_err) {
+			commandOut = " ";
+		}
+		return commandOut;
+	};
+	/**
+	* A String constant containing the value `glibc`.
+	* @type {string}
+	* @public
+	*/
+	var GLIBC = "glibc";
+	/**
+	* A Regexp constant to get the GLIBC Version.
+	* @type {string}
+	*/
+	var RE_GLIBC_VERSION = /GLIBC\s(\d+\.\d+)/;
+	/**
+	* A String constant containing the value `musl`.
+	* @type {string}
+	* @public
+	*/
+	var MUSL = "musl";
+	/**
+	* This string is used to find if the {@link LDD_PATH} is GLIBC
+	* @type {string}
+	*/
+	var GLIBC_ON_LDD = GLIBC.toUpperCase();
+	/**
+	* This string is used to find if the {@link LDD_PATH} is musl
+	* @type {string}
+	*/
+	var MUSL_ON_LDD = MUSL.toLowerCase();
+	var isFileMusl = (f) => f.includes("libc.musl-") || f.includes("ld-musl-");
+	var familyFromReport = () => {
+		const report = getReport();
+		if (report.header && report.header.glibcVersionRuntime) return GLIBC;
+		if (Array.isArray(report.sharedObjects)) {
+			if (report.sharedObjects.some(isFileMusl)) return MUSL;
+		}
+		return null;
+	};
+	var familyFromCommand = (out) => {
+		const [getconf, ldd1] = out.split(/[\r\n]+/);
+		if (getconf && getconf.includes(GLIBC)) return GLIBC;
+		if (ldd1 && ldd1.includes(MUSL)) return MUSL;
+		return null;
+	};
+	var getFamilyFromLddContent = (content) => {
+		if (content.includes(MUSL_ON_LDD)) return MUSL;
+		if (content.includes(GLIBC_ON_LDD)) return GLIBC;
+		return null;
+	};
+	var familyFromFilesystem = async () => {
+		if (cachedFamilyFilesystem !== void 0) return cachedFamilyFilesystem;
+		cachedFamilyFilesystem = null;
+		try {
+			cachedFamilyFilesystem = getFamilyFromLddContent(await readFile(LDD_PATH));
+		} catch (e) {}
+		return cachedFamilyFilesystem;
+	};
+	var familyFromFilesystemSync = () => {
+		if (cachedFamilyFilesystem !== void 0) return cachedFamilyFilesystem;
+		cachedFamilyFilesystem = null;
+		try {
+			cachedFamilyFilesystem = getFamilyFromLddContent(readFileSync(LDD_PATH));
+		} catch (e) {}
+		return cachedFamilyFilesystem;
+	};
+	/**
+	* Resolves with the libc family when it can be determined, `null` otherwise.
+	* @returns {Promise<?string>}
+	*/
+	var family = async () => {
+		let family = null;
+		if (isLinux()) {
+			family = await familyFromFilesystem();
+			if (!family) family = familyFromReport();
+			if (!family) family = familyFromCommand(await safeCommand());
+		}
+		return family;
+	};
+	/**
+	* Returns the libc family when it can be determined, `null` otherwise.
+	* @returns {?string}
+	*/
+	var familySync = () => {
+		let family = null;
+		if (isLinux()) {
+			family = familyFromFilesystemSync();
+			if (!family) family = familyFromReport();
+			if (!family) family = familyFromCommand(safeCommandSync());
+		}
+		return family;
+	};
+	/**
+	* Resolves `true` only when the platform is Linux and the libc family is not `glibc`.
+	* @returns {Promise<boolean>}
+	*/
+	var isNonGlibcLinux = async () => isLinux() && await family() !== GLIBC;
+	/**
+	* Returns `true` only when the platform is Linux and the libc family is not `glibc`.
+	* @returns {boolean}
+	*/
+	var isNonGlibcLinuxSync = () => isLinux() && familySync() !== GLIBC;
+	var versionFromFilesystem = async () => {
+		if (cachedVersionFilesystem !== void 0) return cachedVersionFilesystem;
+		cachedVersionFilesystem = null;
+		try {
+			const versionMatch = (await readFile(LDD_PATH)).match(RE_GLIBC_VERSION);
+			if (versionMatch) cachedVersionFilesystem = versionMatch[1];
+		} catch (e) {}
+		return cachedVersionFilesystem;
+	};
+	var versionFromFilesystemSync = () => {
+		if (cachedVersionFilesystem !== void 0) return cachedVersionFilesystem;
+		cachedVersionFilesystem = null;
+		try {
+			const versionMatch = readFileSync(LDD_PATH).match(RE_GLIBC_VERSION);
+			if (versionMatch) cachedVersionFilesystem = versionMatch[1];
+		} catch (e) {}
+		return cachedVersionFilesystem;
+	};
+	var versionFromReport = () => {
+		const report = getReport();
+		if (report.header && report.header.glibcVersionRuntime) return report.header.glibcVersionRuntime;
+		return null;
+	};
+	var versionSuffix = (s) => s.trim().split(/\s+/)[1];
+	var versionFromCommand = (out) => {
+		const [getconf, ldd1, ldd2] = out.split(/[\r\n]+/);
+		if (getconf && getconf.includes(GLIBC)) return versionSuffix(getconf);
+		if (ldd1 && ldd2 && ldd1.includes(MUSL)) return versionSuffix(ldd2);
+		return null;
+	};
+	/**
+	* Resolves with the libc version when it can be determined, `null` otherwise.
+	* @returns {Promise<?string>}
+	*/
+	var version = async () => {
+		let version = null;
+		if (isLinux()) {
+			version = await versionFromFilesystem();
+			if (!version) version = versionFromReport();
+			if (!version) version = versionFromCommand(await safeCommand());
+		}
+		return version;
+	};
+	/**
+	* Returns the libc version when it can be determined, `null` otherwise.
+	* @returns {?string}
+	*/
+	var versionSync = () => {
+		let version = null;
+		if (isLinux()) {
+			version = versionFromFilesystemSync();
+			if (!version) version = versionFromReport();
+			if (!version) version = versionFromCommand(safeCommandSync());
+		}
+		return version;
+	};
+	module.exports = {
+		GLIBC,
+		MUSL,
+		family,
+		familySync,
+		isNonGlibcLinux,
+		isNonGlibcLinuxSync,
+		version,
+		versionSync
+	};
+}));
+//#endregion
+//#region node_modules/libsql/auth.js
+var require_auth = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = {
+		/**
+		* Allow access to a resource.
+		* @type {number}
+		*/
+		ALLOW: 0,
+		/**
+		* Deny access to a resource and throw an error in `prepare()`.
+		* @type {number}
+		*/
+		DENY: 1
+	};
+}));
+//#endregion
+//#region node_modules/libsql/sqlite-error.js
+var require_sqlite_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var descriptor = {
+		value: "SqliteError",
+		writable: true,
+		enumerable: false,
+		configurable: true
+	};
+	function SqliteError(message, code, rawCode) {
+		if (new.target !== SqliteError) return new SqliteError(message, code);
+		if (typeof code !== "string") throw new TypeError("Expected second argument to be a string");
+		Error.call(this, message);
+		descriptor.value = "" + message;
+		Object.defineProperty(this, "message", descriptor);
+		Error.captureStackTrace(this, SqliteError);
+		this.code = code;
+		this.rawCode = rawCode;
+	}
+	Object.setPrototypeOf(SqliteError, Error);
+	Object.setPrototypeOf(SqliteError.prototype, Error.prototype);
+	Object.defineProperty(SqliteError.prototype, "name", descriptor);
+	module.exports = SqliteError;
+}));
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/sqlite3.js
+var import_libsql = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { load, currentTarget } = require_dist();
+	var { familySync, GLIBC, MUSL } = require_detect_libc();
+	function requireNative() {
+		if (process.env.LIBSQL_JS_DEV) return load(__dirname);
+		let target = currentTarget();
+		if (familySync() == GLIBC) switch (target) {
+			case "linux-x64-musl":
+				target = "linux-x64-gnu";
+				break;
+			case "linux-arm64-musl": target = "linux-arm64-gnu";
+		}
+		if (target === "linux-arm-gnueabihf" && familySync() == MUSL) target = "linux-arm-musleabihf";
+		return __require(`@libsql/${target}`);
+	}
+	var { databaseOpen, databaseOpenWithSync, databaseInTransaction, databaseInterrupt, databaseClose, databaseSyncSync, databaseSyncUntilSync, databaseExecSync, databasePrepareSync, databaseDefaultSafeIntegers, databaseAuthorizer, databaseLoadExtension, databaseMaxWriteReplicationIndex, statementRaw, statementIsReader, statementGet, statementRun, statementInterrupt, statementRowsSync, statementColumns, statementSafeIntegers, rowsNext } = requireNative();
+	var Authorization = require_auth();
+	var SqliteError = require_sqlite_error();
+	function convertError(err) {
+		if (err.libsqlError) return new SqliteError(err.message, err.code, err.rawCode);
+		return err;
+	}
+	/**
+	* Database represents a connection that can prepare and execute SQL statements.
+	*/
+	var Database = class {
+		/**
+		* Creates a new database connection. If the database file pointed to by `path` does not exists, it will be created.
+		*
+		* @constructor
+		* @param {string} path - Path to the database file.
+		*/
+		constructor(path, opts) {
+			const encryptionCipher = opts?.encryptionCipher ?? "aes256cbc";
+			if (opts && opts.syncUrl) {
+				var authToken = "";
+				if (opts.syncAuth) {
+					console.warn("Warning: The `syncAuth` option is deprecated, please use `authToken` option instead.");
+					authToken = opts.syncAuth;
+				} else if (opts.authToken) authToken = opts.authToken;
+				const encryptionKey = opts?.encryptionKey ?? "";
+				const syncPeriod = opts?.syncPeriod ?? 0;
+				const readYourWrites = opts?.readYourWrites ?? true;
+				const offline = opts?.offline ?? false;
+				const remoteEncryptionKey = opts?.remoteEncryptionKey ?? "";
+				this.db = databaseOpenWithSync(path, opts.syncUrl, authToken, encryptionCipher, encryptionKey, syncPeriod, readYourWrites, offline, remoteEncryptionKey);
+			} else {
+				const authToken = opts?.authToken ?? "";
+				const encryptionKey = opts?.encryptionKey ?? "";
+				const timeout = opts?.timeout ?? 0;
+				const remoteEncryptionKey = opts?.remoteEncryptionKey ?? "";
+				this.db = databaseOpen(path, authToken, encryptionCipher, encryptionKey, timeout, remoteEncryptionKey);
+			}
+			this.memory = path === ":memory:";
+			this.readonly = false;
+			this.name = "";
+			this.open = true;
+			const db = this.db;
+			Object.defineProperties(this, { inTransaction: { get() {
+				return databaseInTransaction(db);
+			} } });
+		}
+		sync() {
+			return databaseSyncSync.call(this.db);
+		}
+		syncUntil(replicationIndex) {
+			return databaseSyncUntilSync.call(this.db, replicationIndex);
+		}
+		/**
+		* Prepares a SQL statement for execution.
+		*
+		* @param {string} sql - The SQL statement string to prepare.
+		*/
+		prepare(sql) {
+			try {
+				return new Statement(databasePrepareSync.call(this.db, sql));
+			} catch (err) {
+				throw convertError(err);
+			}
+		}
+		/**
+		* Returns a function that executes the given function in a transaction.
+		*
+		* @param {function} fn - The function to wrap in a transaction.
+		*/
+		transaction(fn) {
+			if (typeof fn !== "function") throw new TypeError("Expected first argument to be a function");
+			const db = this;
+			const wrapTxn = (mode) => {
+				return (...bindParameters) => {
+					db.exec("BEGIN " + mode);
+					try {
+						const result = fn(...bindParameters);
+						db.exec("COMMIT");
+						return result;
+					} catch (err) {
+						db.exec("ROLLBACK");
+						throw err;
+					}
+				};
+			};
+			const properties = {
+				default: { value: wrapTxn("") },
+				deferred: { value: wrapTxn("DEFERRED") },
+				immediate: { value: wrapTxn("IMMEDIATE") },
+				exclusive: { value: wrapTxn("EXCLUSIVE") },
+				database: {
+					value: this,
+					enumerable: true
+				}
+			};
+			Object.defineProperties(properties.default.value, properties);
+			Object.defineProperties(properties.deferred.value, properties);
+			Object.defineProperties(properties.immediate.value, properties);
+			Object.defineProperties(properties.exclusive.value, properties);
+			return properties.default.value;
+		}
+		pragma(source, options) {
+			if (options == null) options = {};
+			if (typeof source !== "string") throw new TypeError("Expected first argument to be a string");
+			if (typeof options !== "object") throw new TypeError("Expected second argument to be an options object");
+			const simple = options["simple"];
+			const stmt = this.prepare(`PRAGMA ${source}`, this, true);
+			return simple ? stmt.pluck().get() : stmt.all();
+		}
+		backup(filename, options) {
+			throw new Error("not implemented");
+		}
+		serialize(options) {
+			throw new Error("not implemented");
+		}
+		function(name, options, fn) {
+			if (options == null) options = {};
+			if (typeof options === "function") {
+				fn = options;
+				options = {};
+			}
+			if (typeof name !== "string") throw new TypeError("Expected first argument to be a string");
+			if (typeof fn !== "function") throw new TypeError("Expected last argument to be a function");
+			if (typeof options !== "object") throw new TypeError("Expected second argument to be an options object");
+			if (!name) throw new TypeError("User-defined function name cannot be an empty string");
+			throw new Error("not implemented");
+		}
+		aggregate(name, options) {
+			if (typeof name !== "string") throw new TypeError("Expected first argument to be a string");
+			if (typeof options !== "object" || options === null) throw new TypeError("Expected second argument to be an options object");
+			if (!name) throw new TypeError("User-defined function name cannot be an empty string");
+			throw new Error("not implemented");
+		}
+		table(name, factory) {
+			if (typeof name !== "string") throw new TypeError("Expected first argument to be a string");
+			if (!name) throw new TypeError("Virtual table module name cannot be an empty string");
+			throw new Error("not implemented");
+		}
+		authorizer(rules) {
+			databaseAuthorizer.call(this.db, rules);
+		}
+		loadExtension(...args) {
+			databaseLoadExtension.call(this.db, ...args);
+		}
+		maxWriteReplicationIndex() {
+			return databaseMaxWriteReplicationIndex.call(this.db);
+		}
+		/**
+		* Executes a SQL statement.
+		*
+		* @param {string} sql - The SQL statement string to execute.
+		*/
+		exec(sql) {
+			try {
+				databaseExecSync.call(this.db, sql);
+			} catch (err) {
+				throw convertError(err);
+			}
+		}
+		/**
+		* Interrupts the database connection.
+		*/
+		interrupt() {
+			databaseInterrupt.call(this.db);
+		}
+		/**
+		* Closes the database connection.
+		*/
+		close() {
+			databaseClose.call(this.db);
+			this.open = false;
+		}
+		/**
+		* Toggle 64-bit integer support.
+		*/
+		defaultSafeIntegers(toggle) {
+			databaseDefaultSafeIntegers.call(this.db, toggle ?? true);
+			return this;
+		}
+		unsafeMode(...args) {
+			throw new Error("not implemented");
+		}
+	};
+	/**
+	* Statement represents a prepared SQL statement that can be executed.
+	*/
+	var Statement = class {
+		constructor(stmt) {
+			this.stmt = stmt;
+			this.pluckMode = false;
+		}
+		/**
+		* Toggle raw mode.
+		*
+		* @param raw Enable or disable raw mode. If you don't pass the parameter, raw mode is enabled.
+		*/
+		raw(raw) {
+			statementRaw.call(this.stmt, raw ?? true);
+			return this;
+		}
+		/**
+		* Toggle pluck mode.
+		*
+		* @param pluckMode Enable or disable pluck mode. If you don't pass the parameter, pluck mode is enabled.
+		*/
+		pluck(pluckMode) {
+			this.pluckMode = pluckMode ?? true;
+			return this;
+		}
+		get reader() {
+			return statementIsReader.call(this.stmt);
+		}
+		/**
+		* Executes the SQL statement and returns an info object.
+		*/
+		run(...bindParameters) {
+			try {
+				if (bindParameters.length == 1 && typeof bindParameters[0] === "object") return statementRun.call(this.stmt, bindParameters[0]);
+				else return statementRun.call(this.stmt, bindParameters.flat());
+			} catch (err) {
+				throw convertError(err);
+			}
+		}
+		/**
+		* Executes the SQL statement and returns the first row.
+		*
+		* @param bindParameters - The bind parameters for executing the statement.
+		*/
+		get(...bindParameters) {
+			try {
+				if (bindParameters.length == 1 && typeof bindParameters[0] === "object") return statementGet.call(this.stmt, bindParameters[0]);
+				else return statementGet.call(this.stmt, bindParameters.flat());
+			} catch (err) {
+				throw convertError(err);
+			}
+		}
+		/**
+		* Executes the SQL statement and returns an iterator to the resulting rows.
+		*
+		* @param bindParameters - The bind parameters for executing the statement.
+		*/
+		iterate(...bindParameters) {
+			var rows = void 0;
+			if (bindParameters.length == 1 && typeof bindParameters[0] === "object") rows = statementRowsSync.call(this.stmt, bindParameters[0]);
+			else rows = statementRowsSync.call(this.stmt, bindParameters.flat());
+			return {
+				nextRows: Array(100),
+				nextRowIndex: 100,
+				next() {
+					try {
+						if (this.nextRowIndex === 100) {
+							rowsNext.call(rows, this.nextRows);
+							this.nextRowIndex = 0;
+						}
+						const row = this.nextRows[this.nextRowIndex];
+						this.nextRows[this.nextRowIndex] = void 0;
+						if (!row) return { done: true };
+						this.nextRowIndex++;
+						return {
+							value: row,
+							done: false
+						};
+					} catch (err) {
+						throw convertError(err);
+					}
+				},
+				[Symbol.iterator]() {
+					return this;
+				}
+			};
+		}
+		/**
+		* Executes the SQL statement and returns an array of the resulting rows.
+		*
+		* @param bindParameters - The bind parameters for executing the statement.
+		*/
+		all(...bindParameters) {
+			try {
+				const result = [];
+				for (const row of this.iterate(...bindParameters)) if (this.pluckMode) result.push(row[Object.keys(row)[0]]);
+				else result.push(row);
+				return result;
+			} catch (err) {
+				throw convertError(err);
+			}
+		}
+		/**
+		* Interrupts the statement.
+		*/
+		interrupt() {
+			statementInterrupt.call(this.stmt);
+		}
+		/**
+		* Returns the columns in the result set returned by this prepared statement.
+		*/
+		columns() {
+			return statementColumns.call(this.stmt);
+		}
+		/**
+		* Toggle 64-bit integer support.
+		*/
+		safeIntegers(toggle) {
+			statementSafeIntegers.call(this.stmt, toggle ?? true);
+			return this;
+		}
+	};
+	module.exports = Database;
+	module.exports.Authorization = Authorization;
+	module.exports.SqliteError = SqliteError;
+})))(), 1);
+/** @private */
+function _createClient$3(config) {
+	if (config.scheme !== "file") throw new LibsqlError(`URL scheme ${JSON.stringify(config.scheme + ":")} is not supported by the local sqlite3 client. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+	const authority = config.authority;
+	if (authority !== void 0) {
+		const host = authority.host.toLowerCase();
+		if (host !== "" && host !== "localhost") throw new LibsqlError(`Invalid host in file URL: ${JSON.stringify(authority.host)}. A "file:" URL with an absolute path should start with one slash ("file:/absolute/path.db") or with three slashes ("file:///absolute/path.db"). For more information, please read ${supportedUrlLink}`, "URL_INVALID");
+		if (authority.port !== void 0) throw new LibsqlError("File URL cannot have a port", "URL_INVALID");
+		if (authority.userinfo !== void 0) throw new LibsqlError("File URL cannot have username and password", "URL_INVALID");
+	}
+	let isInMemory = isInMemoryConfig(config);
+	if (isInMemory && config.syncUrl) throw new LibsqlError(`Embedded replica must use file for local db but URI with in-memory mode were provided instead: ${config.path}`, "URL_INVALID");
+	let path = config.path;
+	if (isInMemory) path = `${config.scheme}:${config.path}`;
+	const maxConnections = isInMemory || config.syncUrl ? 1 : Math.max(1, config.concurrency);
+	const options = {
+		authToken: config.authToken,
+		encryptionKey: config.encryptionKey,
+		remoteEncryptionKey: config.remoteEncryptionKey,
+		syncUrl: config.syncUrl,
+		syncPeriod: config.syncInterval,
+		readYourWrites: config.readYourWrites,
+		offline: config.offline,
+		timeout: config.timeout
+	};
+	const pool = new ConnectionPool(path, options, maxConnections);
+	const db = pool.acquireSync();
+	try {
+		executeStmt(db, "SELECT 1 AS checkThatTheDatabaseCanBeOpened", config.intMode);
+	} catch (e) {
+		pool.close();
+		throw e;
+	}
+	pool.release(db);
+	return new Sqlite3Client(pool, config.intMode);
+}
+/**
+* A client owns a small pool of connections to one database, in the same way
+* that a remote client owns a set of hrana streams: every client operation
+* borrows one for the duration of the call, and a transaction borrows one for
+* its lifetime and gives it back on commit, rollback or close. Nothing is
+* shared between an open transaction and the rest of the client.
+*
+* @private
+*/
+var ConnectionPool = class {
+	#path;
+	#options;
+	#maxConnections;
+	#idle;
+	#borrowed;
+	#heldByTransaction;
+	#waiters;
+	#closed;
+	constructor(path, options, maxConnections) {
+		this.#path = path;
+		this.#options = options;
+		this.#maxConnections = maxConnections;
+		this.#idle = [];
+		this.#borrowed = /* @__PURE__ */ new Set();
+		this.#heldByTransaction = /* @__PURE__ */ new Set();
+		this.#waiters = [];
+		this.#closed = false;
+	}
+	acquire(forTransaction = false) {
+		if (!this.#closed && this.#atLimit()) {
+			if (this.#heldByTransaction.size >= this.#maxConnections) return Promise.reject(new LibsqlError(this.#maxConnections === 1 ? "This client has a single connection, which an open transaction is holding. In-memory databases and embedded replicas cannot have more than one. Commit or roll back the transaction before using the client again." : `All ${this.#maxConnections} of this client's connections are held by open transactions. Commit or roll back one before using the client again, or raise \`concurrency\`.`, "TRANSACTION_ACTIVE"));
+			return new Promise((resolve, reject) => this.#waiters.push({
+				resolve: (db) => {
+					if (forTransaction) this.#heldByTransaction.add(db);
+					resolve(db);
+				},
+				reject
+			}));
+		}
+		try {
+			return Promise.resolve(this.acquireSync(forTransaction));
+		} catch (e) {
+			return Promise.reject(e);
+		}
+	}
+	acquireSync(forTransaction = false) {
+		this.#checkNotClosed();
+		const db = this.#idle.pop() ?? new import_libsql.default(this.#path, this.#options);
+		this.#borrowed.add(db);
+		if (forTransaction) this.#heldByTransaction.add(db);
+		return db;
+	}
+	release(db) {
+		this.#borrowed.delete(db);
+		this.#heldByTransaction.delete(db);
+		if (db.open && db.inTransaction) try {
+			db.prepare("ROLLBACK").run();
+		} catch {
+			closeQuietly(db);
+			return;
+		}
+		if (this.#closed || !db.open) {
+			closeQuietly(db);
+			return;
+		}
+		const waiter = this.#waiters.shift();
+		if (waiter !== void 0) {
+			this.#borrowed.add(db);
+			waiter.resolve(db);
+		} else this.#idle.push(db);
+	}
+	close() {
+		this.#closed = true;
+		for (const db of this.#idle) closeQuietly(db);
+		this.#idle = [];
+		for (const db of this.#borrowed) closeQuietly(db);
+		this.#borrowed.clear();
+		this.#heldByTransaction.clear();
+		const waiters = this.#waiters;
+		this.#waiters = [];
+		for (const waiter of waiters) waiter.reject(new LibsqlError("The client is closed", "CLIENT_CLOSED"));
+	}
+	reopen() {
+		this.close();
+		this.#closed = false;
+	}
+	#atLimit() {
+		return this.#idle.length === 0 && this.#borrowed.size >= this.#maxConnections;
+	}
+	#checkNotClosed() {
+		if (this.#closed) throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
+	}
+};
+function closeQuietly(db) {
+	try {
+		if (db.open) db.close();
+	} catch {}
+}
+var Sqlite3Client = class {
+	#pool;
+	#intMode;
+	closed;
+	protocol;
+	/** @private */
+	constructor(pool, intMode) {
+		this.#pool = pool;
+		this.#intMode = intMode;
+		this.closed = false;
+		this.protocol = "file";
+	}
+	async execute(stmtOrSql, args) {
+		let stmt;
+		if (typeof stmtOrSql === "string") stmt = {
+			sql: stmtOrSql,
+			args: args || []
+		};
+		else stmt = stmtOrSql;
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire();
+		try {
+			this.#checkUsable(db);
+			return executeStmt(db, stmt, this.#intMode);
+		} finally {
+			this.#pool.release(db);
+		}
+	}
+	async batch(stmts, mode = "deferred") {
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire();
+		try {
+			this.#checkUsable(db);
+			executeStmt(db, transactionModeToBegin(mode), this.#intMode);
+			const resultSets = [];
+			for (let i = 0; i < stmts.length; i++) try {
+				if (!db.inTransaction) throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
+				const stmt = stmts[i];
+				const normalizedStmt = Array.isArray(stmt) ? {
+					sql: stmt[0],
+					args: stmt[1] || []
+				} : stmt;
+				resultSets.push(executeStmt(db, normalizedStmt, this.#intMode));
+			} catch (e) {
+				if (e instanceof LibsqlBatchError) throw e;
+				if (e instanceof LibsqlError) throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : void 0);
+				throw e;
+			}
+			executeStmt(db, "COMMIT", this.#intMode);
+			return resultSets;
+		} finally {
+			this.#pool.release(db);
+		}
+	}
+	async migrate(stmts) {
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire();
+		try {
+			this.#checkUsable(db);
+			executeStmt(db, "PRAGMA foreign_keys=off", this.#intMode);
+			executeStmt(db, transactionModeToBegin("deferred"), this.#intMode);
+			const resultSets = [];
+			for (let i = 0; i < stmts.length; i++) try {
+				if (!db.inTransaction) throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
+				resultSets.push(executeStmt(db, stmts[i], this.#intMode));
+			} catch (e) {
+				if (e instanceof LibsqlBatchError) throw e;
+				if (e instanceof LibsqlError) throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : void 0);
+				throw e;
+			}
+			executeStmt(db, "COMMIT", this.#intMode);
+			return resultSets;
+		} finally {
+			if (db.inTransaction) executeStmt(db, "ROLLBACK", this.#intMode);
+			executeStmt(db, "PRAGMA foreign_keys=on", this.#intMode);
+			this.#pool.release(db);
+		}
+	}
+	async transaction(mode = "write") {
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire(true);
+		try {
+			this.#checkUsable(db);
+			executeStmt(db, transactionModeToBegin(mode), this.#intMode);
+		} catch (e) {
+			this.#pool.release(db);
+			throw e;
+		}
+		return new Sqlite3Transaction(db, this.#intMode, (used) => this.#pool.release(used));
+	}
+	async executeMultiple(sql) {
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire();
+		try {
+			this.#checkUsable(db);
+			return executeMultiple(db, sql);
+		} finally {
+			this.#pool.release(db);
+		}
+	}
+	async sync() {
+		this.#checkNotClosed();
+		const db = await this.#pool.acquire();
+		try {
+			this.#checkUsable(db);
+			const rep = await db.sync();
+			return {
+				frames_synced: rep.frames_synced,
+				frame_no: rep.frame_no
+			};
+		} finally {
+			this.#pool.release(db);
+		}
+	}
+	async reconnect() {
+		this.#pool.reopen();
+		this.closed = false;
+	}
+	close() {
+		this.closed = true;
+		this.#pool.close();
+	}
+	#checkNotClosed() {
+		if (this.closed) throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
+	}
+	#checkUsable(db) {
+		this.#checkNotClosed();
+		if (!db.open) throw new LibsqlError("The connection was closed while this operation was in flight", "CLIENT_CLOSED");
+	}
+};
+var Sqlite3Transaction = class {
+	#database;
+	#intMode;
+	#release;
+	/** @private */
+	constructor(database, intMode, release) {
+		this.#database = database;
+		this.#intMode = intMode;
+		this.#release = release;
+	}
+	#settle() {
+		const db = this.#database;
+		if (db === null) return;
+		this.#database = null;
+		this.#release(db);
+	}
+	#getDatabase() {
+		this.#checkNotClosed();
+		return this.#database;
+	}
+	async execute(stmtOrSql, args) {
+		let stmt;
+		if (typeof stmtOrSql === "string") stmt = {
+			sql: stmtOrSql,
+			args: args || []
+		};
+		else stmt = stmtOrSql;
+		return executeStmt(this.#getDatabase(), stmt, this.#intMode);
+	}
+	async batch(stmts) {
+		const resultSets = [];
+		for (let i = 0; i < stmts.length; i++) try {
+			const db = this.#getDatabase();
+			const stmt = stmts[i];
+			const normalizedStmt = Array.isArray(stmt) ? {
+				sql: stmt[0],
+				args: stmt[1] || []
+			} : stmt;
+			resultSets.push(executeStmt(db, normalizedStmt, this.#intMode));
+		} catch (e) {
+			if (e instanceof LibsqlBatchError) throw e;
+			if (e instanceof LibsqlError) throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : void 0);
+			throw e;
+		}
+		return resultSets;
+	}
+	async executeMultiple(sql) {
+		return executeMultiple(this.#getDatabase(), sql);
+	}
+	async rollback() {
+		const db = this.#database;
+		if (db === null || !db.open) {
+			this.#settle();
+			return;
+		}
+		try {
+			this.#checkNotClosed();
+			executeStmt(db, "ROLLBACK", this.#intMode);
+		} finally {
+			this.#settle();
+		}
+	}
+	async commit() {
+		try {
+			executeStmt(this.#getDatabase(), "COMMIT", this.#intMode);
+		} finally {
+			this.#settle();
+		}
+	}
+	close() {
+		const db = this.#database;
+		if (db === null) return;
+		try {
+			if (db.open && db.inTransaction) executeStmt(db, "ROLLBACK", this.#intMode);
+		} finally {
+			this.#settle();
+		}
+	}
+	get closed() {
+		const db = this.#database;
+		if (db === null || !db.open) return true;
+		return !db.inTransaction;
+	}
+	#checkNotClosed() {
+		if (this.closed) throw new LibsqlError("The transaction is closed", "TRANSACTION_CLOSED");
+	}
+};
+function executeStmt(db, stmt, intMode) {
+	let sql;
+	let args;
+	if (typeof stmt === "string") {
+		sql = stmt;
+		args = [];
+	} else {
+		sql = stmt.sql;
+		if (Array.isArray(stmt.args)) args = stmt.args.map((value) => valueToSql(value, intMode));
+		else {
+			args = {};
+			for (const name in stmt.args) {
+				const argName = name[0] === "@" || name[0] === "$" || name[0] === ":" ? name.substring(1) : name;
+				args[argName] = valueToSql(stmt.args[name], intMode);
+			}
+		}
+	}
+	try {
+		const sqlStmt = db.prepare(sql);
+		sqlStmt.safeIntegers(true);
+		let returnsData = true;
+		try {
+			sqlStmt.raw(true);
+		} catch {
+			returnsData = false;
+		}
+		if (returnsData) {
+			const columns = Array.from(sqlStmt.columns().map((col) => col.name));
+			return new ResultSetImpl(columns, Array.from(sqlStmt.columns().map((col) => col.type ?? "")), sqlStmt.all(args).map((sqlRow) => {
+				return rowFromSql(sqlRow, columns, intMode);
+			}), 0, void 0);
+		} else {
+			const info = sqlStmt.run(args);
+			const rowsAffected = info.changes;
+			return new ResultSetImpl([], [], [], rowsAffected, BigInt(info.lastInsertRowid));
+		}
+	} catch (e) {
+		throw mapSqliteError(e);
+	}
+}
+function rowFromSql(sqlRow, columns, intMode) {
+	const row = {};
+	Object.defineProperty(row, "length", { value: sqlRow.length });
+	for (let i = 0; i < sqlRow.length; ++i) {
+		const value = valueFromSql(sqlRow[i], intMode);
+		Object.defineProperty(row, i, { value });
+		const column = columns[i];
+		if (!Object.hasOwn(row, column)) Object.defineProperty(row, column, {
+			value,
+			enumerable: true,
+			configurable: true,
+			writable: true
+		});
+	}
+	return row;
+}
+function valueFromSql(sqlValue, intMode) {
+	if (typeof sqlValue === "bigint") {
+		if (intMode === "number") {
+			if (sqlValue < minSafeBigint || sqlValue > maxSafeBigint) throw new RangeError("Received integer which cannot be safely represented as a JavaScript number");
+			return Number(sqlValue);
+		} else if (intMode === "bigint") return sqlValue;
+		else if (intMode === "string") return "" + sqlValue;
+		else throw new Error("Invalid value for IntMode");
+	} else if (sqlValue instanceof Buffer$1) return sqlValue.buffer;
+	return sqlValue;
+}
+var minSafeBigint = -9007199254740991n;
+var maxSafeBigint = 9007199254740991n;
+function valueToSql(value, intMode) {
+	if (typeof value === "number") {
+		if (!Number.isFinite(value)) throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
+		return value;
+	} else if (typeof value === "bigint") {
+		if (value < minInteger$1 || value > maxInteger$1) throw new RangeError("bigint is too large to be represented as a 64-bit integer and passed as argument");
+		return value;
+	} else if (typeof value === "boolean") switch (intMode) {
+		case "bigint": return value ? 1n : 0n;
+		case "string": return value ? "1" : "0";
+		default: return value ? 1 : 0;
+	}
+	else if (value instanceof ArrayBuffer) return Buffer$1.from(value);
+	else if (value instanceof Date) return value.valueOf();
+	else if (value === void 0) throw new TypeError("undefined cannot be passed as argument to the database");
+	else return value;
+}
+var minInteger$1 = -9223372036854775808n;
+var maxInteger$1 = 9223372036854775807n;
+function executeMultiple(db, sql) {
+	try {
+		db.exec(sql);
+	} catch (e) {
+		throw mapSqliteError(e);
+	}
+}
+function mapSqliteError(e) {
+	if (e instanceof import_libsql.default.SqliteError) {
+		const extendedCode = e.code;
+		const code = mapToBaseCode(e.rawCode);
+		return new LibsqlError(e.message, code, extendedCode, e.rawCode, e);
+	}
+	return e;
+}
+function mapToBaseCode(rawCode) {
+	if (rawCode === void 0) return "SQLITE_UNKNOWN";
+	const baseCode = rawCode & 255;
+	return sqliteErrorCodes[baseCode] ?? `SQLITE_UNKNOWN_${baseCode.toString()}`;
+}
+var sqliteErrorCodes = {
+	1: "SQLITE_ERROR",
+	2: "SQLITE_INTERNAL",
+	3: "SQLITE_PERM",
+	4: "SQLITE_ABORT",
+	5: "SQLITE_BUSY",
+	6: "SQLITE_LOCKED",
+	7: "SQLITE_NOMEM",
+	8: "SQLITE_READONLY",
+	9: "SQLITE_INTERRUPT",
+	10: "SQLITE_IOERR",
+	11: "SQLITE_CORRUPT",
+	12: "SQLITE_NOTFOUND",
+	13: "SQLITE_FULL",
+	14: "SQLITE_CANTOPEN",
+	15: "SQLITE_PROTOCOL",
+	16: "SQLITE_EMPTY",
+	17: "SQLITE_SCHEMA",
+	18: "SQLITE_TOOBIG",
+	19: "SQLITE_CONSTRAINT",
+	20: "SQLITE_MISMATCH",
+	21: "SQLITE_MISUSE",
+	22: "SQLITE_NOLFS",
+	23: "SQLITE_AUTH",
+	24: "SQLITE_FORMAT",
+	25: "SQLITE_RANGE",
+	26: "SQLITE_NOTADB",
+	27: "SQLITE_NOTICE",
+	28: "SQLITE_WARNING"
+};
+//#endregion
+//#region node_modules/ws/lib/constants.js
+var require_constants = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var BINARY_TYPES = [
+		"nodebuffer",
+		"arraybuffer",
+		"fragments"
+	];
+	var hasBlob = typeof Blob !== "undefined";
+	if (hasBlob) BINARY_TYPES.push("blob");
+	module.exports = {
+		BINARY_TYPES,
+		CLOSE_TIMEOUT: 3e4,
+		EMPTY_BUFFER: Buffer.alloc(0),
+		GUID: "258EAFA5-E914-47DA-95CA-C5AB0DC85B11",
+		hasBlob,
+		kForOnEventAttribute: Symbol("kIsForOnEventAttribute"),
+		kListener: Symbol("kListener"),
+		kStatusCode: Symbol("status-code"),
+		kWebSocket: Symbol("websocket"),
+		NOOP: () => {}
+	};
+}));
+//#endregion
+//#region __vite-optional-peer-dep:bufferutil:ws
+var __vite_optional_peer_dep_bufferutil_ws_exports = /* @__PURE__ */ __exportAll({ default: () => __vite_optional_peer_dep_bufferutil_ws_default });
+var __vite_optional_peer_dep_bufferutil_ws_default;
+var init___vite_optional_peer_dep_bufferutil_ws = __esmMin((() => {
+	__vite_optional_peer_dep_bufferutil_ws_default = {};
+	throw new Error(`Could not resolve "bufferutil" imported by "ws".`);
+}));
+//#endregion
+//#region node_modules/ws/lib/buffer-util.js
+var require_buffer_util = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { EMPTY_BUFFER } = require_constants();
+	var FastBuffer = Buffer[Symbol.species];
+	/**
+	* Merges an array of buffers into a new buffer.
+	*
+	* @param {Buffer[]} list The array of buffers to concat
+	* @param {Number} totalLength The total length of buffers in the list
+	* @return {Buffer} The resulting buffer
+	* @public
+	*/
+	function concat(list, totalLength) {
+		if (list.length === 0) return EMPTY_BUFFER;
+		if (list.length === 1) return list[0];
+		const target = Buffer.allocUnsafe(totalLength);
+		let offset = 0;
+		for (let i = 0; i < list.length; i++) {
+			const buf = list[i];
+			target.set(buf, offset);
+			offset += buf.length;
+		}
+		if (offset < totalLength) return new FastBuffer(target.buffer, target.byteOffset, offset);
+		return target;
+	}
+	/**
+	* Masks a buffer using the given mask.
+	*
+	* @param {Buffer} source The buffer to mask
+	* @param {Buffer} mask The mask to use
+	* @param {Buffer} output The buffer where to store the result
+	* @param {Number} offset The offset at which to start writing
+	* @param {Number} length The number of bytes to mask.
+	* @public
+	*/
+	function _mask(source, mask, output, offset, length) {
+		for (let i = 0; i < length; i++) output[offset + i] = source[i] ^ mask[i & 3];
+	}
+	/**
+	* Unmasks a buffer using the given mask.
+	*
+	* @param {Buffer} buffer The buffer to unmask
+	* @param {Buffer} mask The mask to use
+	* @public
+	*/
+	function _unmask(buffer, mask) {
+		for (let i = 0; i < buffer.length; i++) buffer[i] ^= mask[i & 3];
+	}
+	/**
+	* Converts a buffer to an `ArrayBuffer`.
+	*
+	* @param {Buffer} buf The buffer to convert
+	* @return {ArrayBuffer} Converted buffer
+	* @public
+	*/
+	function toArrayBuffer(buf) {
+		if (buf.length === buf.buffer.byteLength) return buf.buffer;
+		return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
+	}
+	/**
+	* Converts `data` to a `Buffer`.
+	*
+	* @param {*} data The data to convert
+	* @return {Buffer} The buffer
+	* @throws {TypeError}
+	* @public
+	*/
+	function toBuffer(data) {
+		toBuffer.readOnly = true;
+		if (Buffer.isBuffer(data)) return data;
+		let buf;
+		if (data instanceof ArrayBuffer) buf = new FastBuffer(data);
+		else if (ArrayBuffer.isView(data)) buf = new FastBuffer(data.buffer, data.byteOffset, data.byteLength);
+		else {
+			buf = Buffer.from(data);
+			toBuffer.readOnly = false;
+		}
+		return buf;
+	}
+	module.exports = {
+		concat,
+		mask: _mask,
+		toArrayBuffer,
+		toBuffer,
+		unmask: _unmask
+	};
+	/* istanbul ignore else  */
+	if (!process.env.WS_NO_BUFFER_UTIL) try {
+		const bufferUtil = (init___vite_optional_peer_dep_bufferutil_ws(), __toCommonJS(__vite_optional_peer_dep_bufferutil_ws_exports));
+		module.exports.mask = function(source, mask, output, offset, length) {
+			if (length < 48) _mask(source, mask, output, offset, length);
+			else bufferUtil.mask(source, mask, output, offset, length);
+		};
+		module.exports.unmask = function(buffer, mask) {
+			if (buffer.length < 32) _unmask(buffer, mask);
+			else bufferUtil.unmask(buffer, mask);
+		};
+	} catch (e) {}
+}));
+//#endregion
+//#region node_modules/ws/lib/limiter.js
+var require_limiter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var kDone = Symbol("kDone");
+	var kRun = Symbol("kRun");
+	/**
+	* A very simple job queue with adjustable concurrency. Adapted from
+	* https://github.com/STRML/async-limiter
+	*/
+	var Limiter = class {
+		/**
+		* Creates a new `Limiter`.
+		*
+		* @param {Number} [concurrency=Infinity] The maximum number of jobs allowed
+		*     to run concurrently
+		*/
+		constructor(concurrency) {
+			this[kDone] = () => {
+				this.pending--;
+				this[kRun]();
+			};
+			this.concurrency = concurrency || Infinity;
+			this.jobs = [];
+			this.pending = 0;
+		}
+		/**
+		* Adds a job to the queue.
+		*
+		* @param {Function} job The job to run
+		* @public
+		*/
+		add(job) {
+			this.jobs.push(job);
+			this[kRun]();
+		}
+		/**
+		* Removes a job from the queue and runs it if possible.
+		*
+		* @private
+		*/
+		[kRun]() {
+			if (this.pending === this.concurrency) return;
+			if (this.jobs.length) {
+				const job = this.jobs.shift();
+				this.pending++;
+				job(this[kDone]);
+			}
+		}
+	};
+	module.exports = Limiter;
+}));
+//#endregion
+//#region node_modules/ws/lib/permessage-deflate.js
+var require_permessage_deflate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var zlib = __require("zlib");
+	var bufferUtil = require_buffer_util();
+	var Limiter = require_limiter();
+	var { kStatusCode } = require_constants();
+	var FastBuffer = Buffer[Symbol.species];
+	var TRAILER = Buffer.from([
+		0,
+		0,
+		255,
+		255
+	]);
+	var kPerMessageDeflate = Symbol("permessage-deflate");
+	var kTotalLength = Symbol("total-length");
+	var kCallback = Symbol("callback");
+	var kBuffers = Symbol("buffers");
+	var kError = Symbol("error");
+	var zlibLimiter;
+	/**
+	* permessage-deflate implementation.
+	*/
+	var PerMessageDeflate = class {
+		/**
+		* Creates a PerMessageDeflate instance.
+		*
+		* @param {Object} [options] Configuration options
+		* @param {(Boolean|Number)} [options.clientMaxWindowBits] Advertise support
+		*     for, or request, a custom client window size
+		* @param {Boolean} [options.clientNoContextTakeover=false] Advertise/
+		*     acknowledge disabling of client context takeover
+		* @param {Number} [options.concurrencyLimit=10] The number of concurrent
+		*     calls to zlib
+		* @param {Boolean} [options.isServer=false] Create the instance in either
+		*     server or client mode
+		* @param {Number} [options.maxPayload=0] The maximum allowed message length
+		* @param {(Boolean|Number)} [options.serverMaxWindowBits] Request/confirm the
+		*     use of a custom server window size
+		* @param {Boolean} [options.serverNoContextTakeover=false] Request/accept
+		*     disabling of server context takeover
+		* @param {Number} [options.threshold=1024] Size (in bytes) below which
+		*     messages should not be compressed if context takeover is disabled
+		* @param {Object} [options.zlibDeflateOptions] Options to pass to zlib on
+		*     deflate
+		* @param {Object} [options.zlibInflateOptions] Options to pass to zlib on
+		*     inflate
+		*/
+		constructor(options) {
+			this._options = options || {};
+			this._threshold = this._options.threshold !== void 0 ? this._options.threshold : 1024;
+			this._maxPayload = this._options.maxPayload | 0;
+			this._isServer = !!this._options.isServer;
+			this._deflate = null;
+			this._inflate = null;
+			this.params = null;
+			if (!zlibLimiter) zlibLimiter = new Limiter(this._options.concurrencyLimit !== void 0 ? this._options.concurrencyLimit : 10);
+		}
+		/**
+		* @type {String}
+		*/
+		static get extensionName() {
+			return "permessage-deflate";
+		}
+		/**
+		* Create an extension negotiation offer.
+		*
+		* @return {Object} Extension parameters
+		* @public
+		*/
+		offer() {
+			const params = {};
+			if (this._options.serverNoContextTakeover) params.server_no_context_takeover = true;
+			if (this._options.clientNoContextTakeover) params.client_no_context_takeover = true;
+			if (this._options.serverMaxWindowBits) params.server_max_window_bits = this._options.serverMaxWindowBits;
+			if (this._options.clientMaxWindowBits) params.client_max_window_bits = this._options.clientMaxWindowBits;
+			else if (this._options.clientMaxWindowBits == null) params.client_max_window_bits = true;
+			return params;
+		}
+		/**
+		* Accept an extension negotiation offer/response.
+		*
+		* @param {Array} configurations The extension negotiation offers/reponse
+		* @return {Object} Accepted configuration
+		* @public
+		*/
+		accept(configurations) {
+			configurations = this.normalizeParams(configurations);
+			this.params = this._isServer ? this.acceptAsServer(configurations) : this.acceptAsClient(configurations);
+			return this.params;
+		}
+		/**
+		* Releases all resources used by the extension.
+		*
+		* @public
+		*/
+		cleanup() {
+			if (this._inflate) {
+				this._inflate.close();
+				this._inflate = null;
+			}
+			if (this._deflate) {
+				const callback = this._deflate[kCallback];
+				this._deflate.close();
+				this._deflate = null;
+				if (callback) callback(/* @__PURE__ */ new Error("The deflate stream was closed while data was being processed"));
+			}
+		}
+		/**
+		*  Accept an extension negotiation offer.
+		*
+		* @param {Array} offers The extension negotiation offers
+		* @return {Object} Accepted configuration
+		* @private
+		*/
+		acceptAsServer(offers) {
+			const opts = this._options;
+			const accepted = offers.find((params) => {
+				if (opts.serverNoContextTakeover === false && params.server_no_context_takeover || params.server_max_window_bits && (opts.serverMaxWindowBits === false || typeof opts.serverMaxWindowBits === "number" && opts.serverMaxWindowBits > params.server_max_window_bits) || typeof opts.clientMaxWindowBits === "number" && (typeof params.client_max_window_bits === "number" ? opts.clientMaxWindowBits > params.client_max_window_bits : !params.client_max_window_bits)) return false;
+				return true;
+			});
+			if (!accepted) throw new Error("None of the extension offers can be accepted");
+			if (opts.serverNoContextTakeover) accepted.server_no_context_takeover = true;
+			if (opts.clientNoContextTakeover) accepted.client_no_context_takeover = true;
+			if (typeof opts.serverMaxWindowBits === "number") accepted.server_max_window_bits = opts.serverMaxWindowBits;
+			if (typeof opts.clientMaxWindowBits === "number") accepted.client_max_window_bits = opts.clientMaxWindowBits;
+			else if (accepted.client_max_window_bits === true || opts.clientMaxWindowBits === false) delete accepted.client_max_window_bits;
+			return accepted;
+		}
+		/**
+		* Accept the extension negotiation response.
+		*
+		* @param {Array} response The extension negotiation response
+		* @return {Object} Accepted configuration
+		* @private
+		*/
+		acceptAsClient(response) {
+			const params = response[0];
+			if (this._options.clientNoContextTakeover === false && params.client_no_context_takeover) throw new Error("Unexpected parameter \"client_no_context_takeover\"");
+			if (!params.client_max_window_bits) {
+				if (typeof this._options.clientMaxWindowBits === "number") params.client_max_window_bits = this._options.clientMaxWindowBits;
+			} else if (this._options.clientMaxWindowBits === false || typeof this._options.clientMaxWindowBits === "number" && params.client_max_window_bits > this._options.clientMaxWindowBits) throw new Error("Unexpected or invalid parameter \"client_max_window_bits\"");
+			return params;
+		}
+		/**
+		* Normalize parameters.
+		*
+		* @param {Array} configurations The extension negotiation offers/reponse
+		* @return {Array} The offers/response with normalized parameters
+		* @private
+		*/
+		normalizeParams(configurations) {
+			configurations.forEach((params) => {
+				Object.keys(params).forEach((key) => {
+					let value = params[key];
+					if (value.length > 1) throw new Error(`Parameter "${key}" must have only a single value`);
+					value = value[0];
+					if (key === "client_max_window_bits") {
+						if (value !== true) {
+							const num = +value;
+							if (!Number.isInteger(num) || num < 8 || num > 15) throw new TypeError(`Invalid value for parameter "${key}": ${value}`);
+							value = num;
+						} else if (!this._isServer) throw new TypeError(`Invalid value for parameter "${key}": ${value}`);
+					} else if (key === "server_max_window_bits") {
+						const num = +value;
+						if (!Number.isInteger(num) || num < 8 || num > 15) throw new TypeError(`Invalid value for parameter "${key}": ${value}`);
+						value = num;
+					} else if (key === "client_no_context_takeover" || key === "server_no_context_takeover") {
+						if (value !== true) throw new TypeError(`Invalid value for parameter "${key}": ${value}`);
+					} else throw new Error(`Unknown parameter "${key}"`);
+					params[key] = value;
+				});
+			});
+			return configurations;
+		}
+		/**
+		* Decompress data. Concurrency limited.
+		*
+		* @param {Buffer} data Compressed data
+		* @param {Boolean} fin Specifies whether or not this is the last fragment
+		* @param {Function} callback Callback
+		* @public
+		*/
+		decompress(data, fin, callback) {
+			zlibLimiter.add((done) => {
+				this._decompress(data, fin, (err, result) => {
+					done();
+					callback(err, result);
+				});
+			});
+		}
+		/**
+		* Compress data. Concurrency limited.
+		*
+		* @param {(Buffer|String)} data Data to compress
+		* @param {Boolean} fin Specifies whether or not this is the last fragment
+		* @param {Function} callback Callback
+		* @public
+		*/
+		compress(data, fin, callback) {
+			zlibLimiter.add((done) => {
+				this._compress(data, fin, (err, result) => {
+					done();
+					callback(err, result);
+				});
+			});
+		}
+		/**
+		* Decompress data.
+		*
+		* @param {Buffer} data Compressed data
+		* @param {Boolean} fin Specifies whether or not this is the last fragment
+		* @param {Function} callback Callback
+		* @private
+		*/
+		_decompress(data, fin, callback) {
+			const endpoint = this._isServer ? "client" : "server";
+			if (!this._inflate) {
+				const key = `${endpoint}_max_window_bits`;
+				const windowBits = typeof this.params[key] !== "number" ? zlib.Z_DEFAULT_WINDOWBITS : this.params[key];
+				this._inflate = zlib.createInflateRaw({
+					...this._options.zlibInflateOptions,
+					windowBits
+				});
+				this._inflate[kPerMessageDeflate] = this;
+				this._inflate[kTotalLength] = 0;
+				this._inflate[kBuffers] = [];
+				this._inflate.on("error", inflateOnError);
+				this._inflate.on("data", inflateOnData);
+			}
+			this._inflate[kCallback] = callback;
+			this._inflate.write(data);
+			if (fin) this._inflate.write(TRAILER);
+			this._inflate.flush(() => {
+				const err = this._inflate[kError];
+				if (err) {
+					this._inflate.close();
+					this._inflate = null;
+					callback(err);
+					return;
+				}
+				const data = bufferUtil.concat(this._inflate[kBuffers], this._inflate[kTotalLength]);
+				if (this._inflate._readableState.endEmitted) {
+					this._inflate.close();
+					this._inflate = null;
+				} else {
+					this._inflate[kTotalLength] = 0;
+					this._inflate[kBuffers] = [];
+					if (fin && this.params[`${endpoint}_no_context_takeover`]) this._inflate.reset();
+				}
+				callback(null, data);
+			});
+		}
+		/**
+		* Compress data.
+		*
+		* @param {(Buffer|String)} data Data to compress
+		* @param {Boolean} fin Specifies whether or not this is the last fragment
+		* @param {Function} callback Callback
+		* @private
+		*/
+		_compress(data, fin, callback) {
+			const endpoint = this._isServer ? "server" : "client";
+			if (!this._deflate) {
+				const key = `${endpoint}_max_window_bits`;
+				const windowBits = typeof this.params[key] !== "number" ? zlib.Z_DEFAULT_WINDOWBITS : this.params[key];
+				this._deflate = zlib.createDeflateRaw({
+					...this._options.zlibDeflateOptions,
+					windowBits
+				});
+				this._deflate[kTotalLength] = 0;
+				this._deflate[kBuffers] = [];
+				this._deflate.on("data", deflateOnData);
+			}
+			this._deflate[kCallback] = callback;
+			this._deflate.write(data);
+			this._deflate.flush(zlib.Z_SYNC_FLUSH, () => {
+				if (!this._deflate) return;
+				let data = bufferUtil.concat(this._deflate[kBuffers], this._deflate[kTotalLength]);
+				if (fin) data = new FastBuffer(data.buffer, data.byteOffset, data.length - 4);
+				this._deflate[kCallback] = null;
+				this._deflate[kTotalLength] = 0;
+				this._deflate[kBuffers] = [];
+				if (fin && this.params[`${endpoint}_no_context_takeover`]) this._deflate.reset();
+				callback(null, data);
+			});
+		}
+	};
+	module.exports = PerMessageDeflate;
+	/**
+	* The listener of the `zlib.DeflateRaw` stream `'data'` event.
+	*
+	* @param {Buffer} chunk A chunk of data
+	* @private
+	*/
+	function deflateOnData(chunk) {
+		this[kBuffers].push(chunk);
+		this[kTotalLength] += chunk.length;
+	}
+	/**
+	* The listener of the `zlib.InflateRaw` stream `'data'` event.
+	*
+	* @param {Buffer} chunk A chunk of data
+	* @private
+	*/
+	function inflateOnData(chunk) {
+		this[kTotalLength] += chunk.length;
+		if (this[kPerMessageDeflate]._maxPayload < 1 || this[kTotalLength] <= this[kPerMessageDeflate]._maxPayload) {
+			this[kBuffers].push(chunk);
+			return;
+		}
+		this[kError] = /* @__PURE__ */ new RangeError("Max payload size exceeded");
+		this[kError].code = "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH";
+		this[kError][kStatusCode] = 1009;
+		this.removeListener("data", inflateOnData);
+		this.reset();
+	}
+	/**
+	* The listener of the `zlib.InflateRaw` stream `'error'` event.
+	*
+	* @param {Error} err The emitted error
+	* @private
+	*/
+	function inflateOnError(err) {
+		this[kPerMessageDeflate]._inflate = null;
+		if (this[kError]) {
+			this[kCallback](this[kError]);
+			return;
+		}
+		err[kStatusCode] = 1007;
+		this[kCallback](err);
+	}
+}));
+//#endregion
+//#region __vite-optional-peer-dep:utf-8-validate:ws
+var __vite_optional_peer_dep_utf_8_validate_ws_exports = /* @__PURE__ */ __exportAll({ default: () => __vite_optional_peer_dep_utf_8_validate_ws_default });
+var __vite_optional_peer_dep_utf_8_validate_ws_default;
+var init___vite_optional_peer_dep_utf_8_validate_ws = __esmMin((() => {
+	__vite_optional_peer_dep_utf_8_validate_ws_default = {};
+	throw new Error(`Could not resolve "utf-8-validate" imported by "ws".`);
+}));
+//#endregion
+//#region node_modules/ws/lib/validation.js
+var require_validation = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { isUtf8 } = __require("buffer");
+	var { hasBlob } = require_constants();
+	var tokenChars = [
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0
+	];
+	/**
+	* Checks if a status code is allowed in a close frame.
+	*
+	* @param {Number} code The status code
+	* @return {Boolean} `true` if the status code is valid, else `false`
+	* @public
+	*/
+	function isValidStatusCode(code) {
+		return code >= 1e3 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006 || code >= 3e3 && code <= 4999;
+	}
+	/**
+	* Checks if a given buffer contains only correct UTF-8.
+	* Ported from https://www.cl.cam.ac.uk/%7Emgk25/ucs/utf8_check.c by
+	* Markus Kuhn.
+	*
+	* @param {Buffer} buf The buffer to check
+	* @return {Boolean} `true` if `buf` contains only correct UTF-8, else `false`
+	* @public
+	*/
+	function _isValidUTF8(buf) {
+		const len = buf.length;
+		let i = 0;
+		while (i < len) if ((buf[i] & 128) === 0) i++;
+		else if ((buf[i] & 224) === 192) {
+			if (i + 1 === len || (buf[i + 1] & 192) !== 128 || (buf[i] & 254) === 192) return false;
+			i += 2;
+		} else if ((buf[i] & 240) === 224) {
+			if (i + 2 >= len || (buf[i + 1] & 192) !== 128 || (buf[i + 2] & 192) !== 128 || buf[i] === 224 && (buf[i + 1] & 224) === 128 || buf[i] === 237 && (buf[i + 1] & 224) === 160) return false;
+			i += 3;
+		} else if ((buf[i] & 248) === 240) {
+			if (i + 3 >= len || (buf[i + 1] & 192) !== 128 || (buf[i + 2] & 192) !== 128 || (buf[i + 3] & 192) !== 128 || buf[i] === 240 && (buf[i + 1] & 240) === 128 || buf[i] === 244 && buf[i + 1] > 143 || buf[i] > 244) return false;
+			i += 4;
+		} else return false;
+		return true;
+	}
+	/**
+	* Determines whether a value is a `Blob`.
+	*
+	* @param {*} value The value to be tested
+	* @return {Boolean} `true` if `value` is a `Blob`, else `false`
+	* @private
+	*/
+	function isBlob(value) {
+		return hasBlob && typeof value === "object" && typeof value.arrayBuffer === "function" && typeof value.type === "string" && typeof value.stream === "function" && (value[Symbol.toStringTag] === "Blob" || value[Symbol.toStringTag] === "File");
+	}
+	module.exports = {
+		isBlob,
+		isValidStatusCode,
+		isValidUTF8: _isValidUTF8,
+		tokenChars
+	};
+	if (isUtf8) module.exports.isValidUTF8 = function(buf) {
+		return buf.length < 24 ? _isValidUTF8(buf) : isUtf8(buf);
+	};
+	else if (!process.env.WS_NO_UTF_8_VALIDATE) try {
+		const isValidUTF8 = (init___vite_optional_peer_dep_utf_8_validate_ws(), __toCommonJS(__vite_optional_peer_dep_utf_8_validate_ws_exports));
+		module.exports.isValidUTF8 = function(buf) {
+			return buf.length < 32 ? _isValidUTF8(buf) : isValidUTF8(buf);
+		};
+	} catch (e) {}
+}));
+//#endregion
+//#region node_modules/ws/lib/receiver.js
+var require_receiver = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { Writable } = __require("stream");
+	var PerMessageDeflate = require_permessage_deflate();
+	var { BINARY_TYPES, EMPTY_BUFFER, kStatusCode, kWebSocket } = require_constants();
+	var { concat, toArrayBuffer, unmask } = require_buffer_util();
+	var { isValidStatusCode, isValidUTF8 } = require_validation();
+	var FastBuffer = Buffer[Symbol.species];
+	var GET_INFO = 0;
+	var GET_PAYLOAD_LENGTH_16 = 1;
+	var GET_PAYLOAD_LENGTH_64 = 2;
+	var GET_MASK = 3;
+	var GET_DATA = 4;
+	var INFLATING = 5;
+	var DEFER_EVENT = 6;
+	/**
+	* HyBi Receiver implementation.
+	*
+	* @extends Writable
+	*/
+	var Receiver = class extends Writable {
+		/**
+		* Creates a Receiver instance.
+		*
+		* @param {Object} [options] Options object
+		* @param {Boolean} [options.allowSynchronousEvents=true] Specifies whether
+		*     any of the `'message'`, `'ping'`, and `'pong'` events can be emitted
+		*     multiple times in the same tick
+		* @param {String} [options.binaryType=nodebuffer] The type for binary data
+		* @param {Object} [options.extensions] An object containing the negotiated
+		*     extensions
+		* @param {Boolean} [options.isServer=false] Specifies whether to operate in
+		*     client or server mode
+		* @param {Number} [options.maxBufferedChunks=0] The maximum number of
+		*     buffered data chunks
+		* @param {Number} [options.maxFragments=0] The maximum number of message
+		*     fragments
+		* @param {Number} [options.maxPayload=0] The maximum allowed message length
+		* @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
+		*     not to skip UTF-8 validation for text and close messages
+		*/
+		constructor(options = {}) {
+			super();
+			this._allowSynchronousEvents = options.allowSynchronousEvents !== void 0 ? options.allowSynchronousEvents : true;
+			this._binaryType = options.binaryType || BINARY_TYPES[0];
+			this._extensions = options.extensions || {};
+			this._isServer = !!options.isServer;
+			this._maxBufferedChunks = options.maxBufferedChunks | 0;
+			this._maxFragments = options.maxFragments | 0;
+			this._maxPayload = options.maxPayload | 0;
+			this._skipUTF8Validation = !!options.skipUTF8Validation;
+			this[kWebSocket] = void 0;
+			this._bufferedBytes = 0;
+			this._buffers = [];
+			this._compressed = false;
+			this._payloadLength = 0;
+			this._mask = void 0;
+			this._fragmented = 0;
+			this._masked = false;
+			this._fin = false;
+			this._opcode = 0;
+			this._totalPayloadLength = 0;
+			this._messageLength = 0;
+			this._numFragments = 0;
+			this._fragments = [];
+			this._errored = false;
+			this._loop = false;
+			this._state = GET_INFO;
+		}
+		/**
+		* Implements `Writable.prototype._write()`.
+		*
+		* @param {Buffer} chunk The chunk of data to write
+		* @param {String} encoding The character encoding of `chunk`
+		* @param {Function} cb Callback
+		* @private
+		*/
+		_write(chunk, encoding, cb) {
+			if (this._opcode === 8 && this._state == GET_INFO) return cb();
+			if (this._maxBufferedChunks > 0 && this._buffers.length >= this._maxBufferedChunks) {
+				cb(this.createError(RangeError, "Too many buffered chunks", false, 1008, "WS_ERR_TOO_MANY_BUFFERED_PARTS"));
+				return;
+			}
+			this._bufferedBytes += chunk.length;
+			this._buffers.push(chunk);
+			this.startLoop(cb);
+		}
+		/**
+		* Consumes `n` bytes from the buffered data.
+		*
+		* @param {Number} n The number of bytes to consume
+		* @return {Buffer} The consumed bytes
+		* @private
+		*/
+		consume(n) {
+			this._bufferedBytes -= n;
+			if (n === this._buffers[0].length) return this._buffers.shift();
+			if (n < this._buffers[0].length) {
+				const buf = this._buffers[0];
+				this._buffers[0] = new FastBuffer(buf.buffer, buf.byteOffset + n, buf.length - n);
+				return new FastBuffer(buf.buffer, buf.byteOffset, n);
+			}
+			const dst = Buffer.allocUnsafe(n);
+			do {
+				const buf = this._buffers[0];
+				const offset = dst.length - n;
+				if (n >= buf.length) dst.set(this._buffers.shift(), offset);
+				else {
+					dst.set(new Uint8Array(buf.buffer, buf.byteOffset, n), offset);
+					this._buffers[0] = new FastBuffer(buf.buffer, buf.byteOffset + n, buf.length - n);
+				}
+				n -= buf.length;
+			} while (n > 0);
+			return dst;
+		}
+		/**
+		* Starts the parsing loop.
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		startLoop(cb) {
+			this._loop = true;
+			do
+				switch (this._state) {
+					case GET_INFO:
+						this.getInfo(cb);
+						break;
+					case GET_PAYLOAD_LENGTH_16:
+						this.getPayloadLength16(cb);
+						break;
+					case GET_PAYLOAD_LENGTH_64:
+						this.getPayloadLength64(cb);
+						break;
+					case GET_MASK:
+						this.getMask();
+						break;
+					case GET_DATA:
+						this.getData(cb);
+						break;
+					case INFLATING:
+					case DEFER_EVENT:
+						this._loop = false;
+						return;
+				}
+			while (this._loop);
+			if (!this._errored) cb();
+		}
+		/**
+		* Reads the first two bytes of a frame.
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		getInfo(cb) {
+			if (this._bufferedBytes < 2) {
+				this._loop = false;
+				return;
+			}
+			const buf = this.consume(2);
+			if ((buf[0] & 48) !== 0) {
+				cb(this.createError(RangeError, "RSV2 and RSV3 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_2_3"));
+				return;
+			}
+			const compressed = (buf[0] & 64) === 64;
+			if (compressed && !this._extensions[PerMessageDeflate.extensionName]) {
+				cb(this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1"));
+				return;
+			}
+			this._fin = (buf[0] & 128) === 128;
+			this._opcode = buf[0] & 15;
+			this._payloadLength = buf[1] & 127;
+			if (this._opcode === 0) {
+				if (compressed) {
+					cb(this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1"));
+					return;
+				}
+				if (!this._fragmented) {
+					cb(this.createError(RangeError, "invalid opcode 0", true, 1002, "WS_ERR_INVALID_OPCODE"));
+					return;
+				}
+				this._opcode = this._fragmented;
+			} else if (this._opcode === 1 || this._opcode === 2) {
+				if (this._fragmented) {
+					cb(this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE"));
+					return;
+				}
+				this._compressed = compressed;
+			} else if (this._opcode > 7 && this._opcode < 11) {
+				if (!this._fin) {
+					cb(this.createError(RangeError, "FIN must be set", true, 1002, "WS_ERR_EXPECTED_FIN"));
+					return;
+				}
+				if (compressed) {
+					cb(this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1"));
+					return;
+				}
+				if (this._payloadLength > 125 || this._opcode === 8 && this._payloadLength === 1) {
+					cb(this.createError(RangeError, `invalid payload length ${this._payloadLength}`, true, 1002, "WS_ERR_INVALID_CONTROL_PAYLOAD_LENGTH"));
+					return;
+				}
+			} else {
+				cb(this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE"));
+				return;
+			}
+			if (!this._fin && !this._fragmented) this._fragmented = this._opcode;
+			this._masked = (buf[1] & 128) === 128;
+			if (this._isServer) {
+				if (!this._masked) {
+					cb(this.createError(RangeError, "MASK must be set", true, 1002, "WS_ERR_EXPECTED_MASK"));
+					return;
+				}
+			} else if (this._masked) {
+				cb(this.createError(RangeError, "MASK must be clear", true, 1002, "WS_ERR_UNEXPECTED_MASK"));
+				return;
+			}
+			if (this._payloadLength === 126) this._state = GET_PAYLOAD_LENGTH_16;
+			else if (this._payloadLength === 127) this._state = GET_PAYLOAD_LENGTH_64;
+			else this.haveLength(cb);
+		}
+		/**
+		* Gets extended payload length (7+16).
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		getPayloadLength16(cb) {
+			if (this._bufferedBytes < 2) {
+				this._loop = false;
+				return;
+			}
+			this._payloadLength = this.consume(2).readUInt16BE(0);
+			this.haveLength(cb);
+		}
+		/**
+		* Gets extended payload length (7+64).
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		getPayloadLength64(cb) {
+			if (this._bufferedBytes < 8) {
+				this._loop = false;
+				return;
+			}
+			const buf = this.consume(8);
+			const num = buf.readUInt32BE(0);
+			if (num > Math.pow(2, 21) - 1) {
+				cb(this.createError(RangeError, "Unsupported WebSocket frame: payload length > 2^53 - 1", false, 1009, "WS_ERR_UNSUPPORTED_DATA_PAYLOAD_LENGTH"));
+				return;
+			}
+			this._payloadLength = num * Math.pow(2, 32) + buf.readUInt32BE(4);
+			this.haveLength(cb);
+		}
+		/**
+		* Payload length has been read.
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		haveLength(cb) {
+			if (this._payloadLength && this._opcode < 8) {
+				this._totalPayloadLength += this._payloadLength;
+				if (this._totalPayloadLength > this._maxPayload && this._maxPayload > 0) {
+					cb(this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH"));
+					return;
+				}
+			}
+			if (this._masked) this._state = GET_MASK;
+			else this._state = GET_DATA;
+		}
+		/**
+		* Reads mask bytes.
+		*
+		* @private
+		*/
+		getMask() {
+			if (this._bufferedBytes < 4) {
+				this._loop = false;
+				return;
+			}
+			this._mask = this.consume(4);
+			this._state = GET_DATA;
+		}
+		/**
+		* Reads data bytes.
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		getData(cb) {
+			let data = EMPTY_BUFFER;
+			if (this._payloadLength) {
+				if (this._bufferedBytes < this._payloadLength) {
+					this._loop = false;
+					return;
+				}
+				data = this.consume(this._payloadLength);
+				if (this._masked && (this._mask[0] | this._mask[1] | this._mask[2] | this._mask[3]) !== 0) unmask(data, this._mask);
+			}
+			if (this._opcode > 7) {
+				this.controlMessage(data, cb);
+				return;
+			}
+			if (this._maxFragments > 0 && ++this._numFragments > this._maxFragments) {
+				cb(this.createError(RangeError, "Too many message fragments", false, 1008, "WS_ERR_TOO_MANY_BUFFERED_PARTS"));
+				return;
+			}
+			if (this._compressed) {
+				this._state = INFLATING;
+				this.decompress(data, cb);
+				return;
+			}
+			if (data.length) {
+				this._messageLength = this._totalPayloadLength;
+				this._fragments.push(data);
+			}
+			this.dataMessage(cb);
+		}
+		/**
+		* Decompresses data.
+		*
+		* @param {Buffer} data Compressed data
+		* @param {Function} cb Callback
+		* @private
+		*/
+		decompress(data, cb) {
+			this._extensions[PerMessageDeflate.extensionName].decompress(data, this._fin, (err, buf) => {
+				if (err) return cb(err);
+				if (buf.length) {
+					this._messageLength += buf.length;
+					if (this._messageLength > this._maxPayload && this._maxPayload > 0) {
+						cb(this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH"));
+						return;
+					}
+					this._fragments.push(buf);
+				}
+				this.dataMessage(cb);
+				if (this._state === GET_INFO) this.startLoop(cb);
+			});
+		}
+		/**
+		* Handles a data message.
+		*
+		* @param {Function} cb Callback
+		* @private
+		*/
+		dataMessage(cb) {
+			if (!this._fin) {
+				this._state = GET_INFO;
+				return;
+			}
+			const messageLength = this._messageLength;
+			const fragments = this._fragments;
+			this._totalPayloadLength = 0;
+			this._messageLength = 0;
+			this._fragmented = 0;
+			this._numFragments = 0;
+			this._fragments = [];
+			if (this._opcode === 2) {
+				let data;
+				if (this._binaryType === "nodebuffer") data = concat(fragments, messageLength);
+				else if (this._binaryType === "arraybuffer") data = toArrayBuffer(concat(fragments, messageLength));
+				else if (this._binaryType === "blob") data = new Blob(fragments);
+				else data = fragments;
+				if (this._allowSynchronousEvents) {
+					this.emit("message", data, true);
+					this._state = GET_INFO;
+				} else {
+					this._state = DEFER_EVENT;
+					setImmediate(() => {
+						this.emit("message", data, true);
+						this._state = GET_INFO;
+						this.startLoop(cb);
+					});
+				}
+			} else {
+				const buf = concat(fragments, messageLength);
+				if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
+					cb(this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8"));
+					return;
+				}
+				if (this._state === INFLATING || this._allowSynchronousEvents) {
+					this.emit("message", buf, false);
+					this._state = GET_INFO;
+				} else {
+					this._state = DEFER_EVENT;
+					setImmediate(() => {
+						this.emit("message", buf, false);
+						this._state = GET_INFO;
+						this.startLoop(cb);
+					});
+				}
+			}
+		}
+		/**
+		* Handles a control message.
+		*
+		* @param {Buffer} data Data to handle
+		* @return {(Error|RangeError|undefined)} A possible error
+		* @private
+		*/
+		controlMessage(data, cb) {
+			if (this._opcode === 8) {
+				if (data.length === 0) {
+					this._loop = false;
+					this.emit("conclude", 1005, EMPTY_BUFFER);
+					this.end();
+				} else {
+					const code = data.readUInt16BE(0);
+					if (!isValidStatusCode(code)) {
+						cb(this.createError(RangeError, `invalid status code ${code}`, true, 1002, "WS_ERR_INVALID_CLOSE_CODE"));
+						return;
+					}
+					const buf = new FastBuffer(data.buffer, data.byteOffset + 2, data.length - 2);
+					if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
+						cb(this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8"));
+						return;
+					}
+					this._loop = false;
+					this.emit("conclude", code, buf);
+					this.end();
+				}
+				this._state = GET_INFO;
+				return;
+			}
+			if (this._allowSynchronousEvents) {
+				this.emit(this._opcode === 9 ? "ping" : "pong", data);
+				this._state = GET_INFO;
+			} else {
+				this._state = DEFER_EVENT;
+				setImmediate(() => {
+					this.emit(this._opcode === 9 ? "ping" : "pong", data);
+					this._state = GET_INFO;
+					this.startLoop(cb);
+				});
+			}
+		}
+		/**
+		* Builds an error object.
+		*
+		* @param {function(new:Error|RangeError)} ErrorCtor The error constructor
+		* @param {String} message The error message
+		* @param {Boolean} prefix Specifies whether or not to add a default prefix to
+		*     `message`
+		* @param {Number} statusCode The status code
+		* @param {String} errorCode The exposed error code
+		* @return {(Error|RangeError)} The error
+		* @private
+		*/
+		createError(ErrorCtor, message, prefix, statusCode, errorCode) {
+			this._loop = false;
+			this._errored = true;
+			const err = new ErrorCtor(prefix ? `Invalid WebSocket frame: ${message}` : message);
+			Error.captureStackTrace(err, this.createError);
+			err.code = errorCode;
+			err[kStatusCode] = statusCode;
+			return err;
+		}
+	};
+	module.exports = Receiver;
+}));
+//#endregion
+//#region node_modules/ws/lib/sender.js
+var require_sender = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { Duplex: Duplex$3 } = __require("stream");
+	var { randomFillSync } = __require("crypto");
+	var { types: { isUint8Array } } = __require("util");
+	var PerMessageDeflate = require_permessage_deflate();
+	var { EMPTY_BUFFER, kWebSocket, NOOP } = require_constants();
+	var { isBlob, isValidStatusCode } = require_validation();
+	var { mask: applyMask, toBuffer } = require_buffer_util();
+	var kByteLength = Symbol("kByteLength");
+	var maskBuffer = Buffer.alloc(4);
+	var RANDOM_POOL_SIZE = 8192;
+	var randomPool;
+	var randomPoolPointer = RANDOM_POOL_SIZE;
+	var DEFAULT = 0;
+	var DEFLATING = 1;
+	var GET_BLOB_DATA = 2;
+	module.exports = class Sender {
+		/**
+		* Creates a Sender instance.
+		*
+		* @param {Duplex} socket The connection socket
+		* @param {Object} [extensions] An object containing the negotiated extensions
+		* @param {Function} [generateMask] The function used to generate the masking
+		*     key
+		*/
+		constructor(socket, extensions, generateMask) {
+			this._extensions = extensions || {};
+			if (generateMask) {
+				this._generateMask = generateMask;
+				this._maskBuffer = Buffer.alloc(4);
+			}
+			this._socket = socket;
+			this._firstFragment = true;
+			this._compress = false;
+			this._bufferedBytes = 0;
+			this._queue = [];
+			this._state = DEFAULT;
+			this.onerror = NOOP;
+			this[kWebSocket] = void 0;
+		}
+		/**
+		* Frames a piece of data according to the HyBi WebSocket protocol.
+		*
+		* @param {(Buffer|String)} data The data to frame
+		* @param {Object} options Options object
+		* @param {Boolean} [options.fin=false] Specifies whether or not to set the
+		*     FIN bit
+		* @param {Function} [options.generateMask] The function used to generate the
+		*     masking key
+		* @param {Boolean} [options.mask=false] Specifies whether or not to mask
+		*     `data`
+		* @param {Buffer} [options.maskBuffer] The buffer used to store the masking
+		*     key
+		* @param {Number} options.opcode The opcode
+		* @param {Boolean} [options.readOnly=false] Specifies whether `data` can be
+		*     modified
+		* @param {Boolean} [options.rsv1=false] Specifies whether or not to set the
+		*     RSV1 bit
+		* @return {(Buffer|String)[]} The framed data
+		* @public
+		*/
+		static frame(data, options) {
+			let mask;
+			let merge = false;
+			let offset = 2;
+			let skipMasking = false;
+			if (options.mask) {
+				mask = options.maskBuffer || maskBuffer;
+				if (options.generateMask) options.generateMask(mask);
+				else {
+					if (randomPoolPointer === RANDOM_POOL_SIZE) {
+						/* istanbul ignore else  */
+						if (randomPool === void 0) randomPool = Buffer.alloc(RANDOM_POOL_SIZE);
+						randomFillSync(randomPool, 0, RANDOM_POOL_SIZE);
+						randomPoolPointer = 0;
+					}
+					mask[0] = randomPool[randomPoolPointer++];
+					mask[1] = randomPool[randomPoolPointer++];
+					mask[2] = randomPool[randomPoolPointer++];
+					mask[3] = randomPool[randomPoolPointer++];
+				}
+				skipMasking = (mask[0] | mask[1] | mask[2] | mask[3]) === 0;
+				offset = 6;
+			}
+			let dataLength;
+			if (typeof data === "string") {
+				if ((!options.mask || skipMasking) && options[kByteLength] !== void 0) dataLength = options[kByteLength];
+				else {
+					data = Buffer.from(data);
+					dataLength = data.length;
+				}
+			} else {
+				dataLength = data.length;
+				merge = options.mask && options.readOnly && !skipMasking;
+			}
+			let payloadLength = dataLength;
+			if (dataLength >= 65536) {
+				offset += 8;
+				payloadLength = 127;
+			} else if (dataLength > 125) {
+				offset += 2;
+				payloadLength = 126;
+			}
+			const target = Buffer.allocUnsafe(merge ? dataLength + offset : offset);
+			target[0] = options.fin ? options.opcode | 128 : options.opcode;
+			if (options.rsv1) target[0] |= 64;
+			target[1] = payloadLength;
+			if (payloadLength === 126) target.writeUInt16BE(dataLength, 2);
+			else if (payloadLength === 127) {
+				target[2] = target[3] = 0;
+				target.writeUIntBE(dataLength, 4, 6);
+			}
+			if (!options.mask) return [target, data];
+			target[1] |= 128;
+			target[offset - 4] = mask[0];
+			target[offset - 3] = mask[1];
+			target[offset - 2] = mask[2];
+			target[offset - 1] = mask[3];
+			if (skipMasking) return [target, data];
+			if (merge) {
+				applyMask(data, mask, target, offset, dataLength);
+				return [target];
+			}
+			applyMask(data, mask, data, 0, dataLength);
+			return [target, data];
+		}
+		/**
+		* Sends a close message to the other peer.
+		*
+		* @param {Number} [code] The status code component of the body
+		* @param {(String|Buffer)} [data] The message component of the body
+		* @param {Boolean} [mask=false] Specifies whether or not to mask the message
+		* @param {Function} [cb] Callback
+		* @public
+		*/
+		close(code, data, mask, cb) {
+			let buf;
+			if (code === void 0) buf = EMPTY_BUFFER;
+			else if (typeof code !== "number" || !isValidStatusCode(code)) throw new TypeError("First argument must be a valid error code number");
+			else if (data === void 0 || !data.length) {
+				buf = Buffer.allocUnsafe(2);
+				buf.writeUInt16BE(code, 0);
+			} else {
+				const length = Buffer.byteLength(data);
+				if (length > 123) throw new RangeError("The message must not be greater than 123 bytes");
+				buf = Buffer.allocUnsafe(2 + length);
+				buf.writeUInt16BE(code, 0);
+				if (typeof data === "string") buf.write(data, 2);
+				else if (isUint8Array(data)) buf.set(data, 2);
+				else throw new TypeError("Second argument must be a string or a Uint8Array");
+			}
+			const options = {
+				[kByteLength]: buf.length,
+				fin: true,
+				generateMask: this._generateMask,
+				mask,
+				maskBuffer: this._maskBuffer,
+				opcode: 8,
+				readOnly: false,
+				rsv1: false
+			};
+			if (this._state !== DEFAULT) this.enqueue([
+				this.dispatch,
+				buf,
+				false,
+				options,
+				cb
+			]);
+			else this.sendFrame(Sender.frame(buf, options), cb);
+		}
+		/**
+		* Sends a ping message to the other peer.
+		*
+		* @param {*} data The message to send
+		* @param {Boolean} [mask=false] Specifies whether or not to mask `data`
+		* @param {Function} [cb] Callback
+		* @public
+		*/
+		ping(data, mask, cb) {
+			let byteLength;
+			let readOnly;
+			if (typeof data === "string") {
+				byteLength = Buffer.byteLength(data);
+				readOnly = false;
+			} else if (isBlob(data)) {
+				byteLength = data.size;
+				readOnly = false;
+			} else {
+				data = toBuffer(data);
+				byteLength = data.length;
+				readOnly = toBuffer.readOnly;
+			}
+			if (byteLength > 125) throw new RangeError("The data size must not be greater than 125 bytes");
+			const options = {
+				[kByteLength]: byteLength,
+				fin: true,
+				generateMask: this._generateMask,
+				mask,
+				maskBuffer: this._maskBuffer,
+				opcode: 9,
+				readOnly,
+				rsv1: false
+			};
+			if (isBlob(data)) {
+				if (this._state !== DEFAULT) this.enqueue([
+					this.getBlobData,
+					data,
+					false,
+					options,
+					cb
+				]);
+				else this.getBlobData(data, false, options, cb);
+			} else if (this._state !== DEFAULT) this.enqueue([
+				this.dispatch,
+				data,
+				false,
+				options,
+				cb
+			]);
+			else this.sendFrame(Sender.frame(data, options), cb);
+		}
+		/**
+		* Sends a pong message to the other peer.
+		*
+		* @param {*} data The message to send
+		* @param {Boolean} [mask=false] Specifies whether or not to mask `data`
+		* @param {Function} [cb] Callback
+		* @public
+		*/
+		pong(data, mask, cb) {
+			let byteLength;
+			let readOnly;
+			if (typeof data === "string") {
+				byteLength = Buffer.byteLength(data);
+				readOnly = false;
+			} else if (isBlob(data)) {
+				byteLength = data.size;
+				readOnly = false;
+			} else {
+				data = toBuffer(data);
+				byteLength = data.length;
+				readOnly = toBuffer.readOnly;
+			}
+			if (byteLength > 125) throw new RangeError("The data size must not be greater than 125 bytes");
+			const options = {
+				[kByteLength]: byteLength,
+				fin: true,
+				generateMask: this._generateMask,
+				mask,
+				maskBuffer: this._maskBuffer,
+				opcode: 10,
+				readOnly,
+				rsv1: false
+			};
+			if (isBlob(data)) {
+				if (this._state !== DEFAULT) this.enqueue([
+					this.getBlobData,
+					data,
+					false,
+					options,
+					cb
+				]);
+				else this.getBlobData(data, false, options, cb);
+			} else if (this._state !== DEFAULT) this.enqueue([
+				this.dispatch,
+				data,
+				false,
+				options,
+				cb
+			]);
+			else this.sendFrame(Sender.frame(data, options), cb);
+		}
+		/**
+		* Sends a data message to the other peer.
+		*
+		* @param {*} data The message to send
+		* @param {Object} options Options object
+		* @param {Boolean} [options.binary=false] Specifies whether `data` is binary
+		*     or text
+		* @param {Boolean} [options.compress=false] Specifies whether or not to
+		*     compress `data`
+		* @param {Boolean} [options.fin=false] Specifies whether the fragment is the
+		*     last one
+		* @param {Boolean} [options.mask=false] Specifies whether or not to mask
+		*     `data`
+		* @param {Function} [cb] Callback
+		* @public
+		*/
+		send(data, options, cb) {
+			const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
+			let opcode = options.binary ? 2 : 1;
+			let rsv1 = options.compress;
+			let byteLength;
+			let readOnly;
+			if (typeof data === "string") {
+				byteLength = Buffer.byteLength(data);
+				readOnly = false;
+			} else if (isBlob(data)) {
+				byteLength = data.size;
+				readOnly = false;
+			} else {
+				data = toBuffer(data);
+				byteLength = data.length;
+				readOnly = toBuffer.readOnly;
+			}
+			if (this._firstFragment) {
+				this._firstFragment = false;
+				if (rsv1 && perMessageDeflate && perMessageDeflate.params[perMessageDeflate._isServer ? "server_no_context_takeover" : "client_no_context_takeover"]) rsv1 = byteLength >= perMessageDeflate._threshold;
+				this._compress = rsv1;
+			} else {
+				rsv1 = false;
+				opcode = 0;
+			}
+			if (options.fin) this._firstFragment = true;
+			const opts = {
+				[kByteLength]: byteLength,
+				fin: options.fin,
+				generateMask: this._generateMask,
+				mask: options.mask,
+				maskBuffer: this._maskBuffer,
+				opcode,
+				readOnly,
+				rsv1
+			};
+			if (isBlob(data)) {
+				if (this._state !== DEFAULT) this.enqueue([
+					this.getBlobData,
+					data,
+					this._compress,
+					opts,
+					cb
+				]);
+				else this.getBlobData(data, this._compress, opts, cb);
+			} else if (this._state !== DEFAULT) this.enqueue([
+				this.dispatch,
+				data,
+				this._compress,
+				opts,
+				cb
+			]);
+			else this.dispatch(data, this._compress, opts, cb);
+		}
+		/**
+		* Gets the contents of a blob as binary data.
+		*
+		* @param {Blob} blob The blob
+		* @param {Boolean} [compress=false] Specifies whether or not to compress
+		*     the data
+		* @param {Object} options Options object
+		* @param {Boolean} [options.fin=false] Specifies whether or not to set the
+		*     FIN bit
+		* @param {Function} [options.generateMask] The function used to generate the
+		*     masking key
+		* @param {Boolean} [options.mask=false] Specifies whether or not to mask
+		*     `data`
+		* @param {Buffer} [options.maskBuffer] The buffer used to store the masking
+		*     key
+		* @param {Number} options.opcode The opcode
+		* @param {Boolean} [options.readOnly=false] Specifies whether `data` can be
+		*     modified
+		* @param {Boolean} [options.rsv1=false] Specifies whether or not to set the
+		*     RSV1 bit
+		* @param {Function} [cb] Callback
+		* @private
+		*/
+		getBlobData(blob, compress, options, cb) {
+			this._bufferedBytes += options[kByteLength];
+			this._state = GET_BLOB_DATA;
+			blob.arrayBuffer().then((arrayBuffer) => {
+				if (this._socket.destroyed) {
+					const err = /* @__PURE__ */ new Error("The socket was closed while the blob was being read");
+					process.nextTick(callCallbacks, this, err, cb);
+					return;
+				}
+				this._bufferedBytes -= options[kByteLength];
+				const data = toBuffer(arrayBuffer);
+				if (!compress) {
+					this._state = DEFAULT;
+					this.sendFrame(Sender.frame(data, options), cb);
+					this.dequeue();
+				} else this.dispatch(data, compress, options, cb);
+			}).catch((err) => {
+				process.nextTick(onError, this, err, cb);
+			});
+		}
+		/**
+		* Dispatches a message.
+		*
+		* @param {(Buffer|String)} data The message to send
+		* @param {Boolean} [compress=false] Specifies whether or not to compress
+		*     `data`
+		* @param {Object} options Options object
+		* @param {Boolean} [options.fin=false] Specifies whether or not to set the
+		*     FIN bit
+		* @param {Function} [options.generateMask] The function used to generate the
+		*     masking key
+		* @param {Boolean} [options.mask=false] Specifies whether or not to mask
+		*     `data`
+		* @param {Buffer} [options.maskBuffer] The buffer used to store the masking
+		*     key
+		* @param {Number} options.opcode The opcode
+		* @param {Boolean} [options.readOnly=false] Specifies whether `data` can be
+		*     modified
+		* @param {Boolean} [options.rsv1=false] Specifies whether or not to set the
+		*     RSV1 bit
+		* @param {Function} [cb] Callback
+		* @private
+		*/
+		dispatch(data, compress, options, cb) {
+			if (!compress) {
+				this.sendFrame(Sender.frame(data, options), cb);
+				return;
+			}
+			const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
+			this._bufferedBytes += options[kByteLength];
+			this._state = DEFLATING;
+			perMessageDeflate.compress(data, options.fin, (_, buf) => {
+				if (this._socket.destroyed) {
+					const err = /* @__PURE__ */ new Error("The socket was closed while data was being compressed");
+					callCallbacks(this, err, cb);
+					return;
+				}
+				this._bufferedBytes -= options[kByteLength];
+				this._state = DEFAULT;
+				options.readOnly = false;
+				this.sendFrame(Sender.frame(buf, options), cb);
+				this.dequeue();
+			});
+		}
+		/**
+		* Executes queued send operations.
+		*
+		* @private
+		*/
+		dequeue() {
+			while (this._state === DEFAULT && this._queue.length) {
+				const params = this._queue.shift();
+				this._bufferedBytes -= params[3][kByteLength];
+				Reflect.apply(params[0], this, params.slice(1));
+			}
+		}
+		/**
+		* Enqueues a send operation.
+		*
+		* @param {Array} params Send operation parameters.
+		* @private
+		*/
+		enqueue(params) {
+			this._bufferedBytes += params[3][kByteLength];
+			this._queue.push(params);
+		}
+		/**
+		* Sends a frame.
+		*
+		* @param {(Buffer | String)[]} list The frame to send
+		* @param {Function} [cb] Callback
+		* @private
+		*/
+		sendFrame(list, cb) {
+			if (list.length === 2) {
+				this._socket.cork();
+				this._socket.write(list[0]);
+				this._socket.write(list[1], cb);
+				this._socket.uncork();
+			} else this._socket.write(list[0], cb);
+		}
+	};
+	/**
+	* Calls queued callbacks with an error.
+	*
+	* @param {Sender} sender The `Sender` instance
+	* @param {Error} err The error to call the callbacks with
+	* @param {Function} [cb] The first callback
+	* @private
+	*/
+	function callCallbacks(sender, err, cb) {
+		if (typeof cb === "function") cb(err);
+		for (let i = 0; i < sender._queue.length; i++) {
+			const params = sender._queue[i];
+			const callback = params[params.length - 1];
+			if (typeof callback === "function") callback(err);
+		}
+	}
+	/**
+	* Handles a `Sender` error.
+	*
+	* @param {Sender} sender The `Sender` instance
+	* @param {Error} err The error
+	* @param {Function} [cb] The first pending callback
+	* @private
+	*/
+	function onError(sender, err, cb) {
+		callCallbacks(sender, err, cb);
+		sender.onerror(err);
+	}
+}));
+//#endregion
+//#region node_modules/ws/lib/event-target.js
+var require_event_target = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { kForOnEventAttribute, kListener } = require_constants();
+	var kCode = Symbol("kCode");
+	var kData = Symbol("kData");
+	var kError = Symbol("kError");
+	var kMessage = Symbol("kMessage");
+	var kReason = Symbol("kReason");
+	var kTarget = Symbol("kTarget");
+	var kType = Symbol("kType");
+	var kWasClean = Symbol("kWasClean");
+	/**
+	* Class representing an event.
+	*/
+	var Event = class {
+		/**
+		* Create a new `Event`.
+		*
+		* @param {String} type The name of the event
+		* @throws {TypeError} If the `type` argument is not specified
+		*/
+		constructor(type) {
+			this[kTarget] = null;
+			this[kType] = type;
+		}
+		/**
+		* @type {*}
+		*/
+		get target() {
+			return this[kTarget];
+		}
+		/**
+		* @type {String}
+		*/
+		get type() {
+			return this[kType];
+		}
+	};
+	Object.defineProperty(Event.prototype, "target", { enumerable: true });
+	Object.defineProperty(Event.prototype, "type", { enumerable: true });
+	/**
+	* Class representing a close event.
+	*
+	* @extends Event
+	*/
+	var CloseEvent = class extends Event {
+		/**
+		* Create a new `CloseEvent`.
+		*
+		* @param {String} type The name of the event
+		* @param {Object} [options] A dictionary object that allows for setting
+		*     attributes via object members of the same name
+		* @param {Number} [options.code=0] The status code explaining why the
+		*     connection was closed
+		* @param {String} [options.reason=''] A human-readable string explaining why
+		*     the connection was closed
+		* @param {Boolean} [options.wasClean=false] Indicates whether or not the
+		*     connection was cleanly closed
+		*/
+		constructor(type, options = {}) {
+			super(type);
+			this[kCode] = options.code === void 0 ? 0 : options.code;
+			this[kReason] = options.reason === void 0 ? "" : options.reason;
+			this[kWasClean] = options.wasClean === void 0 ? false : options.wasClean;
+		}
+		/**
+		* @type {Number}
+		*/
+		get code() {
+			return this[kCode];
+		}
+		/**
+		* @type {String}
+		*/
+		get reason() {
+			return this[kReason];
+		}
+		/**
+		* @type {Boolean}
+		*/
+		get wasClean() {
+			return this[kWasClean];
+		}
+	};
+	Object.defineProperty(CloseEvent.prototype, "code", { enumerable: true });
+	Object.defineProperty(CloseEvent.prototype, "reason", { enumerable: true });
+	Object.defineProperty(CloseEvent.prototype, "wasClean", { enumerable: true });
+	/**
+	* Class representing an error event.
+	*
+	* @extends Event
+	*/
+	var ErrorEvent = class extends Event {
+		/**
+		* Create a new `ErrorEvent`.
+		*
+		* @param {String} type The name of the event
+		* @param {Object} [options] A dictionary object that allows for setting
+		*     attributes via object members of the same name
+		* @param {*} [options.error=null] The error that generated this event
+		* @param {String} [options.message=''] The error message
+		*/
+		constructor(type, options = {}) {
+			super(type);
+			this[kError] = options.error === void 0 ? null : options.error;
+			this[kMessage] = options.message === void 0 ? "" : options.message;
+		}
+		/**
+		* @type {*}
+		*/
+		get error() {
+			return this[kError];
+		}
+		/**
+		* @type {String}
+		*/
+		get message() {
+			return this[kMessage];
+		}
+	};
+	Object.defineProperty(ErrorEvent.prototype, "error", { enumerable: true });
+	Object.defineProperty(ErrorEvent.prototype, "message", { enumerable: true });
+	/**
+	* Class representing a message event.
+	*
+	* @extends Event
+	*/
+	var MessageEvent = class extends Event {
+		/**
+		* Create a new `MessageEvent`.
+		*
+		* @param {String} type The name of the event
+		* @param {Object} [options] A dictionary object that allows for setting
+		*     attributes via object members of the same name
+		* @param {*} [options.data=null] The message content
+		*/
+		constructor(type, options = {}) {
+			super(type);
+			this[kData] = options.data === void 0 ? null : options.data;
+		}
+		/**
+		* @type {*}
+		*/
+		get data() {
+			return this[kData];
+		}
+	};
+	Object.defineProperty(MessageEvent.prototype, "data", { enumerable: true });
+	module.exports = {
+		CloseEvent,
+		ErrorEvent,
+		Event,
+		EventTarget: {
+			/**
+			* Register an event listener.
+			*
+			* @param {String} type A string representing the event type to listen for
+			* @param {(Function|Object)} handler The listener to add
+			* @param {Object} [options] An options object specifies characteristics about
+			*     the event listener
+			* @param {Boolean} [options.once=false] A `Boolean` indicating that the
+			*     listener should be invoked at most once after being added. If `true`,
+			*     the listener would be automatically removed when invoked.
+			* @public
+			*/
+			addEventListener(type, handler, options = {}) {
+				for (const listener of this.listeners(type)) if (!options[kForOnEventAttribute] && listener[kListener] === handler && !listener[kForOnEventAttribute]) return;
+				let wrapper;
+				if (type === "message") wrapper = function onMessage(data, isBinary) {
+					const event = new MessageEvent("message", { data: isBinary ? data : data.toString() });
+					event[kTarget] = this;
+					callListener(handler, this, event);
+				};
+				else if (type === "close") wrapper = function onClose(code, message) {
+					const event = new CloseEvent("close", {
+						code,
+						reason: message.toString(),
+						wasClean: this._closeFrameReceived && this._closeFrameSent
+					});
+					event[kTarget] = this;
+					callListener(handler, this, event);
+				};
+				else if (type === "error") wrapper = function onError(error) {
+					const event = new ErrorEvent("error", {
+						error,
+						message: error.message
+					});
+					event[kTarget] = this;
+					callListener(handler, this, event);
+				};
+				else if (type === "open") wrapper = function onOpen() {
+					const event = new Event("open");
+					event[kTarget] = this;
+					callListener(handler, this, event);
+				};
+				else return;
+				wrapper[kForOnEventAttribute] = !!options[kForOnEventAttribute];
+				wrapper[kListener] = handler;
+				if (options.once) this.once(type, wrapper);
+				else this.on(type, wrapper);
+			},
+			/**
+			* Remove an event listener.
+			*
+			* @param {String} type A string representing the event type to remove
+			* @param {(Function|Object)} handler The listener to remove
+			* @public
+			*/
+			removeEventListener(type, handler) {
+				for (const listener of this.listeners(type)) if (listener[kListener] === handler && !listener[kForOnEventAttribute]) {
+					this.removeListener(type, listener);
+					break;
+				}
+			}
+		},
+		MessageEvent
+	};
+	/**
+	* Call an event listener
+	*
+	* @param {(Function|Object)} listener The listener to call
+	* @param {*} thisArg The value to use as `this`` when calling the listener
+	* @param {Event} event The event to pass to the listener
+	* @private
+	*/
+	function callListener(listener, thisArg, event) {
+		if (typeof listener === "object" && listener.handleEvent) listener.handleEvent.call(listener, event);
+		else listener.call(thisArg, event);
+	}
+}));
+//#endregion
+//#region node_modules/ws/lib/extension.js
+var require_extension = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { tokenChars } = require_validation();
+	/**
+	* Adds an offer to the map of extension offers or a parameter to the map of
+	* parameters.
+	*
+	* @param {Object} dest The map of extension offers or parameters
+	* @param {String} name The extension or parameter name
+	* @param {(Object|Boolean|String)} elem The extension parameters or the
+	*     parameter value
+	* @private
+	*/
+	function push(dest, name, elem) {
+		if (dest[name] === void 0) dest[name] = [elem];
+		else dest[name].push(elem);
+	}
+	/**
+	* Parses the `Sec-WebSocket-Extensions` header into an object.
+	*
+	* @param {String} header The field value of the header
+	* @return {Object} The parsed object
+	* @public
+	*/
+	function parse(header) {
+		const offers = Object.create(null);
+		let params = Object.create(null);
+		let mustUnescape = false;
+		let isEscaping = false;
+		let inQuotes = false;
+		let extensionName;
+		let paramName;
+		let start = -1;
+		let code = -1;
+		let end = -1;
+		let i = 0;
+		for (; i < header.length; i++) {
+			code = header.charCodeAt(i);
+			if (extensionName === void 0) {
+				if (end === -1 && tokenChars[code] === 1) {
+					if (start === -1) start = i;
+				} else if (i !== 0 && (code === 32 || code === 9)) {
+					if (end === -1 && start !== -1) end = i;
+				} else if (code === 59 || code === 44) {
+					if (start === -1) throw new SyntaxError(`Unexpected character at index ${i}`);
+					if (end === -1) end = i;
+					const name = header.slice(start, end);
+					if (code === 44) {
+						push(offers, name, params);
+						params = Object.create(null);
+					} else extensionName = name;
+					start = end = -1;
+				} else throw new SyntaxError(`Unexpected character at index ${i}`);
+			} else if (paramName === void 0) {
+				if (end === -1 && tokenChars[code] === 1) {
+					if (start === -1) start = i;
+				} else if (code === 32 || code === 9) {
+					if (end === -1 && start !== -1) end = i;
+				} else if (code === 59 || code === 44) {
+					if (start === -1) throw new SyntaxError(`Unexpected character at index ${i}`);
+					if (end === -1) end = i;
+					push(params, header.slice(start, end), true);
+					if (code === 44) {
+						push(offers, extensionName, params);
+						params = Object.create(null);
+						extensionName = void 0;
+					}
+					start = end = -1;
+				} else if (code === 61 && start !== -1 && end === -1) {
+					paramName = header.slice(start, i);
+					start = end = -1;
+				} else throw new SyntaxError(`Unexpected character at index ${i}`);
+			} else if (isEscaping) {
+				if (tokenChars[code] !== 1) throw new SyntaxError(`Unexpected character at index ${i}`);
+				if (start === -1) start = i;
+				else if (!mustUnescape) mustUnescape = true;
+				isEscaping = false;
+			} else if (inQuotes) {
+				if (tokenChars[code] === 1) {
+					if (start === -1) start = i;
+				} else if (code === 34 && start !== -1) {
+					inQuotes = false;
+					end = i;
+				} else if (code === 92) isEscaping = true;
+				else throw new SyntaxError(`Unexpected character at index ${i}`);
+			} else if (code === 34 && header.charCodeAt(i - 1) === 61) inQuotes = true;
+			else if (end === -1 && tokenChars[code] === 1) {
+				if (start === -1) start = i;
+			} else if (start !== -1 && (code === 32 || code === 9)) {
+				if (end === -1) end = i;
+			} else if (code === 59 || code === 44) {
+				if (start === -1) throw new SyntaxError(`Unexpected character at index ${i}`);
+				if (end === -1) end = i;
+				let value = header.slice(start, end);
+				if (mustUnescape) {
+					value = value.replace(/\\/g, "");
+					mustUnescape = false;
+				}
+				push(params, paramName, value);
+				if (code === 44) {
+					push(offers, extensionName, params);
+					params = Object.create(null);
+					extensionName = void 0;
+				}
+				paramName = void 0;
+				start = end = -1;
+			} else throw new SyntaxError(`Unexpected character at index ${i}`);
+		}
+		if (start === -1 || inQuotes || code === 32 || code === 9) throw new SyntaxError("Unexpected end of input");
+		if (end === -1) end = i;
+		const token = header.slice(start, end);
+		if (extensionName === void 0) push(offers, token, params);
+		else {
+			if (paramName === void 0) push(params, token, true);
+			else if (mustUnescape) push(params, paramName, token.replace(/\\/g, ""));
+			else push(params, paramName, token);
+			push(offers, extensionName, params);
+		}
+		return offers;
+	}
+	/**
+	* Builds the `Sec-WebSocket-Extensions` header field value.
+	*
+	* @param {Object} extensions The map of extensions and parameters to format
+	* @return {String} A string representing the given object
+	* @public
+	*/
+	function format(extensions) {
+		return Object.keys(extensions).map((extension) => {
+			let configurations = extensions[extension];
+			if (!Array.isArray(configurations)) configurations = [configurations];
+			return configurations.map((params) => {
+				return [extension].concat(Object.keys(params).map((k) => {
+					let values = params[k];
+					if (!Array.isArray(values)) values = [values];
+					return values.map((v) => v === true ? k : `${k}=${v}`).join("; ");
+				})).join("; ");
+			}).join(", ");
+		}).join(", ");
+	}
+	module.exports = {
+		format,
+		parse
+	};
+}));
+//#endregion
+//#region node_modules/ws/lib/websocket.js
+var require_websocket = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var EventEmitter$1 = __require("events");
+	var https = __require("https");
+	var http$1 = __require("http");
+	var net = __require("net");
+	var tls = __require("tls");
+	var { randomBytes, createHash: createHash$1 } = __require("crypto");
+	var { Duplex: Duplex$2, Readable } = __require("stream");
+	var { URL: URL$1 } = __require("url");
+	var PerMessageDeflate = require_permessage_deflate();
+	var Receiver = require_receiver();
+	var Sender = require_sender();
+	var { isBlob } = require_validation();
+	var { BINARY_TYPES, CLOSE_TIMEOUT, EMPTY_BUFFER, GUID, kForOnEventAttribute, kListener, kStatusCode, kWebSocket, NOOP } = require_constants();
+	var { EventTarget: { addEventListener, removeEventListener } } = require_event_target();
+	var { format, parse } = require_extension();
+	var { toBuffer } = require_buffer_util();
+	var kAborted = Symbol("kAborted");
+	var protocolVersions = [8, 13];
+	var readyStates = [
+		"CONNECTING",
+		"OPEN",
+		"CLOSING",
+		"CLOSED"
+	];
+	var subprotocolRegex = /^[!#$%&'*+\-.0-9A-Z^_`|a-z~]+$/;
+	/**
+	* Class representing a WebSocket.
+	*
+	* @extends EventEmitter
+	*/
+	var WebSocket = class WebSocket extends EventEmitter$1 {
+		/**
+		* Create a new `WebSocket`.
+		*
+		* @param {(String|URL)} address The URL to which to connect
+		* @param {(String|String[])} [protocols] The subprotocols
+		* @param {Object} [options] Connection options
+		*/
+		constructor(address, protocols, options) {
+			super();
+			this._binaryType = BINARY_TYPES[0];
+			this._closeCode = 1006;
+			this._closeFrameReceived = false;
+			this._closeFrameSent = false;
+			this._closeMessage = EMPTY_BUFFER;
+			this._closeTimer = null;
+			this._errorEmitted = false;
+			this._extensions = {};
+			this._paused = false;
+			this._protocol = "";
+			this._readyState = WebSocket.CONNECTING;
+			this._receiver = null;
+			this._sender = null;
+			this._socket = null;
+			if (address !== null) {
+				this._bufferedAmount = 0;
+				this._isServer = false;
+				this._redirects = 0;
+				if (protocols === void 0) {
+					if (!options || options.protocols === void 0) protocols = [];
+					else if (Array.isArray(options.protocols)) protocols = options.protocols;
+					else protocols = [options.protocols];
+				} else if (!Array.isArray(protocols)) {
+					if (typeof protocols === "object" && protocols !== null) {
+						options = protocols;
+						if (options.protocols === void 0) protocols = [];
+						else if (Array.isArray(options.protocols)) protocols = options.protocols;
+						else protocols = [options.protocols];
+					} else protocols = [protocols];
+				}
+				initAsClient(this, address, protocols, options);
+			} else {
+				this._autoPong = options.autoPong;
+				this._closeTimeout = options.closeTimeout;
+				this._isServer = true;
+			}
+		}
+		/**
+		* For historical reasons, the custom "nodebuffer" type is used by the default
+		* instead of "blob".
+		*
+		* @type {String}
+		*/
+		get binaryType() {
+			return this._binaryType;
+		}
+		set binaryType(type) {
+			if (!BINARY_TYPES.includes(type)) return;
+			this._binaryType = type;
+			if (this._receiver) this._receiver._binaryType = type;
+		}
+		/**
+		* @type {Number}
+		*/
+		get bufferedAmount() {
+			if (!this._socket) return this._bufferedAmount;
+			return this._socket._writableState.length + this._sender._bufferedBytes;
+		}
+		/**
+		* @type {String}
+		*/
+		get extensions() {
+			return Object.keys(this._extensions).join();
+		}
+		/**
+		* @type {Boolean}
+		*/
+		get isPaused() {
+			return this._paused;
+		}
+		/**
+		* @type {Function}
+		*/
+		/* istanbul ignore next */
+		get onclose() {
+			return null;
+		}
+		/**
+		* @type {Function}
+		*/
+		/* istanbul ignore next */
+		get onerror() {
+			return null;
+		}
+		/**
+		* @type {Function}
+		*/
+		/* istanbul ignore next */
+		get onopen() {
+			return null;
+		}
+		/**
+		* @type {Function}
+		*/
+		/* istanbul ignore next */
+		get onmessage() {
+			return null;
+		}
+		/**
+		* @type {String}
+		*/
+		get protocol() {
+			return this._protocol;
+		}
+		/**
+		* @type {Number}
+		*/
+		get readyState() {
+			return this._readyState;
+		}
+		/**
+		* @type {String}
+		*/
+		get url() {
+			return this._url;
+		}
+		/**
+		* Set up the socket and the internal resources.
+		*
+		* @param {Duplex} socket The network socket between the server and client
+		* @param {Buffer} head The first packet of the upgraded stream
+		* @param {Object} options Options object
+		* @param {Boolean} [options.allowSynchronousEvents=false] Specifies whether
+		*     any of the `'message'`, `'ping'`, and `'pong'` events can be emitted
+		*     multiple times in the same tick
+		* @param {Function} [options.generateMask] The function used to generate the
+		*     masking key
+		* @param {Number} [options.maxBufferedChunks=0] The maximum number of
+		*     buffered data chunks
+		* @param {Number} [options.maxFragments=0] The maximum number of message
+		*     fragments
+		* @param {Number} [options.maxPayload=0] The maximum allowed message size
+		* @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
+		*     not to skip UTF-8 validation for text and close messages
+		* @private
+		*/
+		setSocket(socket, head, options) {
+			const receiver = new Receiver({
+				allowSynchronousEvents: options.allowSynchronousEvents,
+				binaryType: this.binaryType,
+				extensions: this._extensions,
+				isServer: this._isServer,
+				maxBufferedChunks: options.maxBufferedChunks,
+				maxFragments: options.maxFragments,
+				maxPayload: options.maxPayload,
+				skipUTF8Validation: options.skipUTF8Validation
+			});
+			const sender = new Sender(socket, this._extensions, options.generateMask);
+			this._receiver = receiver;
+			this._sender = sender;
+			this._socket = socket;
+			receiver[kWebSocket] = this;
+			sender[kWebSocket] = this;
+			socket[kWebSocket] = this;
+			receiver.on("conclude", receiverOnConclude);
+			receiver.on("drain", receiverOnDrain);
+			receiver.on("error", receiverOnError);
+			receiver.on("message", receiverOnMessage);
+			receiver.on("ping", receiverOnPing);
+			receiver.on("pong", receiverOnPong);
+			sender.onerror = senderOnError;
+			if (socket.setTimeout) socket.setTimeout(0);
+			if (socket.setNoDelay) socket.setNoDelay();
+			if (head.length > 0) socket.unshift(head);
+			socket.on("close", socketOnClose);
+			socket.on("data", socketOnData);
+			socket.on("end", socketOnEnd);
+			socket.on("error", socketOnError);
+			this._readyState = WebSocket.OPEN;
+			this.emit("open");
+		}
+		/**
+		* Emit the `'close'` event.
+		*
+		* @private
+		*/
+		emitClose() {
+			if (!this._socket) {
+				this._readyState = WebSocket.CLOSED;
+				this.emit("close", this._closeCode, this._closeMessage);
+				return;
+			}
+			if (this._extensions[PerMessageDeflate.extensionName]) this._extensions[PerMessageDeflate.extensionName].cleanup();
+			this._receiver.removeAllListeners();
+			this._readyState = WebSocket.CLOSED;
+			this.emit("close", this._closeCode, this._closeMessage);
+		}
+		/**
+		* Start a closing handshake.
+		*
+		*          +----------+   +-----------+   +----------+
+		*     - - -|ws.close()|-->|close frame|-->|ws.close()|- - -
+		*    |     +----------+   +-----------+   +----------+     |
+		*          +----------+   +-----------+         |
+		* CLOSING  |ws.close()|<--|close frame|<--+-----+       CLOSING
+		*          +----------+   +-----------+   |
+		*    |           |                        |   +---+        |
+		*                +------------------------+-->|fin| - - - -
+		*    |         +---+                      |   +---+
+		*     - - - - -|fin|<---------------------+
+		*              +---+
+		*
+		* @param {Number} [code] Status code explaining why the connection is closing
+		* @param {(String|Buffer)} [data] The reason why the connection is
+		*     closing
+		* @public
+		*/
+		close(code, data) {
+			if (this.readyState === WebSocket.CLOSED) return;
+			if (this.readyState === WebSocket.CONNECTING) {
+				abortHandshake(this, this._req, "WebSocket was closed before the connection was established");
+				return;
+			}
+			if (this.readyState === WebSocket.CLOSING) {
+				if (this._closeFrameSent && (this._closeFrameReceived || this._receiver._writableState.errorEmitted)) this._socket.end();
+				return;
+			}
+			this._sender.close(code, data, !this._isServer, (err) => {
+				if (err) return;
+				this._closeFrameSent = true;
+				if (this._closeFrameReceived || this._receiver._writableState.errorEmitted) this._socket.end();
+			});
+			this._readyState = WebSocket.CLOSING;
+			setCloseTimer(this);
+		}
+		/**
+		* Pause the socket.
+		*
+		* @public
+		*/
+		pause() {
+			if (this.readyState === WebSocket.CONNECTING || this.readyState === WebSocket.CLOSED) return;
+			this._paused = true;
+			this._socket.pause();
+		}
+		/**
+		* Send a ping.
+		*
+		* @param {*} [data] The data to send
+		* @param {Boolean} [mask] Indicates whether or not to mask `data`
+		* @param {Function} [cb] Callback which is executed when the ping is sent
+		* @public
+		*/
+		ping(data, mask, cb) {
+			if (this.readyState === WebSocket.CONNECTING) throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
+			if (typeof data === "function") {
+				cb = data;
+				data = mask = void 0;
+			} else if (typeof mask === "function") {
+				cb = mask;
+				mask = void 0;
+			}
+			if (typeof data === "number") data = data.toString();
+			if (this.readyState !== WebSocket.OPEN) {
+				sendAfterClose(this, data, cb);
+				return;
+			}
+			if (mask === void 0) mask = !this._isServer;
+			this._sender.ping(data || EMPTY_BUFFER, mask, cb);
+		}
+		/**
+		* Send a pong.
+		*
+		* @param {*} [data] The data to send
+		* @param {Boolean} [mask] Indicates whether or not to mask `data`
+		* @param {Function} [cb] Callback which is executed when the pong is sent
+		* @public
+		*/
+		pong(data, mask, cb) {
+			if (this.readyState === WebSocket.CONNECTING) throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
+			if (typeof data === "function") {
+				cb = data;
+				data = mask = void 0;
+			} else if (typeof mask === "function") {
+				cb = mask;
+				mask = void 0;
+			}
+			if (typeof data === "number") data = data.toString();
+			if (this.readyState !== WebSocket.OPEN) {
+				sendAfterClose(this, data, cb);
+				return;
+			}
+			if (mask === void 0) mask = !this._isServer;
+			this._sender.pong(data || EMPTY_BUFFER, mask, cb);
+		}
+		/**
+		* Resume the socket.
+		*
+		* @public
+		*/
+		resume() {
+			if (this.readyState === WebSocket.CONNECTING || this.readyState === WebSocket.CLOSED) return;
+			this._paused = false;
+			if (!this._receiver._writableState.needDrain) this._socket.resume();
+		}
+		/**
+		* Send a data message.
+		*
+		* @param {*} data The message to send
+		* @param {Object} [options] Options object
+		* @param {Boolean} [options.binary] Specifies whether `data` is binary or
+		*     text
+		* @param {Boolean} [options.compress] Specifies whether or not to compress
+		*     `data`
+		* @param {Boolean} [options.fin=true] Specifies whether the fragment is the
+		*     last one
+		* @param {Boolean} [options.mask] Specifies whether or not to mask `data`
+		* @param {Function} [cb] Callback which is executed when data is written out
+		* @public
+		*/
+		send(data, options, cb) {
+			if (this.readyState === WebSocket.CONNECTING) throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
+			if (typeof options === "function") {
+				cb = options;
+				options = {};
+			}
+			if (typeof data === "number") data = data.toString();
+			if (this.readyState !== WebSocket.OPEN) {
+				sendAfterClose(this, data, cb);
+				return;
+			}
+			const opts = {
+				binary: typeof data !== "string",
+				mask: !this._isServer,
+				compress: true,
+				fin: true,
+				...options
+			};
+			if (!this._extensions[PerMessageDeflate.extensionName]) opts.compress = false;
+			this._sender.send(data || EMPTY_BUFFER, opts, cb);
+		}
+		/**
+		* Forcibly close the connection.
+		*
+		* @public
+		*/
+		terminate() {
+			if (this.readyState === WebSocket.CLOSED) return;
+			if (this.readyState === WebSocket.CONNECTING) {
+				abortHandshake(this, this._req, "WebSocket was closed before the connection was established");
+				return;
+			}
+			if (this._socket) {
+				this._readyState = WebSocket.CLOSING;
+				this._socket.destroy();
+			}
+		}
+	};
+	/**
+	* @constant {Number} CONNECTING
+	* @memberof WebSocket
+	*/
+	Object.defineProperty(WebSocket, "CONNECTING", {
+		enumerable: true,
+		value: readyStates.indexOf("CONNECTING")
+	});
+	/**
+	* @constant {Number} CONNECTING
+	* @memberof WebSocket.prototype
+	*/
+	Object.defineProperty(WebSocket.prototype, "CONNECTING", {
+		enumerable: true,
+		value: readyStates.indexOf("CONNECTING")
+	});
+	/**
+	* @constant {Number} OPEN
+	* @memberof WebSocket
+	*/
+	Object.defineProperty(WebSocket, "OPEN", {
+		enumerable: true,
+		value: readyStates.indexOf("OPEN")
+	});
+	/**
+	* @constant {Number} OPEN
+	* @memberof WebSocket.prototype
+	*/
+	Object.defineProperty(WebSocket.prototype, "OPEN", {
+		enumerable: true,
+		value: readyStates.indexOf("OPEN")
+	});
+	/**
+	* @constant {Number} CLOSING
+	* @memberof WebSocket
+	*/
+	Object.defineProperty(WebSocket, "CLOSING", {
+		enumerable: true,
+		value: readyStates.indexOf("CLOSING")
+	});
+	/**
+	* @constant {Number} CLOSING
+	* @memberof WebSocket.prototype
+	*/
+	Object.defineProperty(WebSocket.prototype, "CLOSING", {
+		enumerable: true,
+		value: readyStates.indexOf("CLOSING")
+	});
+	/**
+	* @constant {Number} CLOSED
+	* @memberof WebSocket
+	*/
+	Object.defineProperty(WebSocket, "CLOSED", {
+		enumerable: true,
+		value: readyStates.indexOf("CLOSED")
+	});
+	/**
+	* @constant {Number} CLOSED
+	* @memberof WebSocket.prototype
+	*/
+	Object.defineProperty(WebSocket.prototype, "CLOSED", {
+		enumerable: true,
+		value: readyStates.indexOf("CLOSED")
+	});
+	[
+		"binaryType",
+		"bufferedAmount",
+		"extensions",
+		"isPaused",
+		"protocol",
+		"readyState",
+		"url"
+	].forEach((property) => {
+		Object.defineProperty(WebSocket.prototype, property, { enumerable: true });
+	});
+	[
+		"open",
+		"error",
+		"close",
+		"message"
+	].forEach((method) => {
+		Object.defineProperty(WebSocket.prototype, `on${method}`, {
+			enumerable: true,
+			get() {
+				for (const listener of this.listeners(method)) if (listener[kForOnEventAttribute]) return listener[kListener];
+				return null;
+			},
+			set(handler) {
+				for (const listener of this.listeners(method)) if (listener[kForOnEventAttribute]) {
+					this.removeListener(method, listener);
+					break;
+				}
+				if (typeof handler !== "function") return;
+				this.addEventListener(method, handler, { [kForOnEventAttribute]: true });
+			}
+		});
+	});
+	WebSocket.prototype.addEventListener = addEventListener;
+	WebSocket.prototype.removeEventListener = removeEventListener;
+	module.exports = WebSocket;
+	/**
+	* Initialize a WebSocket client.
+	*
+	* @param {WebSocket} websocket The client to initialize
+	* @param {(String|URL)} address The URL to which to connect
+	* @param {Array} protocols The subprotocols
+	* @param {Object} [options] Connection options
+	* @param {Boolean} [options.allowSynchronousEvents=true] Specifies whether any
+	*     of the `'message'`, `'ping'`, and `'pong'` events can be emitted multiple
+	*     times in the same tick
+	* @param {Boolean} [options.autoPong=true] Specifies whether or not to
+	*     automatically send a pong in response to a ping
+	* @param {Number} [options.closeTimeout=30000] Duration in milliseconds to wait
+	*     for the closing handshake to finish after `websocket.close()` is called
+	* @param {Function} [options.finishRequest] A function which can be used to
+	*     customize the headers of each http request before it is sent
+	* @param {Boolean} [options.followRedirects=false] Whether or not to follow
+	*     redirects
+	* @param {Function} [options.generateMask] The function used to generate the
+	*     masking key
+	* @param {Number} [options.handshakeTimeout] Timeout in milliseconds for the
+	*     handshake request
+	* @param {Number} [options.maxBufferedChunks=262144] The maximum number of
+	*     buffered data chunks
+	* @param {Number} [options.maxFragments=16384] The maximum number of message
+	*     fragments
+	* @param {Number} [options.maxPayload=104857600] The maximum allowed message
+	*     size
+	* @param {Number} [options.maxRedirects=10] The maximum number of redirects
+	*     allowed
+	* @param {String} [options.origin] Value of the `Origin` or
+	*     `Sec-WebSocket-Origin` header
+	* @param {(Boolean|Object)} [options.perMessageDeflate=true] Enable/disable
+	*     permessage-deflate
+	* @param {Number} [options.protocolVersion=13] Value of the
+	*     `Sec-WebSocket-Version` header
+	* @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
+	*     not to skip UTF-8 validation for text and close messages
+	* @private
+	*/
+	function initAsClient(websocket, address, protocols, options) {
+		const opts = {
+			allowSynchronousEvents: true,
+			autoPong: true,
+			closeTimeout: CLOSE_TIMEOUT,
+			protocolVersion: protocolVersions[1],
+			maxBufferedChunks: 262144,
+			maxFragments: 16384,
+			maxPayload: 104857600,
+			skipUTF8Validation: false,
+			perMessageDeflate: true,
+			followRedirects: false,
+			maxRedirects: 10,
+			...options,
+			socketPath: void 0,
+			hostname: void 0,
+			protocol: void 0,
+			protocols: void 0,
+			timeout: void 0,
+			method: "GET",
+			host: void 0,
+			path: void 0,
+			port: void 0
+		};
+		websocket._autoPong = opts.autoPong;
+		websocket._closeTimeout = opts.closeTimeout;
+		if (!protocolVersions.includes(opts.protocolVersion)) throw new RangeError(`Unsupported protocol version: ${opts.protocolVersion} (supported versions: ${protocolVersions.join(", ")})`);
+		let parsedUrl;
+		if (address instanceof URL$1) parsedUrl = address;
+		else try {
+			parsedUrl = new URL$1(address);
+		} catch {
+			throw new SyntaxError(`Invalid URL: ${address}`);
+		}
+		if (parsedUrl.protocol === "http:") parsedUrl.protocol = "ws:";
+		else if (parsedUrl.protocol === "https:") parsedUrl.protocol = "wss:";
+		websocket._url = parsedUrl.href;
+		const isSecure = parsedUrl.protocol === "wss:";
+		const isIpcUrl = parsedUrl.protocol === "ws+unix:";
+		let invalidUrlMessage;
+		if (parsedUrl.protocol !== "ws:" && !isSecure && !isIpcUrl) invalidUrlMessage = "The URL's protocol must be one of \"ws:\", \"wss:\", \"http:\", \"https:\", or \"ws+unix:\"";
+		else if (isIpcUrl && !parsedUrl.pathname) invalidUrlMessage = "The URL's pathname is empty";
+		else if (parsedUrl.hash) invalidUrlMessage = "The URL contains a fragment identifier";
+		if (invalidUrlMessage) {
+			const err = new SyntaxError(invalidUrlMessage);
+			if (websocket._redirects === 0) throw err;
+			else {
+				emitErrorAndClose(websocket, err);
+				return;
+			}
+		}
+		const defaultPort = isSecure ? 443 : 80;
+		const key = randomBytes(16).toString("base64");
+		const request = isSecure ? https.request : http$1.request;
+		const protocolSet = /* @__PURE__ */ new Set();
+		let perMessageDeflate;
+		opts.createConnection = opts.createConnection || (isSecure ? tlsConnect : netConnect);
+		opts.defaultPort = opts.defaultPort || defaultPort;
+		opts.port = parsedUrl.port || defaultPort;
+		opts.host = parsedUrl.hostname.startsWith("[") ? parsedUrl.hostname.slice(1, -1) : parsedUrl.hostname;
+		opts.headers = {
+			...opts.headers,
+			"Sec-WebSocket-Version": opts.protocolVersion,
+			"Sec-WebSocket-Key": key,
+			Connection: "Upgrade",
+			Upgrade: "websocket"
+		};
+		opts.path = parsedUrl.pathname + parsedUrl.search;
+		opts.timeout = opts.handshakeTimeout;
+		if (opts.perMessageDeflate) {
+			perMessageDeflate = new PerMessageDeflate({
+				...opts.perMessageDeflate,
+				isServer: false,
+				maxPayload: opts.maxPayload
+			});
+			opts.headers["Sec-WebSocket-Extensions"] = format({ [PerMessageDeflate.extensionName]: perMessageDeflate.offer() });
+		}
+		if (protocols.length) {
+			for (const protocol of protocols) {
+				if (typeof protocol !== "string" || !subprotocolRegex.test(protocol) || protocolSet.has(protocol)) throw new SyntaxError("An invalid or duplicated subprotocol was specified");
+				protocolSet.add(protocol);
+			}
+			opts.headers["Sec-WebSocket-Protocol"] = protocols.join(",");
+		}
+		if (opts.origin) {
+			if (opts.protocolVersion < 13) opts.headers["Sec-WebSocket-Origin"] = opts.origin;
+			else opts.headers.Origin = opts.origin;
+		}
+		if (parsedUrl.username || parsedUrl.password) opts.auth = `${parsedUrl.username}:${parsedUrl.password}`;
+		if (isIpcUrl) {
+			const parts = opts.path.split(":");
+			opts.socketPath = parts[0];
+			opts.path = parts[1];
+		}
+		let req;
+		if (opts.followRedirects) {
+			if (websocket._redirects === 0) {
+				websocket._originalIpc = isIpcUrl;
+				websocket._originalSecure = isSecure;
+				websocket._originalHostOrSocketPath = isIpcUrl ? opts.socketPath : parsedUrl.host;
+				const headers = options && options.headers;
+				options = {
+					...options,
+					headers: {}
+				};
+				if (headers) for (const [key, value] of Object.entries(headers)) options.headers[key.toLowerCase()] = value;
+			} else if (websocket.listenerCount("redirect") === 0) {
+				const isSameHost = isIpcUrl ? websocket._originalIpc ? opts.socketPath === websocket._originalHostOrSocketPath : false : websocket._originalIpc ? false : parsedUrl.host === websocket._originalHostOrSocketPath;
+				if (!isSameHost || websocket._originalSecure && !isSecure) {
+					delete opts.headers.authorization;
+					delete opts.headers.cookie;
+					if (!isSameHost) delete opts.headers.host;
+					opts.auth = void 0;
+				}
+			}
+			if (opts.auth && !options.headers.authorization) options.headers.authorization = "Basic " + Buffer.from(opts.auth).toString("base64");
+			req = websocket._req = request(opts);
+			if (websocket._redirects) websocket.emit("redirect", websocket.url, req);
+		} else req = websocket._req = request(opts);
+		if (opts.timeout) req.on("timeout", () => {
+			abortHandshake(websocket, req, "Opening handshake has timed out");
+		});
+		req.on("error", (err) => {
+			if (req === null || req[kAborted]) return;
+			req = websocket._req = null;
+			emitErrorAndClose(websocket, err);
+		});
+		req.on("response", (res) => {
+			const location = res.headers.location;
+			const statusCode = res.statusCode;
+			if (location && opts.followRedirects && statusCode >= 300 && statusCode < 400) {
+				if (++websocket._redirects > opts.maxRedirects) {
+					abortHandshake(websocket, req, "Maximum redirects exceeded");
+					return;
+				}
+				req.abort();
+				let addr;
+				try {
+					addr = new URL$1(location, address);
+				} catch (e) {
+					emitErrorAndClose(websocket, /* @__PURE__ */ new SyntaxError(`Invalid URL: ${location}`));
+					return;
+				}
+				initAsClient(websocket, addr, protocols, options);
+			} else if (!websocket.emit("unexpected-response", req, res)) abortHandshake(websocket, req, `Unexpected server response: ${res.statusCode}`);
+		});
+		req.on("upgrade", (res, socket, head) => {
+			websocket.emit("upgrade", res);
+			if (websocket.readyState !== WebSocket.CONNECTING) return;
+			req = websocket._req = null;
+			const upgrade = res.headers.upgrade;
+			if (upgrade === void 0 || upgrade.toLowerCase() !== "websocket") {
+				abortHandshake(websocket, socket, "Invalid Upgrade header");
+				return;
+			}
+			const digest = createHash$1("sha1").update(key + GUID).digest("base64");
+			if (res.headers["sec-websocket-accept"] !== digest) {
+				abortHandshake(websocket, socket, "Invalid Sec-WebSocket-Accept header");
+				return;
+			}
+			const serverProt = res.headers["sec-websocket-protocol"];
+			let protError;
+			if (serverProt !== void 0) {
+				if (!protocolSet.size) protError = "Server sent a subprotocol but none was requested";
+				else if (!protocolSet.has(serverProt)) protError = "Server sent an invalid subprotocol";
+			} else if (protocolSet.size) protError = "Server sent no subprotocol";
+			if (protError) {
+				abortHandshake(websocket, socket, protError);
+				return;
+			}
+			if (serverProt) websocket._protocol = serverProt;
+			const secWebSocketExtensions = res.headers["sec-websocket-extensions"];
+			if (secWebSocketExtensions !== void 0) {
+				if (!perMessageDeflate) {
+					abortHandshake(websocket, socket, "Server sent a Sec-WebSocket-Extensions header but no extension was requested");
+					return;
+				}
+				let extensions;
+				try {
+					extensions = parse(secWebSocketExtensions);
+				} catch (err) {
+					abortHandshake(websocket, socket, "Invalid Sec-WebSocket-Extensions header");
+					return;
+				}
+				const extensionNames = Object.keys(extensions);
+				if (extensionNames.length !== 1 || extensionNames[0] !== PerMessageDeflate.extensionName) {
+					abortHandshake(websocket, socket, "Server indicated an extension that was not requested");
+					return;
+				}
+				try {
+					perMessageDeflate.accept(extensions[PerMessageDeflate.extensionName]);
+				} catch (err) {
+					abortHandshake(websocket, socket, "Invalid Sec-WebSocket-Extensions header");
+					return;
+				}
+				websocket._extensions[PerMessageDeflate.extensionName] = perMessageDeflate;
+			}
+			websocket.setSocket(socket, head, {
+				allowSynchronousEvents: opts.allowSynchronousEvents,
+				generateMask: opts.generateMask,
+				maxBufferedChunks: opts.maxBufferedChunks,
+				maxFragments: opts.maxFragments,
+				maxPayload: opts.maxPayload,
+				skipUTF8Validation: opts.skipUTF8Validation
+			});
+		});
+		if (opts.finishRequest) opts.finishRequest(req, websocket);
+		else req.end();
+	}
+	/**
+	* Emit the `'error'` and `'close'` events.
+	*
+	* @param {WebSocket} websocket The WebSocket instance
+	* @param {Error} The error to emit
+	* @private
+	*/
+	function emitErrorAndClose(websocket, err) {
+		websocket._readyState = WebSocket.CLOSING;
+		websocket._errorEmitted = true;
+		websocket.emit("error", err);
+		websocket.emitClose();
+	}
+	/**
+	* Create a `net.Socket` and initiate a connection.
+	*
+	* @param {Object} options Connection options
+	* @return {net.Socket} The newly created socket used to start the connection
+	* @private
+	*/
+	function netConnect(options) {
+		options.path = options.socketPath;
+		return net.connect(options);
+	}
+	/**
+	* Create a `tls.TLSSocket` and initiate a connection.
+	*
+	* @param {Object} options Connection options
+	* @return {tls.TLSSocket} The newly created socket used to start the connection
+	* @private
+	*/
+	function tlsConnect(options) {
+		options.path = void 0;
+		if (!options.servername && options.servername !== "") options.servername = net.isIP(options.host) ? "" : options.host;
+		return tls.connect(options);
+	}
+	/**
+	* Abort the handshake and emit an error.
+	*
+	* @param {WebSocket} websocket The WebSocket instance
+	* @param {(http.ClientRequest|net.Socket|tls.Socket)} stream The request to
+	*     abort or the socket to destroy
+	* @param {String} message The error message
+	* @private
+	*/
+	function abortHandshake(websocket, stream, message) {
+		websocket._readyState = WebSocket.CLOSING;
+		const err = new Error(message);
+		Error.captureStackTrace(err, abortHandshake);
+		if (stream.setHeader) {
+			stream[kAborted] = true;
+			stream.abort();
+			if (stream.socket && !stream.socket.destroyed) stream.socket.destroy();
+			process.nextTick(emitErrorAndClose, websocket, err);
+		} else {
+			stream.destroy(err);
+			stream.once("error", websocket.emit.bind(websocket, "error"));
+			stream.once("close", websocket.emitClose.bind(websocket));
+		}
+	}
+	/**
+	* Handle cases where the `ping()`, `pong()`, or `send()` methods are called
+	* when the `readyState` attribute is `CLOSING` or `CLOSED`.
+	*
+	* @param {WebSocket} websocket The WebSocket instance
+	* @param {*} [data] The data to send
+	* @param {Function} [cb] Callback
+	* @private
+	*/
+	function sendAfterClose(websocket, data, cb) {
+		if (data) {
+			const length = isBlob(data) ? data.size : toBuffer(data).length;
+			if (websocket._socket) websocket._sender._bufferedBytes += length;
+			else websocket._bufferedAmount += length;
+		}
+		if (cb) {
+			const err = /* @__PURE__ */ new Error(`WebSocket is not open: readyState ${websocket.readyState} (${readyStates[websocket.readyState]})`);
+			process.nextTick(cb, err);
+		}
+	}
+	/**
+	* The listener of the `Receiver` `'conclude'` event.
+	*
+	* @param {Number} code The status code
+	* @param {Buffer} reason The reason for closing
+	* @private
+	*/
+	function receiverOnConclude(code, reason) {
+		const websocket = this[kWebSocket];
+		websocket._closeFrameReceived = true;
+		websocket._closeMessage = reason;
+		websocket._closeCode = code;
+		if (websocket._socket[kWebSocket] === void 0) return;
+		websocket._socket.removeListener("data", socketOnData);
+		process.nextTick(resume, websocket._socket);
+		if (code === 1005) websocket.close();
+		else websocket.close(code, reason);
+	}
+	/**
+	* The listener of the `Receiver` `'drain'` event.
+	*
+	* @private
+	*/
+	function receiverOnDrain() {
+		const websocket = this[kWebSocket];
+		if (!websocket.isPaused) websocket._socket.resume();
+	}
+	/**
+	* The listener of the `Receiver` `'error'` event.
+	*
+	* @param {(RangeError|Error)} err The emitted error
+	* @private
+	*/
+	function receiverOnError(err) {
+		const websocket = this[kWebSocket];
+		if (websocket._socket[kWebSocket] !== void 0) {
+			websocket._socket.removeListener("data", socketOnData);
+			process.nextTick(resume, websocket._socket);
+			websocket.close(err[kStatusCode]);
+		}
+		if (!websocket._errorEmitted) {
+			websocket._errorEmitted = true;
+			websocket.emit("error", err);
+		}
+	}
+	/**
+	* The listener of the `Receiver` `'finish'` event.
+	*
+	* @private
+	*/
+	function receiverOnFinish() {
+		this[kWebSocket].emitClose();
+	}
+	/**
+	* The listener of the `Receiver` `'message'` event.
+	*
+	* @param {Buffer|ArrayBuffer|Buffer[])} data The message
+	* @param {Boolean} isBinary Specifies whether the message is binary or not
+	* @private
+	*/
+	function receiverOnMessage(data, isBinary) {
+		this[kWebSocket].emit("message", data, isBinary);
+	}
+	/**
+	* The listener of the `Receiver` `'ping'` event.
+	*
+	* @param {Buffer} data The data included in the ping frame
+	* @private
+	*/
+	function receiverOnPing(data) {
+		const websocket = this[kWebSocket];
+		if (websocket._autoPong) websocket.pong(data, !this._isServer, NOOP);
+		websocket.emit("ping", data);
+	}
+	/**
+	* The listener of the `Receiver` `'pong'` event.
+	*
+	* @param {Buffer} data The data included in the pong frame
+	* @private
+	*/
+	function receiverOnPong(data) {
+		this[kWebSocket].emit("pong", data);
+	}
+	/**
+	* Resume a readable stream
+	*
+	* @param {Readable} stream The readable stream
+	* @private
+	*/
+	function resume(stream) {
+		stream.resume();
+	}
+	/**
+	* The `Sender` error event handler.
+	*
+	* @param {Error} The error
+	* @private
+	*/
+	function senderOnError(err) {
+		const websocket = this[kWebSocket];
+		if (websocket.readyState === WebSocket.CLOSED) return;
+		if (websocket.readyState === WebSocket.OPEN) {
+			websocket._readyState = WebSocket.CLOSING;
+			setCloseTimer(websocket);
+		}
+		this._socket.end();
+		if (!websocket._errorEmitted) {
+			websocket._errorEmitted = true;
+			websocket.emit("error", err);
+		}
+	}
+	/**
+	* Set a timer to destroy the underlying raw socket of a WebSocket.
+	*
+	* @param {WebSocket} websocket The WebSocket instance
+	* @private
+	*/
+	function setCloseTimer(websocket) {
+		websocket._closeTimer = setTimeout(websocket._socket.destroy.bind(websocket._socket), websocket._closeTimeout);
+	}
+	/**
+	* The listener of the socket `'close'` event.
+	*
+	* @private
+	*/
+	function socketOnClose() {
+		const websocket = this[kWebSocket];
+		this.removeListener("close", socketOnClose);
+		this.removeListener("data", socketOnData);
+		this.removeListener("end", socketOnEnd);
+		websocket._readyState = WebSocket.CLOSING;
+		if (!this._readableState.endEmitted && !websocket._closeFrameReceived && !websocket._receiver._writableState.errorEmitted && this._readableState.length !== 0) {
+			const chunk = this.read(this._readableState.length);
+			websocket._receiver.write(chunk);
+		}
+		websocket._receiver.end();
+		this[kWebSocket] = void 0;
+		clearTimeout(websocket._closeTimer);
+		if (websocket._receiver._writableState.finished || websocket._receiver._writableState.errorEmitted) websocket.emitClose();
+		else {
+			websocket._receiver.on("error", receiverOnFinish);
+			websocket._receiver.on("finish", receiverOnFinish);
+		}
+	}
+	/**
+	* The listener of the socket `'data'` event.
+	*
+	* @param {Buffer} chunk A chunk of data
+	* @private
+	*/
+	function socketOnData(chunk) {
+		if (!this[kWebSocket]._receiver.write(chunk)) this.pause();
+	}
+	/**
+	* The listener of the socket `'end'` event.
+	*
+	* @private
+	*/
+	function socketOnEnd() {
+		const websocket = this[kWebSocket];
+		websocket._readyState = WebSocket.CLOSING;
+		websocket._receiver.end();
+		this.end();
+	}
+	/**
+	* The listener of the socket `'error'` event.
+	*
+	* @private
+	*/
+	function socketOnError() {
+		const websocket = this[kWebSocket];
+		this.removeListener("error", socketOnError);
+		this.on("error", NOOP);
+		if (websocket) {
+			websocket._readyState = WebSocket.CLOSING;
+			this.destroy();
+		}
+	}
+}));
+//#endregion
+//#region node_modules/ws/lib/stream.js
+var require_stream = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	require_websocket();
+	var { Duplex: Duplex$1 } = __require("stream");
+	/**
+	* Emits the `'close'` event on a stream.
+	*
+	* @param {Duplex} stream The stream.
+	* @private
+	*/
+	function emitClose(stream) {
+		stream.emit("close");
+	}
+	/**
+	* The listener of the `'end'` event.
+	*
+	* @private
+	*/
+	function duplexOnEnd() {
+		if (!this.destroyed && this._writableState.finished) this.destroy();
+	}
+	/**
+	* The listener of the `'error'` event.
+	*
+	* @param {Error} err The error
+	* @private
+	*/
+	function duplexOnError(err) {
+		this.removeListener("error", duplexOnError);
+		this.destroy();
+		if (this.listenerCount("error") === 0) this.emit("error", err);
+	}
+	/**
+	* Wraps a `WebSocket` in a duplex stream.
+	*
+	* @param {WebSocket} ws The `WebSocket` to wrap
+	* @param {Object} [options] The options for the `Duplex` constructor
+	* @return {Duplex} The duplex stream
+	* @public
+	*/
+	function createWebSocketStream(ws, options) {
+		let terminateOnDestroy = true;
+		const duplex = new Duplex$1({
+			...options,
+			autoDestroy: false,
+			emitClose: false,
+			objectMode: false,
+			writableObjectMode: false
+		});
+		ws.on("message", function message(msg, isBinary) {
+			const data = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
+			if (!duplex.push(data)) ws.pause();
+		});
+		ws.once("error", function error(err) {
+			if (duplex.destroyed) return;
+			terminateOnDestroy = false;
+			duplex.destroy(err);
+		});
+		ws.once("close", function close() {
+			if (duplex.destroyed) return;
+			duplex.push(null);
+		});
+		duplex._destroy = function(err, callback) {
+			if (ws.readyState === ws.CLOSED) {
+				callback(err);
+				process.nextTick(emitClose, duplex);
+				return;
+			}
+			let called = false;
+			ws.once("error", function error(err) {
+				called = true;
+				callback(err);
+			});
+			ws.once("close", function close() {
+				if (!called) callback(err);
+				process.nextTick(emitClose, duplex);
+			});
+			if (terminateOnDestroy) ws.terminate();
+		};
+		duplex._final = function(callback) {
+			if (ws.readyState === ws.CONNECTING) {
+				ws.once("open", function open() {
+					duplex._final(callback);
+				});
+				return;
+			}
+			if (ws._socket === null) return;
+			if (ws._socket._writableState.finished) {
+				callback();
+				if (duplex._readableState.endEmitted) duplex.destroy();
+			} else {
+				ws._socket.once("finish", function finish() {
+					callback();
+				});
+				ws.close();
+			}
+		};
+		duplex._read = function() {
+			if (ws.isPaused) ws.resume();
+		};
+		duplex._write = function(chunk, encoding, callback) {
+			if (ws.readyState === ws.CONNECTING) {
+				ws.once("open", function open() {
+					duplex._write(chunk, encoding, callback);
+				});
+				return;
+			}
+			ws.send(chunk, callback);
+		};
+		duplex.on("end", duplexOnEnd);
+		duplex.on("error", duplexOnError);
+		return duplex;
+	}
+	module.exports = createWebSocketStream;
+}));
+//#endregion
+//#region node_modules/ws/lib/subprotocol.js
+var require_subprotocol = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var { tokenChars } = require_validation();
+	/**
+	* Parses the `Sec-WebSocket-Protocol` header into a set of subprotocol names.
+	*
+	* @param {String} header The field value of the header
+	* @return {Set} The subprotocol names
+	* @public
+	*/
+	function parse(header) {
+		const protocols = /* @__PURE__ */ new Set();
+		let start = -1;
+		let end = -1;
+		let i = 0;
+		for (; i < header.length; i++) {
+			const code = header.charCodeAt(i);
+			if (end === -1 && tokenChars[code] === 1) {
+				if (start === -1) start = i;
+			} else if (i !== 0 && (code === 32 || code === 9)) {
+				if (end === -1 && start !== -1) end = i;
+			} else if (code === 44) {
+				if (start === -1) throw new SyntaxError(`Unexpected character at index ${i}`);
+				if (end === -1) end = i;
+				const protocol = header.slice(start, end);
+				if (protocols.has(protocol)) throw new SyntaxError(`The "${protocol}" subprotocol is duplicated`);
+				protocols.add(protocol);
+				start = end = -1;
+			} else throw new SyntaxError(`Unexpected character at index ${i}`);
+		}
+		if (start === -1 || end !== -1) throw new SyntaxError("Unexpected end of input");
+		const protocol = header.slice(start, i);
+		if (protocols.has(protocol)) throw new SyntaxError(`The "${protocol}" subprotocol is duplicated`);
+		protocols.add(protocol);
+		return protocols;
+	}
+	module.exports = { parse };
+}));
+//#endregion
+//#region node_modules/ws/lib/websocket-server.js
+var require_websocket_server = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var EventEmitter = __require("events");
+	var http = __require("http");
+	var { Duplex } = __require("stream");
+	var { createHash } = __require("crypto");
+	var extension = require_extension();
+	var PerMessageDeflate = require_permessage_deflate();
+	var subprotocol = require_subprotocol();
+	var WebSocket = require_websocket();
+	var { CLOSE_TIMEOUT, GUID, kWebSocket } = require_constants();
+	var keyRegex = /^[+/0-9A-Za-z]{22}==$/;
+	var RUNNING = 0;
+	var CLOSING = 1;
+	var CLOSED = 2;
+	/**
+	* Class representing a WebSocket server.
+	*
+	* @extends EventEmitter
+	*/
+	var WebSocketServer = class extends EventEmitter {
+		/**
+		* Create a `WebSocketServer` instance.
+		*
+		* @param {Object} options Configuration options
+		* @param {Boolean} [options.allowSynchronousEvents=true] Specifies whether
+		*     any of the `'message'`, `'ping'`, and `'pong'` events can be emitted
+		*     multiple times in the same tick
+		* @param {Boolean} [options.autoPong=true] Specifies whether or not to
+		*     automatically send a pong in response to a ping
+		* @param {Number} [options.backlog=511] The maximum length of the queue of
+		*     pending connections
+		* @param {Boolean} [options.clientTracking=true] Specifies whether or not to
+		*     track clients
+		* @param {Number} [options.closeTimeout=30000] Duration in milliseconds to
+		*     wait for the closing handshake to finish after `websocket.close()` is
+		*     called
+		* @param {Function} [options.handleProtocols] A hook to handle protocols
+		* @param {String} [options.host] The hostname where to bind the server
+		* @param {Number} [options.maxBufferedChunks=262144] The maximum number of
+		*     buffered data chunks
+		* @param {Number} [options.maxFragments=16384] The maximum number of message
+		*     fragments
+		* @param {Number} [options.maxPayload=104857600] The maximum allowed message
+		*     size
+		* @param {Boolean} [options.noServer=false] Enable no server mode
+		* @param {String} [options.path] Accept only connections matching this path
+		* @param {(Boolean|Object)} [options.perMessageDeflate=false] Enable/disable
+		*     permessage-deflate
+		* @param {Number} [options.port] The port where to bind the server
+		* @param {(http.Server|https.Server)} [options.server] A pre-created HTTP/S
+		*     server to use
+		* @param {Boolean} [options.skipUTF8Validation=false] Specifies whether or
+		*     not to skip UTF-8 validation for text and close messages
+		* @param {Function} [options.verifyClient] A hook to reject connections
+		* @param {Function} [options.WebSocket=WebSocket] Specifies the `WebSocket`
+		*     class to use. It must be the `WebSocket` class or class that extends it
+		* @param {Function} [callback] A listener for the `listening` event
+		*/
+		constructor(options, callback) {
+			super();
+			options = {
+				allowSynchronousEvents: true,
+				autoPong: true,
+				maxBufferedChunks: 262144,
+				maxFragments: 16384,
+				maxPayload: 104857600,
+				skipUTF8Validation: false,
+				perMessageDeflate: false,
+				handleProtocols: null,
+				clientTracking: true,
+				closeTimeout: CLOSE_TIMEOUT,
+				verifyClient: null,
+				noServer: false,
+				backlog: null,
+				server: null,
+				host: null,
+				path: null,
+				port: null,
+				WebSocket,
+				...options
+			};
+			if (options.port == null && !options.server && !options.noServer || options.port != null && (options.server || options.noServer) || options.server && options.noServer) throw new TypeError("One and only one of the \"port\", \"server\", or \"noServer\" options must be specified");
+			if (options.port != null) {
+				this._server = http.createServer((req, res) => {
+					const body = http.STATUS_CODES[426];
+					res.writeHead(426, {
+						"Content-Length": body.length,
+						"Content-Type": "text/plain"
+					});
+					res.end(body);
+				});
+				this._server.listen(options.port, options.host, options.backlog, callback);
+			} else if (options.server) this._server = options.server;
+			if (this._server) {
+				const emitConnection = this.emit.bind(this, "connection");
+				this._removeListeners = addListeners(this._server, {
+					listening: this.emit.bind(this, "listening"),
+					error: this.emit.bind(this, "error"),
+					upgrade: (req, socket, head) => {
+						this.handleUpgrade(req, socket, head, emitConnection);
+					}
+				});
+			}
+			if (options.perMessageDeflate === true) options.perMessageDeflate = {};
+			if (options.clientTracking) {
+				this.clients = /* @__PURE__ */ new Set();
+				this._shouldEmitClose = false;
+			}
+			this.options = options;
+			this._state = RUNNING;
+		}
+		/**
+		* Returns the bound address, the address family name, and port of the server
+		* as reported by the operating system if listening on an IP socket.
+		* If the server is listening on a pipe or UNIX domain socket, the name is
+		* returned as a string.
+		*
+		* @return {(Object|String|null)} The address of the server
+		* @public
+		*/
+		address() {
+			if (this.options.noServer) throw new Error("The server is operating in \"noServer\" mode");
+			if (!this._server) return null;
+			return this._server.address();
+		}
+		/**
+		* Stop the server from accepting new connections and emit the `'close'` event
+		* when all existing connections are closed.
+		*
+		* @param {Function} [cb] A one-time listener for the `'close'` event
+		* @public
+		*/
+		close(cb) {
+			if (this._state === CLOSED) {
+				if (cb) this.once("close", () => {
+					cb(/* @__PURE__ */ new Error("The server is not running"));
+				});
+				process.nextTick(emitClose, this);
+				return;
+			}
+			if (cb) this.once("close", cb);
+			if (this._state === CLOSING) return;
+			this._state = CLOSING;
+			if (this.options.noServer || this.options.server) {
+				if (this._server) {
+					this._removeListeners();
+					this._removeListeners = this._server = null;
+				}
+				if (this.clients) {
+					if (!this.clients.size) process.nextTick(emitClose, this);
+					else this._shouldEmitClose = true;
+				} else process.nextTick(emitClose, this);
+			} else {
+				const server = this._server;
+				this._removeListeners();
+				this._removeListeners = this._server = null;
+				server.close(() => {
+					emitClose(this);
+				});
+			}
+		}
+		/**
+		* See if a given request should be handled by this server instance.
+		*
+		* @param {http.IncomingMessage} req Request object to inspect
+		* @return {Boolean} `true` if the request is valid, else `false`
+		* @public
+		*/
+		shouldHandle(req) {
+			if (this.options.path) {
+				const index = req.url.indexOf("?");
+				if ((index !== -1 ? req.url.slice(0, index) : req.url) !== this.options.path) return false;
+			}
+			return true;
+		}
+		/**
+		* Handle a HTTP Upgrade request.
+		*
+		* @param {http.IncomingMessage} req The request object
+		* @param {Duplex} socket The network socket between the server and client
+		* @param {Buffer} head The first packet of the upgraded stream
+		* @param {Function} cb Callback
+		* @public
+		*/
+		handleUpgrade(req, socket, head, cb) {
+			socket.on("error", socketOnError);
+			const key = req.headers["sec-websocket-key"];
+			const upgrade = req.headers.upgrade;
+			const version = +req.headers["sec-websocket-version"];
+			if (req.method !== "GET") {
+				abortHandshakeOrEmitwsClientError(this, req, socket, 405, "Invalid HTTP method");
+				return;
+			}
+			if (upgrade === void 0 || upgrade.toLowerCase() !== "websocket") {
+				abortHandshakeOrEmitwsClientError(this, req, socket, 400, "Invalid Upgrade header");
+				return;
+			}
+			if (key === void 0 || !keyRegex.test(key)) {
+				abortHandshakeOrEmitwsClientError(this, req, socket, 400, "Missing or invalid Sec-WebSocket-Key header");
+				return;
+			}
+			if (version !== 13 && version !== 8) {
+				abortHandshakeOrEmitwsClientError(this, req, socket, 400, "Missing or invalid Sec-WebSocket-Version header", { "Sec-WebSocket-Version": "13, 8" });
+				return;
+			}
+			if (!this.shouldHandle(req)) {
+				abortHandshake(socket, 400);
+				return;
+			}
+			const secWebSocketProtocol = req.headers["sec-websocket-protocol"];
+			let protocols = /* @__PURE__ */ new Set();
+			if (secWebSocketProtocol !== void 0) try {
+				protocols = subprotocol.parse(secWebSocketProtocol);
+			} catch (err) {
+				abortHandshakeOrEmitwsClientError(this, req, socket, 400, "Invalid Sec-WebSocket-Protocol header");
+				return;
+			}
+			const secWebSocketExtensions = req.headers["sec-websocket-extensions"];
+			const extensions = {};
+			if (this.options.perMessageDeflate && secWebSocketExtensions !== void 0) {
+				const perMessageDeflate = new PerMessageDeflate({
+					...this.options.perMessageDeflate,
+					isServer: true,
+					maxPayload: this.options.maxPayload
+				});
+				try {
+					const offers = extension.parse(secWebSocketExtensions);
+					if (offers[PerMessageDeflate.extensionName]) {
+						perMessageDeflate.accept(offers[PerMessageDeflate.extensionName]);
+						extensions[PerMessageDeflate.extensionName] = perMessageDeflate;
+					}
+				} catch (err) {
+					abortHandshakeOrEmitwsClientError(this, req, socket, 400, "Invalid or unacceptable Sec-WebSocket-Extensions header");
+					return;
+				}
+			}
+			if (this.options.verifyClient) {
+				const info = {
+					origin: req.headers[`${version === 8 ? "sec-websocket-origin" : "origin"}`],
+					secure: !!(req.socket.authorized || req.socket.encrypted),
+					req
+				};
+				if (this.options.verifyClient.length === 2) {
+					this.options.verifyClient(info, (verified, code, message, headers) => {
+						if (!verified) return abortHandshake(socket, code || 401, message, headers);
+						this.completeUpgrade(extensions, key, protocols, req, socket, head, cb);
+					});
+					return;
+				}
+				if (!this.options.verifyClient(info)) return abortHandshake(socket, 401);
+			}
+			this.completeUpgrade(extensions, key, protocols, req, socket, head, cb);
+		}
+		/**
+		* Upgrade the connection to WebSocket.
+		*
+		* @param {Object} extensions The accepted extensions
+		* @param {String} key The value of the `Sec-WebSocket-Key` header
+		* @param {Set} protocols The subprotocols
+		* @param {http.IncomingMessage} req The request object
+		* @param {Duplex} socket The network socket between the server and client
+		* @param {Buffer} head The first packet of the upgraded stream
+		* @param {Function} cb Callback
+		* @throws {Error} If called more than once with the same socket
+		* @private
+		*/
+		completeUpgrade(extensions, key, protocols, req, socket, head, cb) {
+			if (!socket.readable || !socket.writable) return socket.destroy();
+			if (socket[kWebSocket]) throw new Error("server.handleUpgrade() was called more than once with the same socket, possibly due to a misconfiguration");
+			if (this._state > RUNNING) return abortHandshake(socket, 503);
+			const headers = [
+				"HTTP/1.1 101 Switching Protocols",
+				"Upgrade: websocket",
+				"Connection: Upgrade",
+				`Sec-WebSocket-Accept: ${createHash("sha1").update(key + GUID).digest("base64")}`
+			];
+			const ws = new this.options.WebSocket(null, void 0, this.options);
+			if (protocols.size) {
+				const protocol = this.options.handleProtocols ? this.options.handleProtocols(protocols, req) : protocols.values().next().value;
+				if (protocol) {
+					headers.push(`Sec-WebSocket-Protocol: ${protocol}`);
+					ws._protocol = protocol;
+				}
+			}
+			if (extensions[PerMessageDeflate.extensionName]) {
+				const params = extensions[PerMessageDeflate.extensionName].params;
+				const value = extension.format({ [PerMessageDeflate.extensionName]: [params] });
+				headers.push(`Sec-WebSocket-Extensions: ${value}`);
+				ws._extensions = extensions;
+			}
+			this.emit("headers", headers, req);
+			socket.write(headers.concat("\r\n").join("\r\n"));
+			socket.removeListener("error", socketOnError);
+			ws.setSocket(socket, head, {
+				allowSynchronousEvents: this.options.allowSynchronousEvents,
+				maxBufferedChunks: this.options.maxBufferedChunks,
+				maxFragments: this.options.maxFragments,
+				maxPayload: this.options.maxPayload,
+				skipUTF8Validation: this.options.skipUTF8Validation
+			});
+			if (this.clients) {
+				this.clients.add(ws);
+				ws.on("close", () => {
+					this.clients.delete(ws);
+					if (this._shouldEmitClose && !this.clients.size) process.nextTick(emitClose, this);
+				});
+			}
+			cb(ws, req);
+		}
+	};
+	module.exports = WebSocketServer;
+	/**
+	* Add event listeners on an `EventEmitter` using a map of <event, listener>
+	* pairs.
+	*
+	* @param {EventEmitter} server The event emitter
+	* @param {Object.<String, Function>} map The listeners to add
+	* @return {Function} A function that will remove the added listeners when
+	*     called
+	* @private
+	*/
+	function addListeners(server, map) {
+		for (const event of Object.keys(map)) server.on(event, map[event]);
+		return function removeListeners() {
+			for (const event of Object.keys(map)) server.removeListener(event, map[event]);
+		};
+	}
+	/**
+	* Emit a `'close'` event on an `EventEmitter`.
+	*
+	* @param {EventEmitter} server The event emitter
+	* @private
+	*/
+	function emitClose(server) {
+		server._state = CLOSED;
+		server.emit("close");
+	}
+	/**
+	* Handle socket errors.
+	*
+	* @private
+	*/
+	function socketOnError() {
+		this.destroy();
+	}
+	/**
+	* Close the connection when preconditions are not fulfilled.
+	*
+	* @param {Duplex} socket The socket of the upgrade request
+	* @param {Number} code The HTTP response status code
+	* @param {String} [message] The HTTP response body
+	* @param {Object} [headers] Additional HTTP response headers
+	* @private
+	*/
+	function abortHandshake(socket, code, message, headers) {
+		message = message || http.STATUS_CODES[code];
+		headers = {
+			Connection: "close",
+			"Content-Type": "text/html",
+			"Content-Length": Buffer.byteLength(message),
+			...headers
+		};
+		socket.once("finish", socket.destroy);
+		socket.end(`HTTP/1.1 ${code} ${http.STATUS_CODES[code]}\r\n` + Object.keys(headers).map((h) => `${h}: ${headers[h]}`).join("\r\n") + "\r\n\r\n" + message);
+	}
+	/**
+	* Emit a `'wsClientError'` event on a `WebSocketServer` if there is at least
+	* one listener for it, otherwise call `abortHandshake()`.
+	*
+	* @param {WebSocketServer} server The WebSocket server
+	* @param {http.IncomingMessage} req The request object
+	* @param {Duplex} socket The socket of the upgrade request
+	* @param {Number} code The HTTP response status code
+	* @param {String} message The HTTP response body
+	* @param {Object} [headers] The HTTP response headers
+	* @private
+	*/
+	function abortHandshakeOrEmitwsClientError(server, req, socket, code, message, headers) {
+		if (server.listenerCount("wsClientError")) {
+			const err = new Error(message);
+			Error.captureStackTrace(err, abortHandshakeOrEmitwsClientError);
+			server.emit("wsClientError", err, socket, req);
+		} else abortHandshake(socket, code, message, headers);
+	}
+}));
+require_stream();
+require_extension();
+require_permessage_deflate();
+require_receiver();
+require_sender();
+require_subprotocol();
+var import_websocket = /* @__PURE__ */ __toESM(require_websocket(), 1);
+require_websocket_server();
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/client.js
+/** A client for the Hrana protocol (a "database connection pool"). */
+var Client = class {
+	/** @private */
+	constructor() {
+		this.intMode = "number";
+	}
+	/** Representation of integers returned from the database. See {@link IntMode}.
+	*
+	* This value is inherited by {@link Stream} objects created with {@link openStream}, but you can
+	* override the integer mode for every stream by setting {@link Stream.intMode} on the stream.
+	*/
+	intMode;
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/errors.js
+/** Generic error produced by the Hrana client. */
+var ClientError = class extends Error {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "ClientError";
+	}
+};
+/** Error thrown when the server violates the protocol. */
+var ProtoError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "ProtoError";
+	}
+};
+/** Error thrown when the server returns an error response. */
+var ResponseError = class extends ClientError {
+	code;
+	/** @internal */
+	proto;
+	/** @private */
+	constructor(message, protoError) {
+		super(message);
+		this.name = "ResponseError";
+		this.code = protoError.code;
+		this.proto = protoError;
+		this.stack = void 0;
+	}
+};
+/** Error thrown when the client or stream is closed. */
+var ClosedError = class extends ClientError {
+	/** @private */
+	constructor(message, cause) {
+		if (cause !== void 0) {
+			super(`${message}: ${cause}`);
+			this.cause = cause;
+		} else super(message);
+		this.name = "ClosedError";
+	}
+};
+/** Error thrown when the environment does not seem to support WebSockets. */
+var WebSocketUnsupportedError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "WebSocketUnsupportedError";
+	}
+};
+/** Error thrown when we encounter a WebSocket error. */
+var WebSocketError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "WebSocketError";
+	}
+};
+/** Error thrown when the HTTP server returns an error response. */
+var HttpServerError = class extends ClientError {
+	status;
+	/** @private */
+	constructor(message, status) {
+		super(message);
+		this.status = status;
+		this.name = "HttpServerError";
+	}
+};
+/** Error thrown when the protocol version is too low to support a feature. */
+var ProtocolVersionError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "ProtocolVersionError";
+	}
+};
+/** Error thrown when an internal client error happens. */
+var InternalError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "InternalError";
+	}
+};
+/** Error thrown when the API is misused. */
+var MisuseError = class extends ClientError {
+	/** @private */
+	constructor(message) {
+		super(message);
+		this.name = "MisuseError";
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/encoding/json/decode.js
+function string(value) {
+	if (typeof value === "string") return value;
+	throw typeError(value, "string");
+}
+function stringOpt(value) {
+	if (value === null || value === void 0) return;
+	else if (typeof value === "string") return value;
+	throw typeError(value, "string or null");
+}
+function number(value) {
+	if (typeof value === "number") return value;
+	throw typeError(value, "number");
+}
+function boolean(value) {
+	if (typeof value === "boolean") return value;
+	throw typeError(value, "boolean");
+}
+function array(value) {
+	if (Array.isArray(value)) return value;
+	throw typeError(value, "array");
+}
+function object(value) {
+	if (value !== null && typeof value === "object" && !Array.isArray(value)) return value;
+	throw typeError(value, "object");
+}
+function arrayObjectsMap(value, fun) {
+	return array(value).map((elemValue) => fun(object(elemValue)));
+}
+function typeError(value, expected) {
+	if (value === void 0) return new ProtoError(`Expected ${expected}, but the property was missing`);
+	let received = typeof value;
+	if (value === null) received = "null";
+	else if (Array.isArray(value)) received = "array";
+	return new ProtoError(`Expected ${expected}, received ${received}`);
+}
+function readJsonObject(value, fun) {
+	return fun(object(value));
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/encoding/json/encode.js
+var ObjectWriter = class {
+	#output;
+	#isFirst;
+	constructor(output) {
+		this.#output = output;
+		this.#isFirst = false;
+	}
+	begin() {
+		this.#output.push("{");
+		this.#isFirst = true;
+	}
+	end() {
+		this.#output.push("}");
+		this.#isFirst = false;
+	}
+	#key(name) {
+		if (this.#isFirst) {
+			this.#output.push("\"");
+			this.#isFirst = false;
+		} else this.#output.push(",\"");
+		this.#output.push(name);
+		this.#output.push("\":");
+	}
+	string(name, value) {
+		this.#key(name);
+		this.#output.push(JSON.stringify(value));
+	}
+	stringRaw(name, value) {
+		this.#key(name);
+		this.#output.push("\"");
+		this.#output.push(value);
+		this.#output.push("\"");
+	}
+	number(name, value) {
+		this.#key(name);
+		this.#output.push("" + value);
+	}
+	boolean(name, value) {
+		this.#key(name);
+		this.#output.push(value ? "true" : "false");
+	}
+	object(name, value, valueFun) {
+		this.#key(name);
+		this.begin();
+		valueFun(this, value);
+		this.end();
+	}
+	arrayObjects(name, values, valueFun) {
+		this.#key(name);
+		this.#output.push("[");
+		for (let i = 0; i < values.length; ++i) {
+			if (i !== 0) this.#output.push(",");
+			this.begin();
+			valueFun(this, values[i]);
+			this.end();
+		}
+		this.#output.push("]");
+	}
+};
+function writeJsonObject(value, fun) {
+	const output = [];
+	const writer = new ObjectWriter(output);
+	writer.begin();
+	fun(writer, value);
+	writer.end();
+	return output.join("");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/decode.js
+var MessageReader = class {
+	#array;
+	#view;
+	#pos;
+	constructor(array) {
+		this.#array = array;
+		this.#view = new DataView(array.buffer, array.byteOffset, array.byteLength);
+		this.#pos = 0;
+	}
+	varint() {
+		let value = 0;
+		for (let shift = 0;; shift += 7) {
+			const byte = this.#array[this.#pos++];
+			value |= (byte & 127) << shift;
+			if (!(byte & 128)) break;
+		}
+		return value;
+	}
+	varintBig() {
+		let value = 0n;
+		for (let shift = 0n;; shift += 7n) {
+			const byte = this.#array[this.#pos++];
+			value |= BigInt(byte & 127) << shift;
+			if (!(byte & 128)) break;
+		}
+		return value;
+	}
+	bytes(length) {
+		const array = new Uint8Array(this.#array.buffer, this.#array.byteOffset + this.#pos, length);
+		this.#pos += length;
+		return array;
+	}
+	double() {
+		const value = this.#view.getFloat64(this.#pos, true);
+		this.#pos += 8;
+		return value;
+	}
+	skipVarint() {
+		for (;;) if (!(this.#array[this.#pos++] & 128)) break;
+	}
+	skip(count) {
+		this.#pos += count;
+	}
+	eof() {
+		return this.#pos >= this.#array.byteLength;
+	}
+};
+var FieldReader = class {
+	#reader;
+	#wireType;
+	constructor(reader) {
+		this.#reader = reader;
+		this.#wireType = -1;
+	}
+	setup(wireType) {
+		this.#wireType = wireType;
+	}
+	#expect(expectedWireType) {
+		if (this.#wireType !== expectedWireType) throw new ProtoError(`Expected wire type ${expectedWireType}, got ${this.#wireType}`);
+		this.#wireType = -1;
+	}
+	bytes() {
+		this.#expect(2);
+		const length = this.#reader.varint();
+		return this.#reader.bytes(length);
+	}
+	string() {
+		return new TextDecoder().decode(this.bytes());
+	}
+	message(def) {
+		return readProtobufMessage(this.bytes(), def);
+	}
+	int32() {
+		this.#expect(0);
+		return this.#reader.varint();
+	}
+	uint32() {
+		return this.int32();
+	}
+	bool() {
+		return this.int32() !== 0;
+	}
+	uint64() {
+		this.#expect(0);
+		return this.#reader.varintBig();
+	}
+	sint64() {
+		const value = this.uint64();
+		return value >> 1n ^ -(value & 1n);
+	}
+	double() {
+		this.#expect(1);
+		return this.#reader.double();
+	}
+	maybeSkip() {
+		if (this.#wireType < 0) return;
+		else if (this.#wireType === 0) this.#reader.skipVarint();
+		else if (this.#wireType === 1) this.#reader.skip(8);
+		else if (this.#wireType === 2) {
+			const length = this.#reader.varint();
+			this.#reader.skip(length);
+		} else if (this.#wireType === 5) this.#reader.skip(4);
+		else throw new ProtoError(`Unexpected wire type ${this.#wireType}`);
+		this.#wireType = -1;
+	}
+};
+function readProtobufMessage(data, def) {
+	const msgReader = new MessageReader(data);
+	const fieldReader = new FieldReader(msgReader);
+	let value = def.default();
+	while (!msgReader.eof()) {
+		const key = msgReader.varint();
+		const tag = key >> 3;
+		const wireType = key & 7;
+		fieldReader.setup(wireType);
+		const tagFun = def[tag];
+		if (tagFun !== void 0) {
+			const returnedValue = tagFun(fieldReader, value);
+			if (returnedValue !== void 0) value = returnedValue;
+		}
+		fieldReader.maybeSkip();
+	}
+	return value;
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/encode.js
+var MessageWriter = class MessageWriter {
+	#buf;
+	#array;
+	#view;
+	#pos;
+	constructor() {
+		this.#buf = /* @__PURE__ */ new ArrayBuffer(256);
+		this.#array = new Uint8Array(this.#buf);
+		this.#view = new DataView(this.#buf);
+		this.#pos = 0;
+	}
+	#ensure(extra) {
+		if (this.#pos + extra <= this.#buf.byteLength) return;
+		let newCap = this.#buf.byteLength;
+		while (newCap < this.#pos + extra) newCap *= 2;
+		const newBuf = new ArrayBuffer(newCap);
+		const newArray = new Uint8Array(newBuf);
+		const newView = new DataView(newBuf);
+		newArray.set(new Uint8Array(this.#buf, 0, this.#pos));
+		this.#buf = newBuf;
+		this.#array = newArray;
+		this.#view = newView;
+	}
+	#varint(value) {
+		this.#ensure(5);
+		value = 0 | value;
+		do {
+			let byte = value & 127;
+			value >>>= 7;
+			byte |= value ? 128 : 0;
+			this.#array[this.#pos++] = byte;
+		} while (value);
+	}
+	#varintBig(value) {
+		this.#ensure(10);
+		value = value & 18446744073709551615n;
+		do {
+			let byte = Number(value & 127n);
+			value >>= 7n;
+			byte |= value ? 128 : 0;
+			this.#array[this.#pos++] = byte;
+		} while (value);
+	}
+	#tag(tag, wireType) {
+		this.#varint(tag << 3 | wireType);
+	}
+	bytes(tag, value) {
+		this.#tag(tag, 2);
+		this.#varint(value.byteLength);
+		this.#ensure(value.byteLength);
+		this.#array.set(value, this.#pos);
+		this.#pos += value.byteLength;
+	}
+	string(tag, value) {
+		this.bytes(tag, new TextEncoder().encode(value));
+	}
+	message(tag, value, fun) {
+		const writer = new MessageWriter();
+		fun(writer, value);
+		this.bytes(tag, writer.data());
+	}
+	int32(tag, value) {
+		this.#tag(tag, 0);
+		this.#varint(value);
+	}
+	uint32(tag, value) {
+		this.int32(tag, value);
+	}
+	bool(tag, value) {
+		this.int32(tag, value ? 1 : 0);
+	}
+	sint64(tag, value) {
+		this.#tag(tag, 0);
+		this.#varintBig(value << 1n ^ value >> 63n);
+	}
+	double(tag, value) {
+		this.#tag(tag, 1);
+		this.#ensure(8);
+		this.#view.setFloat64(this.#pos, value, true);
+		this.#pos += 8;
+	}
+	data() {
+		return new Uint8Array(this.#buf, 0, this.#pos);
+	}
+};
+function writeProtobufMessage(value, fun) {
+	const w = new MessageWriter();
+	fun(w, value);
+	return w.data();
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/id_alloc.js
+var IdAlloc = class {
+	#usedIds;
+	#freeIds;
+	constructor() {
+		this.#usedIds = /* @__PURE__ */ new Set();
+		this.#freeIds = /* @__PURE__ */ new Set();
+	}
+	alloc() {
+		for (const freeId of this.#freeIds) {
+			this.#freeIds.delete(freeId);
+			this.#usedIds.add(freeId);
+			if (!this.#usedIds.has(this.#usedIds.size - 1)) this.#freeIds.add(this.#usedIds.size - 1);
+			return freeId;
+		}
+		const freeId = this.#usedIds.size;
+		this.#usedIds.add(freeId);
+		return freeId;
+	}
+	free(id) {
+		if (!this.#usedIds.delete(id)) throw new InternalError("Freeing an id that is not allocated");
+		this.#freeIds.delete(this.#usedIds.size);
+		if (id < this.#usedIds.size) this.#freeIds.add(id);
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/util.js
+function impossible(value, message) {
+	throw new InternalError(message);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/value.js
+function valueToProto(value) {
+	if (value === null) return null;
+	else if (typeof value === "string") return value;
+	else if (typeof value === "number") {
+		if (!Number.isFinite(value)) throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
+		return value;
+	} else if (typeof value === "bigint") {
+		if (value < minInteger || value > maxInteger) throw new RangeError("This bigint value is too large to be represented as a 64-bit integer and passed as argument");
+		return value;
+	} else if (typeof value === "boolean") return value ? 1n : 0n;
+	else if (value instanceof ArrayBuffer) return new Uint8Array(value);
+	else if (value instanceof Uint8Array) return value;
+	else if (value instanceof Date) return +value.valueOf();
+	else if (typeof value === "object") return "" + value.toString();
+	else throw new TypeError("Unsupported type of value");
+}
+var minInteger = -9223372036854775808n;
+var maxInteger = 9223372036854775807n;
+function valueFromProto(value, intMode) {
+	if (value === null) return null;
+	else if (typeof value === "number") return value;
+	else if (typeof value === "string") return value;
+	else if (typeof value === "bigint") {
+		if (intMode === "number") {
+			const num = Number(value);
+			if (!Number.isSafeInteger(num)) throw new RangeError("Received integer which is too large to be safely represented as a JavaScript number");
+			return num;
+		} else if (intMode === "bigint") return value;
+		else if (intMode === "string") return "" + value;
+		else throw new MisuseError("Invalid value for IntMode");
+	} else if (value instanceof Uint8Array) return value.slice().buffer;
+	else if (value === void 0) throw new ProtoError("Received unrecognized type of Value");
+	else throw impossible(value, "Impossible type of Value");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/result.js
+function stmtResultFromProto(result) {
+	return {
+		affectedRowCount: result.affectedRowCount,
+		lastInsertRowid: result.lastInsertRowid,
+		columnNames: result.cols.map((col) => col.name),
+		columnDecltypes: result.cols.map((col) => col.decltype)
+	};
+}
+function rowsResultFromProto(result, intMode) {
+	const stmtResult = stmtResultFromProto(result);
+	const rows = result.rows.map((row) => rowFromProto(stmtResult.columnNames, row, intMode));
+	return {
+		...stmtResult,
+		rows
+	};
+}
+function rowResultFromProto(result, intMode) {
+	const stmtResult = stmtResultFromProto(result);
+	let row;
+	if (result.rows.length > 0) row = rowFromProto(stmtResult.columnNames, result.rows[0], intMode);
+	return {
+		...stmtResult,
+		row
+	};
+}
+function valueResultFromProto(result, intMode) {
+	const stmtResult = stmtResultFromProto(result);
+	let value;
+	if (result.rows.length > 0 && stmtResult.columnNames.length > 0) value = valueFromProto(result.rows[0][0], intMode);
+	return {
+		...stmtResult,
+		value
+	};
+}
+function rowFromProto(colNames, values, intMode) {
+	const row = {};
+	Object.defineProperty(row, "length", { value: values.length });
+	for (let i = 0; i < values.length; ++i) {
+		const value = valueFromProto(values[i], intMode);
+		Object.defineProperty(row, i, { value });
+		const colName = colNames[i];
+		if (colName !== void 0 && !Object.hasOwn(row, colName)) Object.defineProperty(row, colName, {
+			value,
+			enumerable: true,
+			configurable: true,
+			writable: true
+		});
+	}
+	return row;
+}
+function errorFromProto(error) {
+	return new ResponseError(error.message, error);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/sql.js
+/** Text of an SQL statement cached on the server. */
+var Sql = class {
+	#owner;
+	#sqlId;
+	#closed;
+	/** @private */
+	constructor(owner, sqlId) {
+		this.#owner = owner;
+		this.#sqlId = sqlId;
+		this.#closed = void 0;
+	}
+	/** @private */
+	_getSqlId(owner) {
+		if (this.#owner !== owner) throw new MisuseError("Attempted to use SQL text opened with other object");
+		else if (this.#closed !== void 0) throw new ClosedError("SQL text is closed", this.#closed);
+		return this.#sqlId;
+	}
+	/** Remove the SQL text from the server, releasing resouces. */
+	close() {
+		this._setClosed(new ClientError("SQL text was manually closed"));
+	}
+	/** @private */
+	_setClosed(error) {
+		if (this.#closed === void 0) {
+			this.#closed = error;
+			this.#owner._closeSql(this.#sqlId);
+		}
+	}
+	/** True if the SQL text is closed (removed from the server). */
+	get closed() {
+		return this.#closed !== void 0;
+	}
+};
+function sqlToProto(owner, sql) {
+	if (sql instanceof Sql) return { sqlId: sql._getSqlId(owner) };
+	else return { sql: "" + sql };
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/queue.js
+var Queue = class {
+	#pushStack;
+	#shiftStack;
+	constructor() {
+		this.#pushStack = [];
+		this.#shiftStack = [];
+	}
+	get length() {
+		return this.#pushStack.length + this.#shiftStack.length;
+	}
+	push(elem) {
+		this.#pushStack.push(elem);
+	}
+	shift() {
+		if (this.#shiftStack.length === 0 && this.#pushStack.length > 0) {
+			this.#shiftStack = this.#pushStack.reverse();
+			this.#pushStack = [];
+		}
+		return this.#shiftStack.pop();
+	}
+	first() {
+		return this.#shiftStack.length !== 0 ? this.#shiftStack[this.#shiftStack.length - 1] : this.#pushStack[0];
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/stmt.js
+/** A statement that can be evaluated by the database. Besides the SQL text, it also contains the positional
+* and named arguments. */
+var Stmt$2 = class {
+	/** The SQL statement text. */
+	sql;
+	/** @private */
+	_args;
+	/** @private */
+	_namedArgs;
+	/** Initialize the statement with given SQL text. */
+	constructor(sql) {
+		this.sql = sql;
+		this._args = [];
+		this._namedArgs = /* @__PURE__ */ new Map();
+	}
+	/** Binds positional parameters from the given `values`. All previous positional bindings are cleared. */
+	bindIndexes(values) {
+		this._args.length = 0;
+		for (const value of values) this._args.push(valueToProto(value));
+		return this;
+	}
+	/** Binds a parameter by a 1-based index. */
+	bindIndex(index, value) {
+		if (index !== (index | 0) || index <= 0) throw new RangeError("Index of a positional argument must be positive integer");
+		while (this._args.length < index) this._args.push(null);
+		this._args[index - 1] = valueToProto(value);
+		return this;
+	}
+	/** Binds a parameter by name. */
+	bindName(name, value) {
+		this._namedArgs.set(name, valueToProto(value));
+		return this;
+	}
+	/** Clears all bindings. */
+	unbindAll() {
+		this._args.length = 0;
+		this._namedArgs.clear();
+		return this;
+	}
+};
+function stmtToProto(sqlOwner, stmt, wantRows) {
+	let inSql;
+	let args = [];
+	let namedArgs = [];
+	if (stmt instanceof Stmt$2) {
+		inSql = stmt.sql;
+		args = stmt._args;
+		for (const [name, value] of stmt._namedArgs.entries()) namedArgs.push({
+			name,
+			value
+		});
+	} else if (Array.isArray(stmt)) {
+		inSql = stmt[0];
+		if (Array.isArray(stmt[1])) args = stmt[1].map((arg) => valueToProto(arg));
+		else namedArgs = Object.entries(stmt[1]).map(([name, value]) => {
+			return {
+				name,
+				value: valueToProto(value)
+			};
+		});
+	} else inSql = stmt;
+	const { sql, sqlId } = sqlToProto(sqlOwner, inSql);
+	return {
+		sql,
+		sqlId,
+		args,
+		namedArgs,
+		wantRows
+	};
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/batch.js
+/** A builder for creating a batch and executing it on the server. */
+var Batch$2 = class {
+	/** @private */
+	_stream;
+	#useCursor;
+	/** @private */
+	_steps;
+	#executed;
+	/** @private */
+	constructor(stream, useCursor) {
+		this._stream = stream;
+		this.#useCursor = useCursor;
+		this._steps = [];
+		this.#executed = false;
+	}
+	/** Return a builder for adding a step to the batch. */
+	step() {
+		return new BatchStep$2(this);
+	}
+	/** Execute the batch. */
+	execute() {
+		if (this.#executed) throw new MisuseError("This batch has already been executed");
+		this.#executed = true;
+		const batch = { steps: this._steps.map((step) => step.proto) };
+		if (this.#useCursor) return executeCursor(this._stream, this._steps, batch);
+		else return executeRegular(this._stream, this._steps, batch);
+	}
+};
+function executeRegular(stream, steps, batch) {
+	return stream._batch(batch).then((result) => {
+		for (let step = 0; step < steps.length; ++step) {
+			const stepResult = result.stepResults.get(step);
+			const stepError = result.stepErrors.get(step);
+			steps[step].callback(stepResult, stepError);
+		}
+	});
+}
+async function executeCursor(stream, steps, batch) {
+	const cursor = await stream._openCursor(batch);
+	try {
+		let nextStep = 0;
+		let beginEntry = void 0;
+		let rows = [];
+		for (;;) {
+			const entry = await cursor.next();
+			if (entry === void 0) break;
+			if (entry.type === "step_begin") {
+				if (entry.step < nextStep || entry.step >= steps.length) throw new ProtoError("Server produced StepBeginEntry for unexpected step");
+				else if (beginEntry !== void 0) throw new ProtoError("Server produced StepBeginEntry before terminating previous step");
+				for (let step = nextStep; step < entry.step; ++step) steps[step].callback(void 0, void 0);
+				nextStep = entry.step + 1;
+				beginEntry = entry;
+				rows = [];
+			} else if (entry.type === "step_end") {
+				if (beginEntry === void 0) throw new ProtoError("Server produced StepEndEntry but no step is active");
+				const stmtResult = {
+					cols: beginEntry.cols,
+					rows,
+					affectedRowCount: entry.affectedRowCount,
+					lastInsertRowid: entry.lastInsertRowid
+				};
+				steps[beginEntry.step].callback(stmtResult, void 0);
+				beginEntry = void 0;
+				rows = [];
+			} else if (entry.type === "step_error") {
+				if (beginEntry === void 0) {
+					if (entry.step >= steps.length) throw new ProtoError("Server produced StepErrorEntry for unexpected step");
+					for (let step = nextStep; step < entry.step; ++step) steps[step].callback(void 0, void 0);
+				} else {
+					if (entry.step !== beginEntry.step) throw new ProtoError("Server produced StepErrorEntry for unexpected step");
+					beginEntry = void 0;
+					rows = [];
+				}
+				steps[entry.step].callback(void 0, entry.error);
+				nextStep = entry.step + 1;
+			} else if (entry.type === "row") {
+				if (beginEntry === void 0) throw new ProtoError("Server produced RowEntry but no step is active");
+				rows.push(entry.row);
+			} else if (entry.type === "error") throw errorFromProto(entry.error);
+			else if (entry.type === "none") throw new ProtoError("Server produced unrecognized CursorEntry");
+			else throw impossible(entry, "Impossible CursorEntry");
+		}
+		if (beginEntry !== void 0) throw new ProtoError("Server closed Cursor before terminating active step");
+		for (let step = nextStep; step < steps.length; ++step) steps[step].callback(void 0, void 0);
+	} finally {
+		cursor.close();
+	}
+}
+/** A builder for adding a step to the batch. */
+var BatchStep$2 = class {
+	/** @private */
+	_batch;
+	#conds;
+	/** @private */
+	_index;
+	/** @private */
+	constructor(batch) {
+		this._batch = batch;
+		this.#conds = [];
+		this._index = void 0;
+	}
+	/** Add the condition that needs to be satisfied to execute the statement. If you use this method multiple
+	* times, we join the conditions with a logical AND. */
+	condition(cond) {
+		this.#conds.push(cond._proto);
+		return this;
+	}
+	/** Add a statement that returns rows. */
+	query(stmt) {
+		return this.#add(stmt, true, rowsResultFromProto);
+	}
+	/** Add a statement that returns at most a single row. */
+	queryRow(stmt) {
+		return this.#add(stmt, true, rowResultFromProto);
+	}
+	/** Add a statement that returns at most a single value. */
+	queryValue(stmt) {
+		return this.#add(stmt, true, valueResultFromProto);
+	}
+	/** Add a statement without returning rows. */
+	run(stmt) {
+		return this.#add(stmt, false, stmtResultFromProto);
+	}
+	#add(inStmt, wantRows, fromProto) {
+		if (this._index !== void 0) throw new MisuseError("This BatchStep has already been added to the batch");
+		const stmt = stmtToProto(this._batch._stream._sqlOwner(), inStmt, wantRows);
+		let condition;
+		if (this.#conds.length === 0) condition = void 0;
+		else if (this.#conds.length === 1) condition = this.#conds[0];
+		else condition = {
+			type: "and",
+			conds: this.#conds.slice()
+		};
+		const proto = {
+			stmt,
+			condition
+		};
+		return new Promise((outputCallback, errorCallback) => {
+			const callback = (stepResult, stepError) => {
+				if (stepResult !== void 0 && stepError !== void 0) errorCallback(new ProtoError("Server returned both result and error"));
+				else if (stepError !== void 0) errorCallback(errorFromProto(stepError));
+				else if (stepResult !== void 0) outputCallback(fromProto(stepResult, this._batch._stream.intMode));
+				else outputCallback(void 0);
+			};
+			this._index = this._batch._steps.length;
+			this._batch._steps.push({
+				proto,
+				callback
+			});
+		});
+	}
+};
+var BatchCond$2 = class BatchCond$2 {
+	/** @private */
+	_batch;
+	/** @private */
+	_proto;
+	/** @private */
+	constructor(batch, proto) {
+		this._batch = batch;
+		this._proto = proto;
+	}
+	/** Create a condition that evaluates to true when the given step executes successfully.
+	*
+	* If the given step fails error or is skipped because its condition evaluated to false, this
+	* condition evaluates to false.
+	*/
+	static ok(step) {
+		return new BatchCond$2(step._batch, {
+			type: "ok",
+			step: stepIndex(step)
+		});
+	}
+	/** Create a condition that evaluates to true when the given step fails.
+	*
+	* If the given step succeeds or is skipped because its condition evaluated to false, this condition
+	* evaluates to false.
+	*/
+	static error(step) {
+		return new BatchCond$2(step._batch, {
+			type: "error",
+			step: stepIndex(step)
+		});
+	}
+	/** Create a condition that is a logical negation of another condition.
+	*/
+	static not(cond) {
+		return new BatchCond$2(cond._batch, {
+			type: "not",
+			cond: cond._proto
+		});
+	}
+	/** Create a condition that is a logical AND of other conditions.
+	*/
+	static and(batch, conds) {
+		for (const cond of conds) checkCondBatch(batch, cond);
+		return new BatchCond$2(batch, {
+			type: "and",
+			conds: conds.map((e) => e._proto)
+		});
+	}
+	/** Create a condition that is a logical OR of other conditions.
+	*/
+	static or(batch, conds) {
+		for (const cond of conds) checkCondBatch(batch, cond);
+		return new BatchCond$2(batch, {
+			type: "or",
+			conds: conds.map((e) => e._proto)
+		});
+	}
+	/** Create a condition that evaluates to true when the SQL connection is in autocommit mode (not inside an
+	* explicit transaction). This requires protocol version 3 or higher.
+	*/
+	static isAutocommit(batch) {
+		batch._stream.client()._ensureVersion(3, "BatchCond.isAutocommit()");
+		return new BatchCond$2(batch, { type: "is_autocommit" });
+	}
+};
+function stepIndex(step) {
+	if (step._index === void 0) throw new MisuseError("Cannot add a condition referencing a step that has not been added to the batch");
+	return step._index;
+}
+function checkCondBatch(expectedBatch, cond) {
+	if (cond._batch !== expectedBatch) throw new MisuseError("Cannot mix BatchCond objects for different Batch objects");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/describe.js
+function describeResultFromProto(result) {
+	return {
+		paramNames: result.params.map((p) => p.name),
+		columns: result.cols,
+		isExplain: result.isExplain,
+		isReadonly: result.isReadonly
+	};
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/stream.js
+/** A stream for executing SQL statements (a "database connection"). */
+var Stream = class {
+	/** @private */
+	constructor(intMode) {
+		this.intMode = intMode;
+	}
+	/** Execute a statement and return rows. */
+	query(stmt) {
+		return this.#execute(stmt, true, rowsResultFromProto);
+	}
+	/** Execute a statement and return at most a single row. */
+	queryRow(stmt) {
+		return this.#execute(stmt, true, rowResultFromProto);
+	}
+	/** Execute a statement and return at most a single value. */
+	queryValue(stmt) {
+		return this.#execute(stmt, true, valueResultFromProto);
+	}
+	/** Execute a statement without returning rows. */
+	run(stmt) {
+		return this.#execute(stmt, false, stmtResultFromProto);
+	}
+	#execute(inStmt, wantRows, fromProto) {
+		const stmt = stmtToProto(this._sqlOwner(), inStmt, wantRows);
+		return this._execute(stmt).then((r) => fromProto(r, this.intMode));
+	}
+	/** Return a builder for creating and executing a batch.
+	*
+	* If `useCursor` is true, the batch will be executed using a Hrana cursor, which will stream results from
+	* the server to the client, which consumes less memory on the server. This requires protocol version 3 or
+	* higher.
+	*/
+	batch(useCursor = false) {
+		return new Batch$2(this, useCursor);
+	}
+	/** Parse and analyze a statement. This requires protocol version 2 or higher. */
+	describe(inSql) {
+		const protoSql = sqlToProto(this._sqlOwner(), inSql);
+		return this._describe(protoSql).then(describeResultFromProto);
+	}
+	/** Execute a sequence of statements separated by semicolons. This requires protocol version 2 or higher.
+	* */
+	sequence(inSql) {
+		const protoSql = sqlToProto(this._sqlOwner(), inSql);
+		return this._sequence(protoSql);
+	}
+	/** Representation of integers returned from the database. See {@link IntMode}.
+	*
+	* This value affects the results of all operations on this stream.
+	*/
+	intMode;
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/cursor.js
+var Cursor = class {};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/cursor.js
+var fetchChunkSize = 1e3;
+var fetchQueueSize = 10;
+var WsCursor = class extends Cursor {
+	#client;
+	#stream;
+	#cursorId;
+	#entryQueue;
+	#fetchQueue;
+	#closed;
+	#done;
+	/** @private */
+	constructor(client, stream, cursorId) {
+		super();
+		this.#client = client;
+		this.#stream = stream;
+		this.#cursorId = cursorId;
+		this.#entryQueue = new Queue();
+		this.#fetchQueue = new Queue();
+		this.#closed = void 0;
+		this.#done = false;
+	}
+	/** Fetch the next entry from the cursor. */
+	async next() {
+		for (;;) {
+			if (this.#closed !== void 0) throw new ClosedError("Cursor is closed", this.#closed);
+			while (!this.#done && this.#fetchQueue.length < fetchQueueSize) this.#fetchQueue.push(this.#fetch());
+			const entry = this.#entryQueue.shift();
+			if (this.#done || entry !== void 0) return entry;
+			await this.#fetchQueue.shift().then((response) => {
+				if (response === void 0) return;
+				for (const entry of response.entries) this.#entryQueue.push(entry);
+				this.#done ||= response.done;
+			});
+		}
+	}
+	#fetch() {
+		return this.#stream._sendCursorRequest(this, {
+			type: "fetch_cursor",
+			cursorId: this.#cursorId,
+			maxCount: fetchChunkSize
+		}).then((resp) => resp, (error) => {
+			this._setClosed(error);
+		});
+	}
+	/** @private */
+	_setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		this.#stream._sendCursorRequest(this, {
+			type: "close_cursor",
+			cursorId: this.#cursorId
+		}).catch(() => void 0);
+		this.#stream._cursorClosed(this);
+	}
+	/** Close the cursor. */
+	close() {
+		this._setClosed(new ClientError("Cursor was manually closed"));
+	}
+	/** True if the cursor is closed. */
+	get closed() {
+		return this.#closed !== void 0;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/stream.js
+var WsStream = class WsStream extends Stream {
+	#client;
+	#streamId;
+	#queue;
+	#cursor;
+	#closing;
+	#closed;
+	/** @private */
+	static open(client) {
+		const streamId = client._streamIdAlloc.alloc();
+		const stream = new WsStream(client, streamId);
+		const responseCallback = () => void 0;
+		const errorCallback = (e) => stream.#setClosed(e);
+		const request = {
+			type: "open_stream",
+			streamId
+		};
+		client._sendRequest(request, {
+			responseCallback,
+			errorCallback
+		});
+		return stream;
+	}
+	/** @private */
+	constructor(client, streamId) {
+		super(client.intMode);
+		this.#client = client;
+		this.#streamId = streamId;
+		this.#queue = new Queue();
+		this.#cursor = void 0;
+		this.#closing = false;
+		this.#closed = void 0;
+	}
+	/** Get the {@link WsClient} object that this stream belongs to. */
+	client() {
+		return this.#client;
+	}
+	/** @private */
+	_sqlOwner() {
+		return this.#client;
+	}
+	/** @private */
+	_execute(stmt) {
+		return this.#sendStreamRequest({
+			type: "execute",
+			streamId: this.#streamId,
+			stmt
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_batch(batch) {
+		return this.#sendStreamRequest({
+			type: "batch",
+			streamId: this.#streamId,
+			batch
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_describe(protoSql) {
+		this.#client._ensureVersion(2, "describe()");
+		return this.#sendStreamRequest({
+			type: "describe",
+			streamId: this.#streamId,
+			sql: protoSql.sql,
+			sqlId: protoSql.sqlId
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_sequence(protoSql) {
+		this.#client._ensureVersion(2, "sequence()");
+		return this.#sendStreamRequest({
+			type: "sequence",
+			streamId: this.#streamId,
+			sql: protoSql.sql,
+			sqlId: protoSql.sqlId
+		}).then((_response) => {});
+	}
+	/** Check whether the SQL connection underlying this stream is in autocommit state (i.e., outside of an
+	* explicit transaction). This requires protocol version 3 or higher.
+	*/
+	getAutocommit() {
+		this.#client._ensureVersion(3, "getAutocommit()");
+		return this.#sendStreamRequest({
+			type: "get_autocommit",
+			streamId: this.#streamId
+		}).then((response) => {
+			return response.isAutocommit;
+		});
+	}
+	#sendStreamRequest(request) {
+		return new Promise((responseCallback, errorCallback) => {
+			this.#pushToQueue({
+				type: "request",
+				request,
+				responseCallback,
+				errorCallback
+			});
+		});
+	}
+	/** @private */
+	_openCursor(batch) {
+		this.#client._ensureVersion(3, "cursor");
+		return new Promise((cursorCallback, errorCallback) => {
+			this.#pushToQueue({
+				type: "cursor",
+				batch,
+				cursorCallback,
+				errorCallback
+			});
+		});
+	}
+	/** @private */
+	_sendCursorRequest(cursor, request) {
+		if (cursor !== this.#cursor) throw new InternalError("Cursor not associated with the stream attempted to execute a request");
+		return new Promise((responseCallback, errorCallback) => {
+			if (this.#closed !== void 0) errorCallback(new ClosedError("Stream is closed", this.#closed));
+			else this.#client._sendRequest(request, {
+				responseCallback,
+				errorCallback
+			});
+		});
+	}
+	/** @private */
+	_cursorClosed(cursor) {
+		if (cursor !== this.#cursor) throw new InternalError("Cursor was closed, but it was not associated with the stream");
+		this.#cursor = void 0;
+		this.#flushQueue();
+	}
+	#pushToQueue(entry) {
+		if (this.#closed !== void 0) entry.errorCallback(new ClosedError("Stream is closed", this.#closed));
+		else if (this.#closing) entry.errorCallback(new ClosedError("Stream is closing", void 0));
+		else {
+			this.#queue.push(entry);
+			this.#flushQueue();
+		}
+	}
+	#flushQueue() {
+		for (;;) {
+			const entry = this.#queue.first();
+			if (entry === void 0 && this.#cursor === void 0 && this.#closing) {
+				this.#setClosed(new ClientError("Stream was gracefully closed"));
+				break;
+			} else if (entry?.type === "request" && this.#cursor === void 0) {
+				const { request, responseCallback, errorCallback } = entry;
+				this.#queue.shift();
+				this.#client._sendRequest(request, {
+					responseCallback,
+					errorCallback
+				});
+			} else if (entry?.type === "cursor" && this.#cursor === void 0) {
+				const { batch, cursorCallback } = entry;
+				this.#queue.shift();
+				const cursorId = this.#client._cursorIdAlloc.alloc();
+				const cursor = new WsCursor(this.#client, this, cursorId);
+				const request = {
+					type: "open_cursor",
+					streamId: this.#streamId,
+					cursorId,
+					batch
+				};
+				const responseCallback = () => void 0;
+				const errorCallback = (e) => cursor._setClosed(e);
+				this.#client._sendRequest(request, {
+					responseCallback,
+					errorCallback
+				});
+				this.#cursor = cursor;
+				cursorCallback(cursor);
+			} else break;
+		}
+	}
+	#setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		if (this.#cursor !== void 0) this.#cursor._setClosed(error);
+		for (;;) {
+			const entry = this.#queue.shift();
+			if (entry !== void 0) entry.errorCallback(error);
+			else break;
+		}
+		const request = {
+			type: "close_stream",
+			streamId: this.#streamId
+		};
+		const responseCallback = () => this.#client._streamIdAlloc.free(this.#streamId);
+		const errorCallback = () => void 0;
+		this.#client._sendRequest(request, {
+			responseCallback,
+			errorCallback
+		});
+	}
+	/** Immediately close the stream. */
+	close() {
+		this.#setClosed(new ClientError("Stream was manually closed"));
+	}
+	/** Gracefully close the stream. */
+	closeGracefully() {
+		this.#closing = true;
+		this.#flushQueue();
+	}
+	/** True if the stream is closed or closing. */
+	get closed() {
+		return this.#closed !== void 0 || this.#closing;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/shared/json_encode.js
+function Stmt$1(w, msg) {
+	if (msg.sql !== void 0) w.string("sql", msg.sql);
+	if (msg.sqlId !== void 0) w.number("sql_id", msg.sqlId);
+	w.arrayObjects("args", msg.args, Value$3);
+	w.arrayObjects("named_args", msg.namedArgs, NamedArg$1);
+	w.boolean("want_rows", msg.wantRows);
+}
+function NamedArg$1(w, msg) {
+	w.string("name", msg.name);
+	w.object("value", msg.value, Value$3);
+}
+function Batch$1(w, msg) {
+	w.arrayObjects("steps", msg.steps, BatchStep$1);
+}
+function BatchStep$1(w, msg) {
+	if (msg.condition !== void 0) w.object("condition", msg.condition, BatchCond$1);
+	w.object("stmt", msg.stmt, Stmt$1);
+}
+function BatchCond$1(w, msg) {
+	w.stringRaw("type", msg.type);
+	if (msg.type === "ok" || msg.type === "error") w.number("step", msg.step);
+	else if (msg.type === "not") w.object("cond", msg.cond, BatchCond$1);
+	else if (msg.type === "and" || msg.type === "or") w.arrayObjects("conds", msg.conds, BatchCond$1);
+	else if (msg.type === "is_autocommit") {} else throw impossible(msg, "Impossible type of BatchCond");
+}
+function Value$3(w, msg) {
+	if (msg === null) w.stringRaw("type", "null");
+	else if (typeof msg === "bigint") {
+		w.stringRaw("type", "integer");
+		w.stringRaw("value", "" + msg);
+	} else if (typeof msg === "number") {
+		w.stringRaw("type", "float");
+		w.number("value", msg);
+	} else if (typeof msg === "string") {
+		w.stringRaw("type", "text");
+		w.string("value", msg);
+	} else if (msg instanceof Uint8Array) {
+		w.stringRaw("type", "blob");
+		w.stringRaw("base64", gBase64.fromUint8Array(msg));
+	} else if (msg === void 0) {} else throw impossible(msg, "Impossible type of Value");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/json_encode.js
+function ClientMsg$1(w, msg) {
+	w.stringRaw("type", msg.type);
+	if (msg.type === "hello") {
+		if (msg.jwt !== void 0) w.string("jwt", msg.jwt);
+	} else if (msg.type === "request") {
+		w.number("request_id", msg.requestId);
+		w.object("request", msg.request, Request$1);
+	} else throw impossible(msg, "Impossible type of ClientMsg");
+}
+function Request$1(w, msg) {
+	w.stringRaw("type", msg.type);
+	if (msg.type === "open_stream") w.number("stream_id", msg.streamId);
+	else if (msg.type === "close_stream") w.number("stream_id", msg.streamId);
+	else if (msg.type === "execute") {
+		w.number("stream_id", msg.streamId);
+		w.object("stmt", msg.stmt, Stmt$1);
+	} else if (msg.type === "batch") {
+		w.number("stream_id", msg.streamId);
+		w.object("batch", msg.batch, Batch$1);
+	} else if (msg.type === "open_cursor") {
+		w.number("stream_id", msg.streamId);
+		w.number("cursor_id", msg.cursorId);
+		w.object("batch", msg.batch, Batch$1);
+	} else if (msg.type === "close_cursor") w.number("cursor_id", msg.cursorId);
+	else if (msg.type === "fetch_cursor") {
+		w.number("cursor_id", msg.cursorId);
+		w.number("max_count", msg.maxCount);
+	} else if (msg.type === "sequence") {
+		w.number("stream_id", msg.streamId);
+		if (msg.sql !== void 0) w.string("sql", msg.sql);
+		if (msg.sqlId !== void 0) w.number("sql_id", msg.sqlId);
+	} else if (msg.type === "describe") {
+		w.number("stream_id", msg.streamId);
+		if (msg.sql !== void 0) w.string("sql", msg.sql);
+		if (msg.sqlId !== void 0) w.number("sql_id", msg.sqlId);
+	} else if (msg.type === "store_sql") {
+		w.number("sql_id", msg.sqlId);
+		w.string("sql", msg.sql);
+	} else if (msg.type === "close_sql") w.number("sql_id", msg.sqlId);
+	else if (msg.type === "get_autocommit") w.number("stream_id", msg.streamId);
+	else throw impossible(msg, "Impossible type of Request");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_encode.js
+function Stmt(w, msg) {
+	if (msg.sql !== void 0) w.string(1, msg.sql);
+	if (msg.sqlId !== void 0) w.int32(2, msg.sqlId);
+	for (const arg of msg.args) w.message(3, arg, Value$2);
+	for (const arg of msg.namedArgs) w.message(4, arg, NamedArg);
+	w.bool(5, msg.wantRows);
+}
+function NamedArg(w, msg) {
+	w.string(1, msg.name);
+	w.message(2, msg.value, Value$2);
+}
+function Batch(w, msg) {
+	for (const step of msg.steps) w.message(1, step, BatchStep);
+}
+function BatchStep(w, msg) {
+	if (msg.condition !== void 0) w.message(1, msg.condition, BatchCond);
+	w.message(2, msg.stmt, Stmt);
+}
+function BatchCond(w, msg) {
+	if (msg.type === "ok") w.uint32(1, msg.step);
+	else if (msg.type === "error") w.uint32(2, msg.step);
+	else if (msg.type === "not") w.message(3, msg.cond, BatchCond);
+	else if (msg.type === "and") w.message(4, msg.conds, BatchCondList);
+	else if (msg.type === "or") w.message(5, msg.conds, BatchCondList);
+	else if (msg.type === "is_autocommit") w.message(6, void 0, Empty);
+	else throw impossible(msg, "Impossible type of BatchCond");
+}
+function BatchCondList(w, msg) {
+	for (const cond of msg) w.message(1, cond, BatchCond);
+}
+function Value$2(w, msg) {
+	if (msg === null) w.message(1, void 0, Empty);
+	else if (typeof msg === "bigint") w.sint64(2, msg);
+	else if (typeof msg === "number") w.double(3, msg);
+	else if (typeof msg === "string") w.string(4, msg);
+	else if (msg instanceof Uint8Array) w.bytes(5, msg);
+	else if (msg === void 0) {} else throw impossible(msg, "Impossible type of Value");
+}
+function Empty(_w, _msg) {}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_encode.js
+function ClientMsg(w, msg) {
+	if (msg.type === "hello") w.message(1, msg, HelloMsg);
+	else if (msg.type === "request") w.message(2, msg, RequestMsg);
+	else throw impossible(msg, "Impossible type of ClientMsg");
+}
+function HelloMsg(w, msg) {
+	if (msg.jwt !== void 0) w.string(1, msg.jwt);
+}
+function RequestMsg(w, msg) {
+	w.int32(1, msg.requestId);
+	const request = msg.request;
+	if (request.type === "open_stream") w.message(2, request, OpenStreamReq);
+	else if (request.type === "close_stream") w.message(3, request, CloseStreamReq$1);
+	else if (request.type === "execute") w.message(4, request, ExecuteReq);
+	else if (request.type === "batch") w.message(5, request, BatchReq);
+	else if (request.type === "open_cursor") w.message(6, request, OpenCursorReq);
+	else if (request.type === "close_cursor") w.message(7, request, CloseCursorReq);
+	else if (request.type === "fetch_cursor") w.message(8, request, FetchCursorReq);
+	else if (request.type === "sequence") w.message(9, request, SequenceReq);
+	else if (request.type === "describe") w.message(10, request, DescribeReq);
+	else if (request.type === "store_sql") w.message(11, request, StoreSqlReq);
+	else if (request.type === "close_sql") w.message(12, request, CloseSqlReq);
+	else if (request.type === "get_autocommit") w.message(13, request, GetAutocommitReq);
+	else throw impossible(request, "Impossible type of Request");
+}
+function OpenStreamReq(w, msg) {
+	w.int32(1, msg.streamId);
+}
+function CloseStreamReq$1(w, msg) {
+	w.int32(1, msg.streamId);
+}
+function ExecuteReq(w, msg) {
+	w.int32(1, msg.streamId);
+	w.message(2, msg.stmt, Stmt);
+}
+function BatchReq(w, msg) {
+	w.int32(1, msg.streamId);
+	w.message(2, msg.batch, Batch);
+}
+function OpenCursorReq(w, msg) {
+	w.int32(1, msg.streamId);
+	w.int32(2, msg.cursorId);
+	w.message(3, msg.batch, Batch);
+}
+function CloseCursorReq(w, msg) {
+	w.int32(1, msg.cursorId);
+}
+function FetchCursorReq(w, msg) {
+	w.int32(1, msg.cursorId);
+	w.uint32(2, msg.maxCount);
+}
+function SequenceReq(w, msg) {
+	w.int32(1, msg.streamId);
+	if (msg.sql !== void 0) w.string(2, msg.sql);
+	if (msg.sqlId !== void 0) w.int32(3, msg.sqlId);
+}
+function DescribeReq(w, msg) {
+	w.int32(1, msg.streamId);
+	if (msg.sql !== void 0) w.string(2, msg.sql);
+	if (msg.sqlId !== void 0) w.int32(3, msg.sqlId);
+}
+function StoreSqlReq(w, msg) {
+	w.int32(1, msg.sqlId);
+	w.string(2, msg.sql);
+}
+function CloseSqlReq(w, msg) {
+	w.int32(1, msg.sqlId);
+}
+function GetAutocommitReq(w, msg) {
+	w.int32(1, msg.streamId);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/shared/json_decode.js
+function Error$2(obj) {
+	return {
+		message: string(obj["message"]),
+		code: stringOpt(obj["code"])
+	};
+}
+function StmtResult$1(obj) {
+	const cols = arrayObjectsMap(obj["cols"], Col$1);
+	const rows = array(obj["rows"]).map((rowObj) => arrayObjectsMap(rowObj, Value$1));
+	const affectedRowCount = number(obj["affected_row_count"]);
+	const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
+	return {
+		cols,
+		rows,
+		affectedRowCount,
+		lastInsertRowid: lastInsertRowidStr !== void 0 ? BigInt(lastInsertRowidStr) : void 0
+	};
+}
+function Col$1(obj) {
+	return {
+		name: stringOpt(obj["name"]),
+		decltype: stringOpt(obj["decltype"])
+	};
+}
+function BatchResult$1(obj) {
+	const stepResults = /* @__PURE__ */ new Map();
+	array(obj["step_results"]).forEach((value, i) => {
+		if (value !== null) stepResults.set(i, StmtResult$1(object(value)));
+	});
+	const stepErrors = /* @__PURE__ */ new Map();
+	array(obj["step_errors"]).forEach((value, i) => {
+		if (value !== null) stepErrors.set(i, Error$2(object(value)));
+	});
+	return {
+		stepResults,
+		stepErrors
+	};
+}
+function CursorEntry$1(obj) {
+	const type = string(obj["type"]);
+	if (type === "step_begin") return {
+		type: "step_begin",
+		step: number(obj["step"]),
+		cols: arrayObjectsMap(obj["cols"], Col$1)
+	};
+	else if (type === "step_end") {
+		const affectedRowCount = number(obj["affected_row_count"]);
+		const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
+		return {
+			type: "step_end",
+			affectedRowCount,
+			lastInsertRowid: lastInsertRowidStr !== void 0 ? BigInt(lastInsertRowidStr) : void 0
+		};
+	} else if (type === "step_error") return {
+		type: "step_error",
+		step: number(obj["step"]),
+		error: Error$2(object(obj["error"]))
+	};
+	else if (type === "row") return {
+		type: "row",
+		row: arrayObjectsMap(obj["row"], Value$1)
+	};
+	else if (type === "error") return {
+		type: "error",
+		error: Error$2(object(obj["error"]))
+	};
+	else throw new ProtoError("Unexpected type of CursorEntry");
+}
+function DescribeResult$1(obj) {
+	return {
+		params: arrayObjectsMap(obj["params"], DescribeParam$1),
+		cols: arrayObjectsMap(obj["cols"], DescribeCol$1),
+		isExplain: boolean(obj["is_explain"]),
+		isReadonly: boolean(obj["is_readonly"])
+	};
+}
+function DescribeParam$1(obj) {
+	return { name: stringOpt(obj["name"]) };
+}
+function DescribeCol$1(obj) {
+	return {
+		name: string(obj["name"]),
+		decltype: stringOpt(obj["decltype"])
+	};
+}
+function Value$1(obj) {
+	const type = string(obj["type"]);
+	if (type === "null") return null;
+	else if (type === "integer") {
+		const value = string(obj["value"]);
+		return BigInt(value);
+	} else if (type === "float") return number(obj["value"]);
+	else if (type === "text") return string(obj["value"]);
+	else if (type === "blob") return gBase64.toUint8Array(string(obj["base64"]));
+	else throw new ProtoError("Unexpected type of Value");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/json_decode.js
+function ServerMsg$1(obj) {
+	const type = string(obj["type"]);
+	if (type === "hello_ok") return { type: "hello_ok" };
+	else if (type === "hello_error") return {
+		type: "hello_error",
+		error: Error$2(object(obj["error"]))
+	};
+	else if (type === "response_ok") return {
+		type: "response_ok",
+		requestId: number(obj["request_id"]),
+		response: Response(object(obj["response"]))
+	};
+	else if (type === "response_error") return {
+		type: "response_error",
+		requestId: number(obj["request_id"]),
+		error: Error$2(object(obj["error"]))
+	};
+	else throw new ProtoError("Unexpected type of ServerMsg");
+}
+function Response(obj) {
+	const type = string(obj["type"]);
+	if (type === "open_stream") return { type: "open_stream" };
+	else if (type === "close_stream") return { type: "close_stream" };
+	else if (type === "execute") return {
+		type: "execute",
+		result: StmtResult$1(object(obj["result"]))
+	};
+	else if (type === "batch") return {
+		type: "batch",
+		result: BatchResult$1(object(obj["result"]))
+	};
+	else if (type === "open_cursor") return { type: "open_cursor" };
+	else if (type === "close_cursor") return { type: "close_cursor" };
+	else if (type === "fetch_cursor") return {
+		type: "fetch_cursor",
+		entries: arrayObjectsMap(obj["entries"], CursorEntry$1),
+		done: boolean(obj["done"])
+	};
+	else if (type === "sequence") return { type: "sequence" };
+	else if (type === "describe") return {
+		type: "describe",
+		result: DescribeResult$1(object(obj["result"]))
+	};
+	else if (type === "store_sql") return { type: "store_sql" };
+	else if (type === "close_sql") return { type: "close_sql" };
+	else if (type === "get_autocommit") return {
+		type: "get_autocommit",
+		isAutocommit: boolean(obj["is_autocommit"])
+	};
+	else throw new ProtoError("Unexpected type of Response");
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_decode.js
+var Error$1 = {
+	default() {
+		return {
+			message: "",
+			code: void 0
+		};
+	},
+	1(r, msg) {
+		msg.message = r.string();
+	},
+	2(r, msg) {
+		msg.code = r.string();
+	}
+};
+var StmtResult = {
+	default() {
+		return {
+			cols: [],
+			rows: [],
+			affectedRowCount: 0,
+			lastInsertRowid: void 0
+		};
+	},
+	1(r, msg) {
+		msg.cols.push(r.message(Col));
+	},
+	2(r, msg) {
+		msg.rows.push(r.message(Row));
+	},
+	3(r, msg) {
+		msg.affectedRowCount = Number(r.uint64());
+	},
+	4(r, msg) {
+		msg.lastInsertRowid = r.sint64();
+	}
+};
+var Col = {
+	default() {
+		return {
+			name: void 0,
+			decltype: void 0
+		};
+	},
+	1(r, msg) {
+		msg.name = r.string();
+	},
+	2(r, msg) {
+		msg.decltype = r.string();
+	}
+};
+var Row = {
+	default() {
+		return [];
+	},
+	1(r, msg) {
+		msg.push(r.message(Value));
+	}
+};
+var BatchResult = {
+	default() {
+		return {
+			stepResults: /* @__PURE__ */ new Map(),
+			stepErrors: /* @__PURE__ */ new Map()
+		};
+	},
+	1(r, msg) {
+		const [key, value] = r.message(BatchResultStepResult);
+		msg.stepResults.set(key, value);
+	},
+	2(r, msg) {
+		const [key, value] = r.message(BatchResultStepError);
+		msg.stepErrors.set(key, value);
+	}
+};
+var BatchResultStepResult = {
+	default() {
+		return [0, StmtResult.default()];
+	},
+	1(r, msg) {
+		msg[0] = r.uint32();
+	},
+	2(r, msg) {
+		msg[1] = r.message(StmtResult);
+	}
+};
+var BatchResultStepError = {
+	default() {
+		return [0, Error$1.default()];
+	},
+	1(r, msg) {
+		msg[0] = r.uint32();
+	},
+	2(r, msg) {
+		msg[1] = r.message(Error$1);
+	}
+};
+var CursorEntry = {
+	default() {
+		return { type: "none" };
+	},
+	1(r) {
+		return r.message(StepBeginEntry);
+	},
+	2(r) {
+		return r.message(StepEndEntry);
+	},
+	3(r) {
+		return r.message(StepErrorEntry);
+	},
+	4(r) {
+		return {
+			type: "row",
+			row: r.message(Row)
+		};
+	},
+	5(r) {
+		return {
+			type: "error",
+			error: r.message(Error$1)
+		};
+	}
+};
+var StepBeginEntry = {
+	default() {
+		return {
+			type: "step_begin",
+			step: 0,
+			cols: []
+		};
+	},
+	1(r, msg) {
+		msg.step = r.uint32();
+	},
+	2(r, msg) {
+		msg.cols.push(r.message(Col));
+	}
+};
+var StepEndEntry = {
+	default() {
+		return {
+			type: "step_end",
+			affectedRowCount: 0,
+			lastInsertRowid: void 0
+		};
+	},
+	1(r, msg) {
+		msg.affectedRowCount = r.uint32();
+	},
+	2(r, msg) {
+		msg.lastInsertRowid = r.uint64();
+	}
+};
+var StepErrorEntry = {
+	default() {
+		return {
+			type: "step_error",
+			step: 0,
+			error: Error$1.default()
+		};
+	},
+	1(r, msg) {
+		msg.step = r.uint32();
+	},
+	2(r, msg) {
+		msg.error = r.message(Error$1);
+	}
+};
+var DescribeResult = {
+	default() {
+		return {
+			params: [],
+			cols: [],
+			isExplain: false,
+			isReadonly: false
+		};
+	},
+	1(r, msg) {
+		msg.params.push(r.message(DescribeParam));
+	},
+	2(r, msg) {
+		msg.cols.push(r.message(DescribeCol));
+	},
+	3(r, msg) {
+		msg.isExplain = r.bool();
+	},
+	4(r, msg) {
+		msg.isReadonly = r.bool();
+	}
+};
+var DescribeParam = {
+	default() {
+		return { name: void 0 };
+	},
+	1(r, msg) {
+		msg.name = r.string();
+	}
+};
+var DescribeCol = {
+	default() {
+		return {
+			name: "",
+			decltype: void 0
+		};
+	},
+	1(r, msg) {
+		msg.name = r.string();
+	},
+	2(r, msg) {
+		msg.decltype = r.string();
+	}
+};
+var Value = {
+	default() {},
+	1(r) {
+		return null;
+	},
+	2(r) {
+		return r.sint64();
+	},
+	3(r) {
+		return r.double();
+	},
+	4(r) {
+		return r.string();
+	},
+	5(r) {
+		return r.bytes();
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_decode.js
+var ServerMsg = {
+	default() {
+		return { type: "none" };
+	},
+	1(r) {
+		return { type: "hello_ok" };
+	},
+	2(r) {
+		return r.message(HelloErrorMsg);
+	},
+	3(r) {
+		return r.message(ResponseOkMsg);
+	},
+	4(r) {
+		return r.message(ResponseErrorMsg);
+	}
+};
+var HelloErrorMsg = {
+	default() {
+		return {
+			type: "hello_error",
+			error: Error$1.default()
+		};
+	},
+	1(r, msg) {
+		msg.error = r.message(Error$1);
+	}
+};
+var ResponseErrorMsg = {
+	default() {
+		return {
+			type: "response_error",
+			requestId: 0,
+			error: Error$1.default()
+		};
+	},
+	1(r, msg) {
+		msg.requestId = r.int32();
+	},
+	2(r, msg) {
+		msg.error = r.message(Error$1);
+	}
+};
+var ResponseOkMsg = {
+	default() {
+		return {
+			type: "response_ok",
+			requestId: 0,
+			response: { type: "none" }
+		};
+	},
+	1(r, msg) {
+		msg.requestId = r.int32();
+	},
+	2(r, msg) {
+		msg.response = { type: "open_stream" };
+	},
+	3(r, msg) {
+		msg.response = { type: "close_stream" };
+	},
+	4(r, msg) {
+		msg.response = r.message(ExecuteResp);
+	},
+	5(r, msg) {
+		msg.response = r.message(BatchResp);
+	},
+	6(r, msg) {
+		msg.response = { type: "open_cursor" };
+	},
+	7(r, msg) {
+		msg.response = { type: "close_cursor" };
+	},
+	8(r, msg) {
+		msg.response = r.message(FetchCursorResp);
+	},
+	9(r, msg) {
+		msg.response = { type: "sequence" };
+	},
+	10(r, msg) {
+		msg.response = r.message(DescribeResp);
+	},
+	11(r, msg) {
+		msg.response = { type: "store_sql" };
+	},
+	12(r, msg) {
+		msg.response = { type: "close_sql" };
+	},
+	13(r, msg) {
+		msg.response = r.message(GetAutocommitResp);
+	}
+};
+var ExecuteResp = {
+	default() {
+		return {
+			type: "execute",
+			result: StmtResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(StmtResult);
+	}
+};
+var BatchResp = {
+	default() {
+		return {
+			type: "batch",
+			result: BatchResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(BatchResult);
+	}
+};
+var FetchCursorResp = {
+	default() {
+		return {
+			type: "fetch_cursor",
+			entries: [],
+			done: false
+		};
+	},
+	1(r, msg) {
+		msg.entries.push(r.message(CursorEntry));
+	},
+	2(r, msg) {
+		msg.done = r.bool();
+	}
+};
+var DescribeResp = {
+	default() {
+		return {
+			type: "describe",
+			result: DescribeResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(DescribeResult);
+	}
+};
+var GetAutocommitResp = {
+	default() {
+		return {
+			type: "get_autocommit",
+			isAutocommit: false
+		};
+	},
+	1(r, msg) {
+		msg.isAutocommit = r.bool();
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/ws/client.js
+var subprotocolsV2 = /* @__PURE__ */ new Map([["hrana2", {
+	version: 2,
+	encoding: "json"
+}], ["hrana1", {
+	version: 1,
+	encoding: "json"
+}]]);
+var subprotocolsV3 = /* @__PURE__ */ new Map([
+	["hrana3-protobuf", {
+		version: 3,
+		encoding: "protobuf"
+	}],
+	["hrana3", {
+		version: 3,
+		encoding: "json"
+	}],
+	["hrana2", {
+		version: 2,
+		encoding: "json"
+	}],
+	["hrana1", {
+		version: 1,
+		encoding: "json"
+	}]
+]);
+/** A client for the Hrana protocol over a WebSocket. */
+var WsClient$1 = class extends Client {
+	#socket;
+	#openCallbacks;
+	#opened;
+	#closed;
+	#recvdHello;
+	#subprotocol;
+	#getVersionCalled;
+	#responseMap;
+	#requestIdAlloc;
+	/** @private */
+	_streamIdAlloc;
+	/** @private */
+	_cursorIdAlloc;
+	#sqlIdAlloc;
+	/** @private */
+	constructor(socket, jwt) {
+		super();
+		this.#socket = socket;
+		this.#openCallbacks = [];
+		this.#opened = false;
+		this.#closed = void 0;
+		this.#recvdHello = false;
+		this.#subprotocol = void 0;
+		this.#getVersionCalled = false;
+		this.#responseMap = /* @__PURE__ */ new Map();
+		this.#requestIdAlloc = new IdAlloc();
+		this._streamIdAlloc = new IdAlloc();
+		this._cursorIdAlloc = new IdAlloc();
+		this.#sqlIdAlloc = new IdAlloc();
+		this.#socket.binaryType = "arraybuffer";
+		this.#socket.addEventListener("open", () => this.#onSocketOpen());
+		this.#socket.addEventListener("close", (event) => this.#onSocketClose(event));
+		this.#socket.addEventListener("error", (event) => this.#onSocketError(event));
+		this.#socket.addEventListener("message", (event) => this.#onSocketMessage(event));
+		this.#send({
+			type: "hello",
+			jwt
+		});
+	}
+	#send(msg) {
+		if (this.#closed !== void 0) throw new InternalError("Trying to send a message on a closed client");
+		if (this.#opened) this.#sendToSocket(msg);
+		else {
+			const openCallback = () => this.#sendToSocket(msg);
+			const errorCallback = () => void 0;
+			this.#openCallbacks.push({
+				openCallback,
+				errorCallback
+			});
+		}
+	}
+	#onSocketOpen() {
+		const protocol = this.#socket.protocol;
+		if (protocol === void 0) {
+			this.#setClosed(new ClientError("The `WebSocket.protocol` property is undefined. This most likely means that the WebSocket implementation provided by the environment is broken. If you are using Miniflare 2, please update to Miniflare 3, which fixes this problem."));
+			return;
+		} else if (protocol === "") this.#subprotocol = {
+			version: 1,
+			encoding: "json"
+		};
+		else {
+			this.#subprotocol = subprotocolsV3.get(protocol);
+			if (this.#subprotocol === void 0) {
+				this.#setClosed(new ProtoError(`Unrecognized WebSocket subprotocol: ${JSON.stringify(protocol)}`));
+				return;
+			}
+		}
+		for (const callbacks of this.#openCallbacks) callbacks.openCallback();
+		this.#openCallbacks.length = 0;
+		this.#opened = true;
+	}
+	#sendToSocket(msg) {
+		const encoding = this.#subprotocol.encoding;
+		if (encoding === "json") {
+			const jsonMsg = writeJsonObject(msg, ClientMsg$1);
+			this.#socket.send(jsonMsg);
+		} else if (encoding === "protobuf") {
+			const protobufMsg = writeProtobufMessage(msg, ClientMsg);
+			this.#socket.send(protobufMsg);
+		} else throw impossible(encoding, "Impossible encoding");
+	}
+	/** Get the protocol version negotiated with the server, possibly waiting until the socket is open. */
+	getVersion() {
+		return new Promise((versionCallback, errorCallback) => {
+			this.#getVersionCalled = true;
+			if (this.#closed !== void 0) errorCallback(this.#closed);
+			else if (!this.#opened) {
+				const openCallback = () => versionCallback(this.#subprotocol.version);
+				this.#openCallbacks.push({
+					openCallback,
+					errorCallback
+				});
+			} else versionCallback(this.#subprotocol.version);
+		});
+	}
+	/** @private */
+	_ensureVersion(minVersion, feature) {
+		if (this.#subprotocol === void 0 || !this.#getVersionCalled) throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, but the version supported by the WebSocket server is not yet known. Use Client.getVersion() to wait until the version is available.`);
+		else if (this.#subprotocol.version < minVersion) throw new ProtocolVersionError(`${feature} is supported on protocol version ${minVersion} and higher, but the WebSocket server only supports version ${this.#subprotocol.version}`);
+	}
+	/** @private */
+	_sendRequest(request, callbacks) {
+		if (this.#closed !== void 0) {
+			callbacks.errorCallback(new ClosedError("Client is closed", this.#closed));
+			return;
+		}
+		const requestId = this.#requestIdAlloc.alloc();
+		this.#responseMap.set(requestId, {
+			...callbacks,
+			type: request.type
+		});
+		this.#send({
+			type: "request",
+			requestId,
+			request
+		});
+	}
+	#onSocketError(event) {
+		const message = event.message ?? "WebSocket was closed due to an error";
+		this.#setClosed(new WebSocketError(message));
+	}
+	#onSocketClose(event) {
+		let message = `WebSocket was closed with code ${event.code}`;
+		if (event.reason) message += `: ${event.reason}`;
+		this.#setClosed(new WebSocketError(message));
+	}
+	#setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		for (const callbacks of this.#openCallbacks) callbacks.errorCallback(error);
+		this.#openCallbacks.length = 0;
+		for (const [requestId, responseState] of this.#responseMap.entries()) {
+			responseState.errorCallback(error);
+			this.#requestIdAlloc.free(requestId);
+		}
+		this.#responseMap.clear();
+		this.#socket.close();
+	}
+	#onSocketMessage(event) {
+		if (this.#closed !== void 0) return;
+		try {
+			let msg;
+			const encoding = this.#subprotocol.encoding;
+			if (encoding === "json") {
+				if (typeof event.data !== "string") {
+					this.#socket.close(3003, "Only text messages are accepted with JSON encoding");
+					this.#setClosed(new ProtoError("Received non-text message from server with JSON encoding"));
+					return;
+				}
+				msg = readJsonObject(JSON.parse(event.data), ServerMsg$1);
+			} else if (encoding === "protobuf") {
+				if (!(event.data instanceof ArrayBuffer)) {
+					this.#socket.close(3003, "Only binary messages are accepted with Protobuf encoding");
+					this.#setClosed(new ProtoError("Received non-binary message from server with Protobuf encoding"));
+					return;
+				}
+				msg = readProtobufMessage(new Uint8Array(event.data), ServerMsg);
+			} else throw impossible(encoding, "Impossible encoding");
+			this.#handleMsg(msg);
+		} catch (e) {
+			this.#socket.close(3007, "Could not handle message");
+			this.#setClosed(e);
+		}
+	}
+	#handleMsg(msg) {
+		if (msg.type === "none") throw new ProtoError("Received an unrecognized ServerMsg");
+		else if (msg.type === "hello_ok" || msg.type === "hello_error") {
+			if (this.#recvdHello) throw new ProtoError("Received a duplicated hello response");
+			this.#recvdHello = true;
+			if (msg.type === "hello_error") throw errorFromProto(msg.error);
+			return;
+		} else if (!this.#recvdHello) throw new ProtoError("Received a non-hello message before a hello response");
+		if (msg.type === "response_ok") {
+			const requestId = msg.requestId;
+			const responseState = this.#responseMap.get(requestId);
+			this.#responseMap.delete(requestId);
+			if (responseState === void 0) throw new ProtoError("Received unexpected OK response");
+			this.#requestIdAlloc.free(requestId);
+			try {
+				if (responseState.type !== msg.response.type) {
+					console.dir({
+						responseState,
+						msg
+					});
+					throw new ProtoError("Received unexpected type of response");
+				}
+				responseState.responseCallback(msg.response);
+			} catch (e) {
+				responseState.errorCallback(e);
+				throw e;
+			}
+		} else if (msg.type === "response_error") {
+			const requestId = msg.requestId;
+			const responseState = this.#responseMap.get(requestId);
+			this.#responseMap.delete(requestId);
+			if (responseState === void 0) throw new ProtoError("Received unexpected error response");
+			this.#requestIdAlloc.free(requestId);
+			responseState.errorCallback(errorFromProto(msg.error));
+		} else throw impossible(msg, "Impossible ServerMsg type");
+	}
+	/** Open a {@link WsStream}, a stream for executing SQL statements. */
+	openStream() {
+		return WsStream.open(this);
+	}
+	/** Cache a SQL text on the server. This requires protocol version 2 or higher. */
+	storeSql(sql) {
+		this._ensureVersion(2, "storeSql()");
+		const sqlId = this.#sqlIdAlloc.alloc();
+		const sqlObj = new Sql(this, sqlId);
+		const responseCallback = () => void 0;
+		const errorCallback = (e) => sqlObj._setClosed(e);
+		const request = {
+			type: "store_sql",
+			sqlId,
+			sql
+		};
+		this._sendRequest(request, {
+			responseCallback,
+			errorCallback
+		});
+		return sqlObj;
+	}
+	/** @private */
+	_closeSql(sqlId) {
+		if (this.#closed !== void 0) return;
+		const responseCallback = () => this.#sqlIdAlloc.free(sqlId);
+		const errorCallback = (e) => this.#setClosed(e);
+		const request = {
+			type: "close_sql",
+			sqlId
+		};
+		this._sendRequest(request, {
+			responseCallback,
+			errorCallback
+		});
+	}
+	/** Close the client and the WebSocket. */
+	close() {
+		this.#setClosed(new ClientError("Client was manually closed"));
+	}
+	/** True if the client is closed. */
+	get closed() {
+		return this.#closed !== void 0;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/queue_microtask.js
+var _queueMicrotask;
+if (typeof queueMicrotask !== "undefined") _queueMicrotask = queueMicrotask;
+else {
+	const resolved = Promise.resolve();
+	_queueMicrotask = (callback) => {
+		resolved.then(callback);
+	};
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/byte_queue.js
+var ByteQueue = class {
+	#array;
+	#shiftPos;
+	#pushPos;
+	constructor(initialCap) {
+		this.#array = new Uint8Array(new ArrayBuffer(initialCap));
+		this.#shiftPos = 0;
+		this.#pushPos = 0;
+	}
+	get length() {
+		return this.#pushPos - this.#shiftPos;
+	}
+	data() {
+		return this.#array.slice(this.#shiftPos, this.#pushPos);
+	}
+	push(chunk) {
+		this.#ensurePush(chunk.byteLength);
+		this.#array.set(chunk, this.#pushPos);
+		this.#pushPos += chunk.byteLength;
+	}
+	#ensurePush(pushLength) {
+		if (this.#pushPos + pushLength <= this.#array.byteLength) return;
+		const filledLength = this.#pushPos - this.#shiftPos;
+		if (filledLength + pushLength <= this.#array.byteLength && 2 * this.#pushPos >= this.#array.byteLength) this.#array.copyWithin(0, this.#shiftPos, this.#pushPos);
+		else {
+			let newCap = this.#array.byteLength;
+			do
+				newCap *= 2;
+			while (filledLength + pushLength > newCap);
+			const newArray = new Uint8Array(new ArrayBuffer(newCap));
+			newArray.set(this.#array.slice(this.#shiftPos, this.#pushPos), 0);
+			this.#array = newArray;
+		}
+		this.#pushPos = filledLength;
+		this.#shiftPos = 0;
+	}
+	shift(length) {
+		this.#shiftPos += length;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/json_decode.js
+function PipelineRespBody$1(obj) {
+	return {
+		baton: stringOpt(obj["baton"]),
+		baseUrl: stringOpt(obj["base_url"]),
+		results: arrayObjectsMap(obj["results"], StreamResult$1)
+	};
+}
+function StreamResult$1(obj) {
+	const type = string(obj["type"]);
+	if (type === "ok") return {
+		type: "ok",
+		response: StreamResponse$1(object(obj["response"]))
+	};
+	else if (type === "error") return {
+		type: "error",
+		error: Error$2(object(obj["error"]))
+	};
+	else throw new ProtoError("Unexpected type of StreamResult");
+}
+function StreamResponse$1(obj) {
+	const type = string(obj["type"]);
+	if (type === "close") return { type: "close" };
+	else if (type === "execute") return {
+		type: "execute",
+		result: StmtResult$1(object(obj["result"]))
+	};
+	else if (type === "batch") return {
+		type: "batch",
+		result: BatchResult$1(object(obj["result"]))
+	};
+	else if (type === "sequence") return { type: "sequence" };
+	else if (type === "describe") return {
+		type: "describe",
+		result: DescribeResult$1(object(obj["result"]))
+	};
+	else if (type === "store_sql") return { type: "store_sql" };
+	else if (type === "close_sql") return { type: "close_sql" };
+	else if (type === "get_autocommit") return {
+		type: "get_autocommit",
+		isAutocommit: boolean(obj["is_autocommit"])
+	};
+	else throw new ProtoError("Unexpected type of StreamResponse");
+}
+function CursorRespBody$1(obj) {
+	return {
+		baton: stringOpt(obj["baton"]),
+		baseUrl: stringOpt(obj["base_url"])
+	};
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/protobuf_decode.js
+var PipelineRespBody = {
+	default() {
+		return {
+			baton: void 0,
+			baseUrl: void 0,
+			results: []
+		};
+	},
+	1(r, msg) {
+		msg.baton = r.string();
+	},
+	2(r, msg) {
+		msg.baseUrl = r.string();
+	},
+	3(r, msg) {
+		msg.results.push(r.message(StreamResult));
+	}
+};
+var StreamResult = {
+	default() {
+		return { type: "none" };
+	},
+	1(r) {
+		return {
+			type: "ok",
+			response: r.message(StreamResponse)
+		};
+	},
+	2(r) {
+		return {
+			type: "error",
+			error: r.message(Error$1)
+		};
+	}
+};
+var StreamResponse = {
+	default() {
+		return { type: "none" };
+	},
+	1(r) {
+		return { type: "close" };
+	},
+	2(r) {
+		return r.message(ExecuteStreamResp);
+	},
+	3(r) {
+		return r.message(BatchStreamResp);
+	},
+	4(r) {
+		return { type: "sequence" };
+	},
+	5(r) {
+		return r.message(DescribeStreamResp);
+	},
+	6(r) {
+		return { type: "store_sql" };
+	},
+	7(r) {
+		return { type: "close_sql" };
+	},
+	8(r) {
+		return r.message(GetAutocommitStreamResp);
+	}
+};
+var ExecuteStreamResp = {
+	default() {
+		return {
+			type: "execute",
+			result: StmtResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(StmtResult);
+	}
+};
+var BatchStreamResp = {
+	default() {
+		return {
+			type: "batch",
+			result: BatchResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(BatchResult);
+	}
+};
+var DescribeStreamResp = {
+	default() {
+		return {
+			type: "describe",
+			result: DescribeResult.default()
+		};
+	},
+	1(r, msg) {
+		msg.result = r.message(DescribeResult);
+	}
+};
+var GetAutocommitStreamResp = {
+	default() {
+		return {
+			type: "get_autocommit",
+			isAutocommit: false
+		};
+	},
+	1(r, msg) {
+		msg.isAutocommit = r.bool();
+	}
+};
+var CursorRespBody = {
+	default() {
+		return {
+			baton: void 0,
+			baseUrl: void 0
+		};
+	},
+	1(r, msg) {
+		msg.baton = r.string();
+	},
+	2(r, msg) {
+		msg.baseUrl = r.string();
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/cursor.js
+var HttpCursor = class extends Cursor {
+	#stream;
+	#encoding;
+	#reader;
+	#queue;
+	#closed;
+	#done;
+	/** @private */
+	constructor(stream, encoding) {
+		super();
+		this.#stream = stream;
+		this.#encoding = encoding;
+		this.#reader = void 0;
+		this.#queue = new ByteQueue(16384);
+		this.#closed = void 0;
+		this.#done = false;
+	}
+	async open(response) {
+		if (response.body === null) throw new ProtoError("No response body for cursor request");
+		this.#reader = response.body[Symbol.asyncIterator]();
+		const respBody = await this.#nextItem(CursorRespBody$1, CursorRespBody);
+		if (respBody === void 0) throw new ProtoError("Empty response to cursor request");
+		return respBody;
+	}
+	/** Fetch the next entry from the cursor. */
+	next() {
+		return this.#nextItem(CursorEntry$1, CursorEntry);
+	}
+	/** Close the cursor. */
+	close() {
+		this._setClosed(new ClientError("Cursor was manually closed"));
+	}
+	/** @private */
+	_setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		this.#stream._cursorClosed(this);
+		if (this.#reader !== void 0) this.#reader.return();
+	}
+	/** True if the cursor is closed. */
+	get closed() {
+		return this.#closed !== void 0;
+	}
+	async #nextItem(jsonFun, protobufDef) {
+		for (;;) {
+			if (this.#done) return;
+			else if (this.#closed !== void 0) throw new ClosedError("Cursor is closed", this.#closed);
+			if (this.#encoding === "json") {
+				const jsonData = this.#parseItemJson();
+				if (jsonData !== void 0) {
+					const jsonText = new TextDecoder().decode(jsonData);
+					return readJsonObject(JSON.parse(jsonText), jsonFun);
+				}
+			} else if (this.#encoding === "protobuf") {
+				const protobufData = this.#parseItemProtobuf();
+				if (protobufData !== void 0) return readProtobufMessage(protobufData, protobufDef);
+			} else throw impossible(this.#encoding, "Impossible encoding");
+			if (this.#reader === void 0) throw new InternalError("Attempted to read from HTTP cursor before it was opened");
+			const { value, done } = await this.#reader.next();
+			if (done && this.#queue.length === 0) this.#done = true;
+			else if (done) throw new ProtoError("Unexpected end of cursor stream");
+			else this.#queue.push(value);
+		}
+	}
+	#parseItemJson() {
+		const data = this.#queue.data();
+		const newlinePos = data.indexOf(10);
+		if (newlinePos < 0) return;
+		const jsonData = data.slice(0, newlinePos);
+		this.#queue.shift(newlinePos + 1);
+		return jsonData;
+	}
+	#parseItemProtobuf() {
+		const data = this.#queue.data();
+		let varintValue = 0;
+		let varintLength = 0;
+		for (;;) {
+			if (varintLength >= data.byteLength) return;
+			const byte = data[varintLength];
+			varintValue |= (byte & 127) << 7 * varintLength;
+			varintLength += 1;
+			if (!(byte & 128)) break;
+		}
+		if (data.byteLength < varintLength + varintValue) return;
+		const protobufData = data.slice(varintLength, varintLength + varintValue);
+		this.#queue.shift(varintLength + varintValue);
+		return protobufData;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/json_encode.js
+function PipelineReqBody$1(w, msg) {
+	if (msg.baton !== void 0) w.string("baton", msg.baton);
+	w.arrayObjects("requests", msg.requests, StreamRequest$1);
+}
+function StreamRequest$1(w, msg) {
+	w.stringRaw("type", msg.type);
+	if (msg.type === "close") {} else if (msg.type === "execute") w.object("stmt", msg.stmt, Stmt$1);
+	else if (msg.type === "batch") w.object("batch", msg.batch, Batch$1);
+	else if (msg.type === "sequence") {
+		if (msg.sql !== void 0) w.string("sql", msg.sql);
+		if (msg.sqlId !== void 0) w.number("sql_id", msg.sqlId);
+	} else if (msg.type === "describe") {
+		if (msg.sql !== void 0) w.string("sql", msg.sql);
+		if (msg.sqlId !== void 0) w.number("sql_id", msg.sqlId);
+	} else if (msg.type === "store_sql") {
+		w.number("sql_id", msg.sqlId);
+		w.string("sql", msg.sql);
+	} else if (msg.type === "close_sql") w.number("sql_id", msg.sqlId);
+	else if (msg.type === "get_autocommit") {} else throw impossible(msg, "Impossible type of StreamRequest");
+}
+function CursorReqBody$1(w, msg) {
+	if (msg.baton !== void 0) w.string("baton", msg.baton);
+	w.object("batch", msg.batch, Batch$1);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/protobuf_encode.js
+function PipelineReqBody(w, msg) {
+	if (msg.baton !== void 0) w.string(1, msg.baton);
+	for (const req of msg.requests) w.message(2, req, StreamRequest);
+}
+function StreamRequest(w, msg) {
+	if (msg.type === "close") w.message(1, msg, CloseStreamReq);
+	else if (msg.type === "execute") w.message(2, msg, ExecuteStreamReq);
+	else if (msg.type === "batch") w.message(3, msg, BatchStreamReq);
+	else if (msg.type === "sequence") w.message(4, msg, SequenceStreamReq);
+	else if (msg.type === "describe") w.message(5, msg, DescribeStreamReq);
+	else if (msg.type === "store_sql") w.message(6, msg, StoreSqlStreamReq);
+	else if (msg.type === "close_sql") w.message(7, msg, CloseSqlStreamReq);
+	else if (msg.type === "get_autocommit") w.message(8, msg, GetAutocommitStreamReq);
+	else throw impossible(msg, "Impossible type of StreamRequest");
+}
+function CloseStreamReq(_w, _msg) {}
+function ExecuteStreamReq(w, msg) {
+	w.message(1, msg.stmt, Stmt);
+}
+function BatchStreamReq(w, msg) {
+	w.message(1, msg.batch, Batch);
+}
+function SequenceStreamReq(w, msg) {
+	if (msg.sql !== void 0) w.string(1, msg.sql);
+	if (msg.sqlId !== void 0) w.int32(2, msg.sqlId);
+}
+function DescribeStreamReq(w, msg) {
+	if (msg.sql !== void 0) w.string(1, msg.sql);
+	if (msg.sqlId !== void 0) w.int32(2, msg.sqlId);
+}
+function StoreSqlStreamReq(w, msg) {
+	w.int32(1, msg.sqlId);
+	w.string(2, msg.sql);
+}
+function CloseSqlStreamReq(w, msg) {
+	w.int32(1, msg.sqlId);
+}
+function GetAutocommitStreamReq(_w, _msg) {}
+function CursorReqBody(w, msg) {
+	if (msg.baton !== void 0) w.string(1, msg.baton);
+	w.message(2, msg.batch, Batch);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/stream.js
+var HttpStream = class extends Stream {
+	#client;
+	#baseUrl;
+	#jwt;
+	#fetch;
+	#remoteEncryptionKey;
+	#baton;
+	#queue;
+	#flushing;
+	#cursor;
+	#closing;
+	#closeQueued;
+	#closed;
+	#sqlIdAlloc;
+	/** @private */
+	constructor(client, baseUrl, jwt, customFetch, remoteEncryptionKey) {
+		super(client.intMode);
+		this.#client = client;
+		this.#baseUrl = baseUrl.toString();
+		this.#jwt = jwt;
+		this.#fetch = customFetch;
+		this.#remoteEncryptionKey = remoteEncryptionKey;
+		this.#baton = void 0;
+		this.#queue = new Queue();
+		this.#flushing = false;
+		this.#closing = false;
+		this.#closeQueued = false;
+		this.#closed = void 0;
+		this.#sqlIdAlloc = new IdAlloc();
+	}
+	/** Get the {@link HttpClient} object that this stream belongs to. */
+	client() {
+		return this.#client;
+	}
+	/** @private */
+	_sqlOwner() {
+		return this;
+	}
+	/** Cache a SQL text on the server. */
+	storeSql(sql) {
+		const sqlId = this.#sqlIdAlloc.alloc();
+		this.#sendStreamRequest({
+			type: "store_sql",
+			sqlId,
+			sql
+		}).then(() => void 0, (error) => this._setClosed(error));
+		return new Sql(this, sqlId);
+	}
+	/** @private */
+	_closeSql(sqlId) {
+		if (this.#closed !== void 0) return;
+		this.#sendStreamRequest({
+			type: "close_sql",
+			sqlId
+		}).then(() => this.#sqlIdAlloc.free(sqlId), (error) => this._setClosed(error));
+	}
+	/** @private */
+	_execute(stmt) {
+		return this.#sendStreamRequest({
+			type: "execute",
+			stmt
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_batch(batch) {
+		return this.#sendStreamRequest({
+			type: "batch",
+			batch
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_describe(protoSql) {
+		return this.#sendStreamRequest({
+			type: "describe",
+			sql: protoSql.sql,
+			sqlId: protoSql.sqlId
+		}).then((response) => {
+			return response.result;
+		});
+	}
+	/** @private */
+	_sequence(protoSql) {
+		return this.#sendStreamRequest({
+			type: "sequence",
+			sql: protoSql.sql,
+			sqlId: protoSql.sqlId
+		}).then((_response) => {});
+	}
+	/** Check whether the SQL connection underlying this stream is in autocommit state (i.e., outside of an
+	* explicit transaction). This requires protocol version 3 or higher.
+	*/
+	getAutocommit() {
+		this.#client._ensureVersion(3, "getAutocommit()");
+		return this.#sendStreamRequest({ type: "get_autocommit" }).then((response) => {
+			return response.isAutocommit;
+		});
+	}
+	#sendStreamRequest(request) {
+		return new Promise((responseCallback, errorCallback) => {
+			this.#pushToQueue({
+				type: "pipeline",
+				request,
+				responseCallback,
+				errorCallback
+			});
+		});
+	}
+	/** @private */
+	_openCursor(batch) {
+		return new Promise((cursorCallback, errorCallback) => {
+			this.#pushToQueue({
+				type: "cursor",
+				batch,
+				cursorCallback,
+				errorCallback
+			});
+		});
+	}
+	/** @private */
+	_cursorClosed(cursor) {
+		if (cursor !== this.#cursor) throw new InternalError("Cursor was closed, but it was not associated with the stream");
+		this.#cursor = void 0;
+		_queueMicrotask(() => this.#flushQueue());
+	}
+	/** Immediately close the stream. */
+	close() {
+		this._setClosed(new ClientError("Stream was manually closed"));
+	}
+	/** Gracefully close the stream. */
+	closeGracefully() {
+		this.#closing = true;
+		_queueMicrotask(() => this.#flushQueue());
+	}
+	/** True if the stream is closed. */
+	get closed() {
+		return this.#closed !== void 0 || this.#closing;
+	}
+	/** @private */
+	_setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		if (this.#cursor !== void 0) this.#cursor._setClosed(error);
+		this.#client._streamClosed(this);
+		for (;;) {
+			const entry = this.#queue.shift();
+			if (entry !== void 0) entry.errorCallback(error);
+			else break;
+		}
+		if ((this.#baton !== void 0 || this.#flushing) && !this.#closeQueued) {
+			this.#queue.push({
+				type: "pipeline",
+				request: { type: "close" },
+				responseCallback: () => void 0,
+				errorCallback: () => void 0
+			});
+			this.#closeQueued = true;
+			_queueMicrotask(() => this.#flushQueue());
+		}
+	}
+	#pushToQueue(entry) {
+		if (this.#closed !== void 0) throw new ClosedError("Stream is closed", this.#closed);
+		else if (this.#closing) throw new ClosedError("Stream is closing", void 0);
+		else {
+			this.#queue.push(entry);
+			_queueMicrotask(() => this.#flushQueue());
+		}
+	}
+	#flushQueue() {
+		if (this.#flushing || this.#cursor !== void 0) return;
+		if (this.#closing && this.#queue.length === 0) {
+			this._setClosed(new ClientError("Stream was gracefully closed"));
+			return;
+		}
+		const endpoint = this.#client._endpoint;
+		if (endpoint === void 0) {
+			this.#client._endpointPromise.then(() => this.#flushQueue(), (error) => this._setClosed(error));
+			return;
+		}
+		const firstEntry = this.#queue.shift();
+		if (firstEntry === void 0) return;
+		else if (firstEntry.type === "pipeline") {
+			const pipeline = [firstEntry];
+			for (;;) {
+				const entry = this.#queue.first();
+				if (entry !== void 0 && entry.type === "pipeline") {
+					pipeline.push(entry);
+					this.#queue.shift();
+				} else if (entry === void 0 && this.#closing && !this.#closeQueued) {
+					pipeline.push({
+						type: "pipeline",
+						request: { type: "close" },
+						responseCallback: () => void 0,
+						errorCallback: () => void 0
+					});
+					this.#closeQueued = true;
+					break;
+				} else break;
+			}
+			this.#flushPipeline(endpoint, pipeline);
+		} else if (firstEntry.type === "cursor") this.#flushCursor(endpoint, firstEntry);
+		else throw impossible(firstEntry, "Impossible type of QueueEntry");
+	}
+	#flushPipeline(endpoint, pipeline) {
+		this.#flush(() => this.#createPipelineRequest(pipeline, endpoint), (resp) => decodePipelineResponse(resp, endpoint.encoding), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (respBody) => handlePipelineResponse(pipeline, respBody), (error) => pipeline.forEach((entry) => entry.errorCallback(error)));
+	}
+	#flushCursor(endpoint, entry) {
+		const cursor = new HttpCursor(this, endpoint.encoding);
+		this.#cursor = cursor;
+		this.#flush(() => this.#createCursorRequest(entry, endpoint), (resp) => cursor.open(resp), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (_respBody) => entry.cursorCallback(cursor), (error) => entry.errorCallback(error));
+	}
+	#flush(createRequest, decodeResponse, getBaton, getBaseUrl, handleResponse, handleError) {
+		let promise;
+		try {
+			const request = createRequest();
+			const fetch = this.#fetch;
+			promise = fetch(request);
+		} catch (error) {
+			promise = Promise.reject(error);
+		}
+		this.#flushing = true;
+		promise.then((resp) => {
+			if (!resp.ok) return errorFromResponse(resp).then((error) => {
+				throw error;
+			});
+			return decodeResponse(resp);
+		}).then((r) => {
+			this.#baton = getBaton(r);
+			this.#baseUrl = getBaseUrl(r) ?? this.#baseUrl;
+			handleResponse(r);
+		}).catch((error) => {
+			this._setClosed(error);
+			handleError(error);
+		}).finally(() => {
+			this.#flushing = false;
+			this.#flushQueue();
+		});
+	}
+	#createPipelineRequest(pipeline, endpoint) {
+		return this.#createRequest(new URL(endpoint.pipelinePath, this.#baseUrl), {
+			baton: this.#baton,
+			requests: pipeline.map((entry) => entry.request)
+		}, endpoint.encoding, PipelineReqBody$1, PipelineReqBody);
+	}
+	#createCursorRequest(entry, endpoint) {
+		if (endpoint.cursorPath === void 0) throw new ProtocolVersionError(`Cursors are supported only on protocol version 3 and higher, but the HTTP server only supports version ${endpoint.version}.`);
+		return this.#createRequest(new URL(endpoint.cursorPath, this.#baseUrl), {
+			baton: this.#baton,
+			batch: entry.batch
+		}, endpoint.encoding, CursorReqBody$1, CursorReqBody);
+	}
+	#createRequest(url, reqBody, encoding, jsonFun, protobufFun) {
+		let bodyData;
+		let contentType;
+		if (encoding === "json") {
+			bodyData = writeJsonObject(reqBody, jsonFun);
+			contentType = "application/json";
+		} else if (encoding === "protobuf") {
+			bodyData = writeProtobufMessage(reqBody, protobufFun);
+			contentType = "application/x-protobuf";
+		} else throw impossible(encoding, "Impossible encoding");
+		const headers = new Headers();
+		headers.set("content-type", contentType);
+		if (this.#jwt !== void 0) headers.set("authorization", `Bearer ${this.#jwt}`);
+		if (this.#remoteEncryptionKey !== void 0) headers.set("x-turso-encryption-key", this.#remoteEncryptionKey);
+		return new Request(url.toString(), {
+			method: "POST",
+			headers,
+			body: bodyData
+		});
+	}
+};
+function handlePipelineResponse(pipeline, respBody) {
+	if (respBody.results.length !== pipeline.length) throw new ProtoError("Server returned unexpected number of pipeline results");
+	for (let i = 0; i < pipeline.length; ++i) {
+		const result = respBody.results[i];
+		const entry = pipeline[i];
+		if (result.type === "ok") {
+			if (result.response.type !== entry.request.type) throw new ProtoError("Received unexpected type of response");
+			entry.responseCallback(result.response);
+		} else if (result.type === "error") entry.errorCallback(errorFromProto(result.error));
+		else if (result.type === "none") throw new ProtoError("Received unrecognized type of StreamResult");
+		else throw impossible(result, "Received impossible type of StreamResult");
+	}
+}
+async function decodePipelineResponse(resp, encoding) {
+	if (encoding === "json") return readJsonObject(await resp.json(), PipelineRespBody$1);
+	if (encoding === "protobuf") {
+		const respData = await resp.arrayBuffer();
+		return readProtobufMessage(new Uint8Array(respData), PipelineRespBody);
+	}
+	await resp.body?.cancel();
+	throw impossible(encoding, "Impossible encoding");
+}
+async function errorFromResponse(resp) {
+	const respType = resp.headers.get("content-type") ?? "text/plain";
+	let message = `Server returned HTTP status ${resp.status}`;
+	if (respType === "application/json") {
+		const respBody = await resp.json();
+		if ("message" in respBody) return errorFromProto(respBody);
+		return new HttpServerError(message, resp.status);
+	}
+	if (respType === "text/plain") {
+		const respBody = (await resp.text()).trim();
+		if (respBody !== "") message += `: ${respBody}`;
+		return new HttpServerError(message, resp.status);
+	}
+	await resp.body?.cancel();
+	return new HttpServerError(message, resp.status);
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/http/client.js
+var checkEndpoints = [{
+	versionPath: "v3-protobuf",
+	pipelinePath: "v3-protobuf/pipeline",
+	cursorPath: "v3-protobuf/cursor",
+	version: 3,
+	encoding: "protobuf"
+}];
+var fallbackEndpoint = {
+	versionPath: "v2",
+	pipelinePath: "v2/pipeline",
+	cursorPath: void 0,
+	version: 2,
+	encoding: "json"
+};
+/** A client for the Hrana protocol over HTTP. */
+var HttpClient$1 = class extends Client {
+	#url;
+	#jwt;
+	#fetch;
+	#remoteEncryptionKey;
+	#closed;
+	#streams;
+	/** @private */
+	_endpointPromise;
+	/** @private */
+	_endpoint;
+	/** @private */
+	constructor(url, jwt, customFetch, remoteEncryptionKey, protocolVersion = 2) {
+		super();
+		this.#url = url;
+		this.#jwt = jwt;
+		this.#fetch = customFetch ?? globalThis.fetch;
+		this.#remoteEncryptionKey = remoteEncryptionKey;
+		this.#closed = void 0;
+		this.#streams = /* @__PURE__ */ new Set();
+		if (protocolVersion == 3) {
+			this._endpointPromise = findEndpoint(this.#fetch, this.#url);
+			this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error) => this.#setClosed(error));
+		} else {
+			this._endpointPromise = Promise.resolve(fallbackEndpoint);
+			this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error) => this.#setClosed(error));
+		}
+	}
+	/** Get the protocol version supported by the server. */
+	async getVersion() {
+		if (this._endpoint !== void 0) return this._endpoint.version;
+		return (await this._endpointPromise).version;
+	}
+	/** @private */
+	_ensureVersion(minVersion, feature) {
+		if (minVersion <= fallbackEndpoint.version) return;
+		else if (this._endpoint === void 0) throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, but the version supported by the HTTP server is not yet known. Use Client.getVersion() to wait until the version is available.`);
+		else if (this._endpoint.version < minVersion) throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, but the HTTP server only supports version ${this._endpoint.version}.`);
+	}
+	/** Open a {@link HttpStream}, a stream for executing SQL statements. */
+	openStream() {
+		if (this.#closed !== void 0) throw new ClosedError("Client is closed", this.#closed);
+		const stream = new HttpStream(this, this.#url, this.#jwt, this.#fetch, this.#remoteEncryptionKey);
+		this.#streams.add(stream);
+		return stream;
+	}
+	/** @private */
+	_streamClosed(stream) {
+		this.#streams.delete(stream);
+	}
+	/** Close the client and all its streams. */
+	close() {
+		this.#setClosed(new ClientError("Client was manually closed"));
+	}
+	/** True if the client is closed. */
+	get closed() {
+		return this.#closed !== void 0;
+	}
+	#setClosed(error) {
+		if (this.#closed !== void 0) return;
+		this.#closed = error;
+		for (const stream of Array.from(this.#streams)) stream._setClosed(new ClosedError("Client was closed", error));
+	}
+};
+async function findEndpoint(customFetch, clientUrl) {
+	const fetch = customFetch;
+	for (const endpoint of checkEndpoints) {
+		const url = new URL(endpoint.versionPath, clientUrl);
+		const response = await fetch(new Request(url.toString(), { method: "GET" }));
+		await response.arrayBuffer();
+		if (response.ok) return endpoint;
+	}
+	return fallbackEndpoint;
+}
+//#endregion
+//#region node_modules/@libsql/hrana-client/lib-esm/index.js
+/** Open a Hrana client over WebSocket connected to the given `url`. */
+function openWs(url, jwt, protocolVersion = 2) {
+	if (typeof import_websocket.default === "undefined") throw new WebSocketUnsupportedError("WebSockets are not supported in this environment");
+	var subprotocols = void 0;
+	if (protocolVersion == 3) subprotocols = Array.from(subprotocolsV3.keys());
+	else subprotocols = Array.from(subprotocolsV2.keys());
+	return new WsClient$1(new import_websocket.default(url, subprotocols), jwt);
+}
+/** Open a Hrana client over HTTP connected to the given `url`.
+*
+* If the `customFetch` argument is passed and not `undefined`, it is used in place of the `fetch` function
+* from the global `fetch`. This function is always called with a global `Request` object.
+*/
+function openHttp(url, jwt, customFetch, remoteEncryptionKey, protocolVersion = 2) {
+	return new HttpClient$1(url instanceof URL ? url : new URL(url), jwt, customFetch, remoteEncryptionKey, protocolVersion);
+}
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/hrana.js
+var HranaTransaction = class {
+	#mode;
+	#version;
+	#started;
+	/** @private */
+	constructor(mode, version) {
+		this.#mode = mode;
+		this.#version = version;
+		this.#started = void 0;
+	}
+	execute(stmt) {
+		return this.batch([stmt]).then((results) => results[0]);
+	}
+	async batch(stmts) {
+		const stream = this._getStream();
+		if (stream.closed) throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
+		try {
+			const hranaStmts = stmts.map(stmtToHrana);
+			let rowsPromises;
+			if (this.#started === void 0) {
+				this._getSqlCache().apply(hranaStmts);
+				const batch = stream.batch(this.#version >= 3);
+				const beginStep = batch.step();
+				const beginPromise = beginStep.run(transactionModeToBegin(this.#mode));
+				let lastStep = beginStep;
+				rowsPromises = hranaStmts.map((hranaStmt) => {
+					const stmtStep = batch.step().condition(BatchCond$2.ok(lastStep));
+					if (this.#version >= 3) stmtStep.condition(BatchCond$2.not(BatchCond$2.isAutocommit(batch)));
+					const rowsPromise = stmtStep.query(hranaStmt);
+					rowsPromise.catch(() => void 0);
+					lastStep = stmtStep;
+					return rowsPromise;
+				});
+				this.#started = batch.execute().then(() => beginPromise).then(() => void 0);
+				try {
+					await this.#started;
+				} catch (e) {
+					this.close();
+					throw e;
+				}
+			} else {
+				if (this.#version < 3) await this.#started;
+				this._getSqlCache().apply(hranaStmts);
+				const batch = stream.batch(this.#version >= 3);
+				let lastStep = void 0;
+				rowsPromises = hranaStmts.map((hranaStmt) => {
+					const stmtStep = batch.step();
+					if (lastStep !== void 0) stmtStep.condition(BatchCond$2.ok(lastStep));
+					if (this.#version >= 3) stmtStep.condition(BatchCond$2.not(BatchCond$2.isAutocommit(batch)));
+					const rowsPromise = stmtStep.query(hranaStmt);
+					rowsPromise.catch(() => void 0);
+					lastStep = stmtStep;
+					return rowsPromise;
+				});
+				await batch.execute();
+			}
+			const resultSets = [];
+			for (let i = 0; i < rowsPromises.length; i++) try {
+				const rows = await rowsPromises[i];
+				if (rows === void 0) throw new LibsqlBatchError("Statement in a transaction was not executed, probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
+				resultSets.push(resultSetFromHrana(rows));
+			} catch (e) {
+				if (e instanceof LibsqlBatchError) throw e;
+				const mappedError = mapHranaError(e);
+				if (mappedError instanceof LibsqlError) throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : void 0);
+				throw mappedError;
+			}
+			return resultSets;
+		} catch (e) {
+			throw mapHranaError(e);
+		}
+	}
+	async executeMultiple(sql) {
+		const stream = this._getStream();
+		if (stream.closed) throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
+		try {
+			if (this.#started === void 0) {
+				this.#started = stream.run(transactionModeToBegin(this.#mode)).then(() => void 0);
+				try {
+					await this.#started;
+				} catch (e) {
+					this.close();
+					throw e;
+				}
+			} else await this.#started;
+			await stream.sequence(sql);
+		} catch (e) {
+			throw mapHranaError(e);
+		}
+	}
+	async rollback() {
+		try {
+			const stream = this._getStream();
+			if (stream.closed) return;
+			if (this.#started !== void 0) {} else return;
+			const promise = stream.run("ROLLBACK").catch((e) => {
+				throw mapHranaError(e);
+			});
+			stream.closeGracefully();
+			await promise;
+		} catch (e) {
+			throw mapHranaError(e);
+		} finally {
+			this.close();
+		}
+	}
+	async commit() {
+		try {
+			const stream = this._getStream();
+			if (stream.closed) throw new LibsqlError("Cannot commit the transaction because it is already closed", "TRANSACTION_CLOSED");
+			if (this.#started !== void 0) await this.#started;
+			else return;
+			const promise = stream.run("COMMIT").catch((e) => {
+				throw mapHranaError(e);
+			});
+			stream.closeGracefully();
+			await promise;
+		} catch (e) {
+			throw mapHranaError(e);
+		} finally {
+			this.close();
+		}
+	}
+};
+async function executeHranaBatch(mode, version, batch, hranaStmts, disableForeignKeys = false) {
+	if (disableForeignKeys) batch.step().run("PRAGMA foreign_keys=off");
+	const beginStep = batch.step();
+	const beginPromise = beginStep.run(transactionModeToBegin(mode));
+	let lastStep = beginStep;
+	const stmtPromises = hranaStmts.map((hranaStmt) => {
+		const stmtStep = batch.step().condition(BatchCond$2.ok(lastStep));
+		if (version >= 3) stmtStep.condition(BatchCond$2.not(BatchCond$2.isAutocommit(batch)));
+		const stmtPromise = stmtStep.query(hranaStmt);
+		lastStep = stmtStep;
+		return stmtPromise;
+	});
+	const commitStep = batch.step().condition(BatchCond$2.ok(lastStep));
+	if (version >= 3) commitStep.condition(BatchCond$2.not(BatchCond$2.isAutocommit(batch)));
+	const commitPromise = commitStep.run("COMMIT");
+	batch.step().condition(BatchCond$2.not(BatchCond$2.ok(commitStep))).run("ROLLBACK").catch((_) => void 0);
+	if (disableForeignKeys) batch.step().run("PRAGMA foreign_keys=on");
+	await batch.execute();
+	const resultSets = [];
+	await beginPromise;
+	for (let i = 0; i < stmtPromises.length; i++) try {
+		const hranaRows = await stmtPromises[i];
+		if (hranaRows === void 0) throw new LibsqlBatchError("Statement in a batch was not executed, probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
+		resultSets.push(resultSetFromHrana(hranaRows));
+	} catch (e) {
+		if (e instanceof LibsqlBatchError) throw e;
+		const mappedError = mapHranaError(e);
+		if (mappedError instanceof LibsqlError) throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : void 0);
+		throw mappedError;
+	}
+	await commitPromise;
+	return resultSets;
+}
+function stmtToHrana(stmt) {
+	let sql;
+	let args;
+	if (Array.isArray(stmt)) [sql, args] = stmt;
+	else if (typeof stmt === "string") sql = stmt;
+	else {
+		sql = stmt.sql;
+		args = stmt.args;
+	}
+	const hranaStmt = new Stmt$2(sql);
+	if (args) {
+		if (Array.isArray(args)) hranaStmt.bindIndexes(args);
+		else for (const [key, value] of Object.entries(args)) hranaStmt.bindName(key, value);
+	}
+	return hranaStmt;
+}
+function resultSetFromHrana(hranaRows) {
+	const columns = hranaRows.columnNames.map((c) => c ?? "");
+	const columnTypes = hranaRows.columnDecltypes.map((c) => c ?? "");
+	const rows = hranaRows.rows;
+	const rowsAffected = hranaRows.affectedRowCount;
+	return new ResultSetImpl(columns, columnTypes, rows, rowsAffected, hranaRows.lastInsertRowid !== void 0 ? hranaRows.lastInsertRowid : void 0);
+}
+function mapHranaError(e) {
+	if (e instanceof ClientError) {
+		const code = mapHranaErrorCode(e);
+		return new LibsqlError(e.message, code, void 0, void 0, e);
+	}
+	return e;
+}
+function mapHranaErrorCode(e) {
+	if (e instanceof ResponseError && e.code !== void 0) return e.code;
+	else if (e instanceof ProtoError) return "HRANA_PROTO_ERROR";
+	else if (e instanceof ClosedError) return e.cause instanceof ClientError ? mapHranaErrorCode(e.cause) : "HRANA_CLOSED_ERROR";
+	else if (e instanceof WebSocketError) return "HRANA_WEBSOCKET_ERROR";
+	else if (e instanceof HttpServerError) return "SERVER_ERROR";
+	else if (e instanceof ProtocolVersionError) return "PROTOCOL_VERSION_ERROR";
+	else if (e instanceof InternalError) return "INTERNAL_ERROR";
+	else return "UNKNOWN";
+}
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/sql_cache.js
+var SqlCache = class {
+	#owner;
+	#sqls;
+	capacity;
+	constructor(owner, capacity) {
+		this.#owner = owner;
+		this.#sqls = new Lru();
+		this.capacity = capacity;
+	}
+	apply(hranaStmts) {
+		if (this.capacity <= 0) return;
+		const usedSqlObjs = /* @__PURE__ */ new Set();
+		for (const hranaStmt of hranaStmts) {
+			if (typeof hranaStmt.sql !== "string") continue;
+			const sqlText = hranaStmt.sql;
+			if (sqlText.length >= 5e3) continue;
+			let sqlObj = this.#sqls.get(sqlText);
+			if (sqlObj === void 0) {
+				while (this.#sqls.size + 1 > this.capacity) {
+					const [evictSqlText, evictSqlObj] = this.#sqls.peekLru();
+					if (usedSqlObjs.has(evictSqlObj)) break;
+					evictSqlObj.close();
+					this.#sqls.delete(evictSqlText);
+				}
+				if (this.#sqls.size + 1 <= this.capacity) {
+					sqlObj = this.#owner.storeSql(sqlText);
+					this.#sqls.set(sqlText, sqlObj);
+				}
+			}
+			if (sqlObj !== void 0) {
+				hranaStmt.sql = sqlObj;
+				usedSqlObjs.add(sqlObj);
+			}
+		}
+	}
+};
+var Lru = class {
+	#cache;
+	constructor() {
+		this.#cache = /* @__PURE__ */ new Map();
+	}
+	get(key) {
+		const value = this.#cache.get(key);
+		if (value !== void 0) {
+			this.#cache.delete(key);
+			this.#cache.set(key, value);
+		}
+		return value;
+	}
+	set(key, value) {
+		this.#cache.set(key, value);
+	}
+	peekLru() {
+		for (const entry of this.#cache.entries()) return entry;
+	}
+	delete(key) {
+		this.#cache.delete(key);
+	}
+	get size() {
+		return this.#cache.size;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/ws.js
+var import_promise_limit = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function limiter(count) {
+		var outstanding = 0;
+		var jobs = [];
+		function remove() {
+			outstanding--;
+			if (outstanding < count) dequeue();
+		}
+		function dequeue() {
+			var job = jobs.shift();
+			semaphore.queue = jobs.length;
+			if (job) run(job.fn).then(job.resolve).catch(job.reject);
+		}
+		function queue(fn) {
+			return new Promise(function(resolve, reject) {
+				jobs.push({
+					fn,
+					resolve,
+					reject
+				});
+				semaphore.queue = jobs.length;
+			});
+		}
+		function run(fn) {
+			outstanding++;
+			try {
+				return Promise.resolve(fn()).then(function(result) {
+					remove();
+					return result;
+				}, function(error) {
+					remove();
+					throw error;
+				});
+			} catch (err) {
+				remove();
+				return Promise.reject(err);
+			}
+		}
+		var semaphore = function(fn) {
+			if (outstanding >= count) return queue(fn);
+			else return run(fn);
+		};
+		return semaphore;
+	}
+	function map(items, mapper) {
+		var failed = false;
+		var limit = this;
+		return Promise.all(items.map(function() {
+			var args = arguments;
+			return limit(function() {
+				if (!failed) return mapper.apply(void 0, args).catch(function(e) {
+					failed = true;
+					throw e;
+				});
+			});
+		}));
+	}
+	function addExtras(fn) {
+		fn.queue = 0;
+		fn.map = map;
+		return fn;
+	}
+	module.exports = function(count) {
+		if (count) return addExtras(limiter(count));
+		else return addExtras(function(fn) {
+			return fn();
+		});
+	};
+})))(), 1);
+/** @private */
+function _createClient$2(config) {
+	if (config.scheme !== "wss" && config.scheme !== "ws") throw new LibsqlError(`The WebSocket client supports only "libsql:", "wss:" and "ws:" URLs, got ${JSON.stringify(config.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+	if (config.encryptionKey !== void 0) throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
+	if (config.scheme === "ws" && config.tls) throw new LibsqlError(`A "ws:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
+	else if (config.scheme === "wss" && !config.tls) throw new LibsqlError(`A "wss:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
+	const url = encodeBaseUrl(config.scheme, config.authority, config.path);
+	let client;
+	try {
+		client = openWs(url, config.authToken);
+	} catch (e) {
+		if (e instanceof WebSocketUnsupportedError) {
+			const suggestedScheme = config.scheme === "wss" ? "https" : "http";
+			const suggestedUrl = encodeBaseUrl(suggestedScheme, config.authority, config.path);
+			throw new LibsqlError(`This environment does not support WebSockets, please switch to the HTTP client by using a "${suggestedScheme}:" URL (${JSON.stringify(suggestedUrl)}). For more information, please read ${supportedUrlLink}`, "WEBSOCKETS_NOT_SUPPORTED");
+		}
+		throw mapHranaError(e);
+	}
+	return new WsClient(client, url, config.authToken, config.intMode, config.concurrency);
+}
+var maxConnAgeMillis = 6e4;
+var sqlCacheCapacity$1 = 100;
+var WsClient = class {
+	#url;
+	#authToken;
+	#intMode;
+	#connState;
+	#futureConnState;
+	closed;
+	protocol;
+	#isSchemaDatabase;
+	#promiseLimitFunction;
+	/** @private */
+	constructor(client, url, authToken, intMode, concurrency) {
+		this.#url = url;
+		this.#authToken = authToken;
+		this.#intMode = intMode;
+		this.#connState = this.#openConn(client);
+		this.#futureConnState = void 0;
+		this.closed = false;
+		this.protocol = "ws";
+		this.#promiseLimitFunction = (0, import_promise_limit.default)(concurrency);
+	}
+	async limit(fn) {
+		return this.#promiseLimitFunction(fn);
+	}
+	async execute(stmtOrSql, args) {
+		let stmt;
+		if (typeof stmtOrSql === "string") stmt = {
+			sql: stmtOrSql,
+			args: args || []
+		};
+		else stmt = stmtOrSql;
+		return this.limit(async () => {
+			const streamState = await this.#openStream();
+			try {
+				const hranaStmt = stmtToHrana(stmt);
+				streamState.conn.sqlCache.apply([hranaStmt]);
+				const hranaRowsPromise = streamState.stream.query(hranaStmt);
+				streamState.stream.closeGracefully();
+				return resultSetFromHrana(await hranaRowsPromise);
+			} catch (e) {
+				throw mapHranaError(e);
+			} finally {
+				this._closeStream(streamState);
+			}
+		});
+	}
+	async batch(stmts, mode = "deferred") {
+		return this.limit(async () => {
+			const streamState = await this.#openStream();
+			try {
+				const hranaStmts = stmts.map((stmt) => {
+					if (Array.isArray(stmt)) return {
+						sql: stmt[0],
+						args: stmt[1] || []
+					};
+					return stmt;
+				}).map(stmtToHrana);
+				const version = await streamState.conn.client.getVersion();
+				streamState.conn.sqlCache.apply(hranaStmts);
+				return await executeHranaBatch(mode, version, streamState.stream.batch(version >= 3), hranaStmts);
+			} catch (e) {
+				throw mapHranaError(e);
+			} finally {
+				this._closeStream(streamState);
+			}
+		});
+	}
+	async migrate(stmts) {
+		return this.limit(async () => {
+			const streamState = await this.#openStream();
+			try {
+				const hranaStmts = stmts.map(stmtToHrana);
+				const version = await streamState.conn.client.getVersion();
+				return await executeHranaBatch("deferred", version, streamState.stream.batch(version >= 3), hranaStmts, true);
+			} catch (e) {
+				throw mapHranaError(e);
+			} finally {
+				this._closeStream(streamState);
+			}
+		});
+	}
+	async transaction(mode = "write") {
+		return this.limit(async () => {
+			const streamState = await this.#openStream();
+			try {
+				const version = await streamState.conn.client.getVersion();
+				return new WsTransaction(this, streamState, mode, version);
+			} catch (e) {
+				this._closeStream(streamState);
+				throw mapHranaError(e);
+			}
+		});
+	}
+	async executeMultiple(sql) {
+		return this.limit(async () => {
+			const streamState = await this.#openStream();
+			try {
+				const promise = streamState.stream.sequence(sql);
+				streamState.stream.closeGracefully();
+				await promise;
+			} catch (e) {
+				throw mapHranaError(e);
+			} finally {
+				this._closeStream(streamState);
+			}
+		});
+	}
+	sync() {
+		throw new LibsqlError("sync not supported in ws mode", "SYNC_NOT_SUPPORTED");
+	}
+	async #openStream() {
+		if (this.closed) throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
+		if ((/* @__PURE__ */ new Date()).valueOf() - this.#connState.openTime.valueOf() > maxConnAgeMillis && this.#futureConnState === void 0) {
+			const futureConnState = this.#openConn();
+			this.#futureConnState = futureConnState;
+			futureConnState.client.getVersion().then((_version) => {
+				if (this.#connState !== futureConnState) {
+					if (this.#connState.streamStates.size === 0) this.#connState.client.close();
+				}
+				this.#connState = futureConnState;
+				this.#futureConnState = void 0;
+			}, (_e) => {
+				this.#futureConnState = void 0;
+			});
+		}
+		if (this.#connState.client.closed) try {
+			if (this.#futureConnState !== void 0) this.#connState = this.#futureConnState;
+			else this.#connState = this.#openConn();
+		} catch (e) {
+			throw mapHranaError(e);
+		}
+		const connState = this.#connState;
+		try {
+			if (connState.useSqlCache === void 0) {
+				connState.useSqlCache = await connState.client.getVersion() >= 2;
+				if (connState.useSqlCache) connState.sqlCache.capacity = sqlCacheCapacity$1;
+			}
+			const stream = connState.client.openStream();
+			stream.intMode = this.#intMode;
+			const streamState = {
+				conn: connState,
+				stream
+			};
+			connState.streamStates.add(streamState);
+			return streamState;
+		} catch (e) {
+			throw mapHranaError(e);
+		}
+	}
+	#openConn(client) {
+		try {
+			client ??= openWs(this.#url, this.#authToken);
+			return {
+				client,
+				useSqlCache: void 0,
+				sqlCache: new SqlCache(client, 0),
+				openTime: /* @__PURE__ */ new Date(),
+				streamStates: /* @__PURE__ */ new Set()
+			};
+		} catch (e) {
+			throw mapHranaError(e);
+		}
+	}
+	async reconnect() {
+		try {
+			for (const st of Array.from(this.#connState.streamStates)) try {
+				st.stream.close();
+			} catch {}
+			this.#connState.client.close();
+		} catch {}
+		if (this.#futureConnState) {
+			try {
+				this.#futureConnState.client.close();
+			} catch {}
+			this.#futureConnState = void 0;
+		}
+		const next = this.#openConn();
+		next.useSqlCache = await next.client.getVersion() >= 2;
+		if (next.useSqlCache) next.sqlCache.capacity = sqlCacheCapacity$1;
+		this.#connState = next;
+		this.closed = false;
+	}
+	_closeStream(streamState) {
+		streamState.stream.close();
+		const connState = streamState.conn;
+		connState.streamStates.delete(streamState);
+		if (connState.streamStates.size === 0 && connState !== this.#connState) connState.client.close();
+	}
+	close() {
+		this.#connState.client.close();
+		this.closed = true;
+		if (this.#futureConnState) {
+			try {
+				this.#futureConnState.client.close();
+			} catch {}
+			this.#futureConnState = void 0;
+		}
+		this.closed = true;
+	}
+};
+var WsTransaction = class extends HranaTransaction {
+	#client;
+	#streamState;
+	/** @private */
+	constructor(client, state, mode, version) {
+		super(mode, version);
+		this.#client = client;
+		this.#streamState = state;
+	}
+	/** @private */
+	_getStream() {
+		return this.#streamState.stream;
+	}
+	/** @private */
+	_getSqlCache() {
+		return this.#streamState.conn.sqlCache;
+	}
+	close() {
+		this.#client._closeStream(this.#streamState);
+	}
+	get closed() {
+		return this.#streamState.stream.closed;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/http.js
+/** @private */
+function _createClient$1(config) {
+	if (config.scheme !== "https" && config.scheme !== "http") throw new LibsqlError(`The HTTP client supports only "libsql:", "https:" and "http:" URLs, got ${JSON.stringify(config.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+	if (config.encryptionKey !== void 0) throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
+	if (config.scheme === "http" && config.tls) throw new LibsqlError(`A "http:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
+	else if (config.scheme === "https" && !config.tls) throw new LibsqlError(`A "https:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
+	return new HttpClient(encodeBaseUrl(config.scheme, config.authority, config.path), config.authToken, config.intMode, config.fetch, config.concurrency, config.remoteEncryptionKey);
+}
+var sqlCacheCapacity = 30;
+var HttpClient = class {
+	#client;
+	protocol;
+	#url;
+	#intMode;
+	#customFetch;
+	#concurrency;
+	#authToken;
+	#remoteEncryptionKey;
+	#promiseLimitFunction;
+	/** @private */
+	constructor(url, authToken, intMode, customFetch, concurrency, remoteEncryptionKey) {
+		this.#url = url;
+		this.#authToken = authToken;
+		this.#intMode = intMode;
+		this.#customFetch = customFetch;
+		this.#concurrency = concurrency;
+		this.#remoteEncryptionKey = remoteEncryptionKey;
+		this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, remoteEncryptionKey);
+		this.#client.intMode = this.#intMode;
+		this.protocol = "http";
+		this.#promiseLimitFunction = (0, import_promise_limit.default)(this.#concurrency);
+	}
+	async limit(fn) {
+		return this.#promiseLimitFunction(fn);
+	}
+	async execute(stmtOrSql, args) {
+		let stmt;
+		if (typeof stmtOrSql === "string") stmt = {
+			sql: stmtOrSql,
+			args: args || []
+		};
+		else stmt = stmtOrSql;
+		return this.limit(async () => {
+			try {
+				const hranaStmt = stmtToHrana(stmt);
+				let rowsPromise;
+				const stream = this.#client.openStream();
+				try {
+					rowsPromise = stream.query(hranaStmt);
+				} finally {
+					stream.closeGracefully();
+				}
+				return resultSetFromHrana(await rowsPromise);
+			} catch (e) {
+				throw mapHranaError(e);
+			}
+		});
+	}
+	async batch(stmts, mode = "deferred") {
+		return this.limit(async () => {
+			try {
+				const hranaStmts = stmts.map((stmt) => {
+					if (Array.isArray(stmt)) return {
+						sql: stmt[0],
+						args: stmt[1] || []
+					};
+					return stmt;
+				}).map(stmtToHrana);
+				const version = await this.#client.getVersion();
+				let resultsPromise;
+				const stream = this.#client.openStream();
+				try {
+					new SqlCache(stream, sqlCacheCapacity).apply(hranaStmts);
+					resultsPromise = executeHranaBatch(mode, version, stream.batch(false), hranaStmts);
+				} finally {
+					stream.closeGracefully();
+				}
+				return await resultsPromise;
+			} catch (e) {
+				throw mapHranaError(e);
+			}
+		});
+	}
+	async migrate(stmts) {
+		return this.limit(async () => {
+			try {
+				const hranaStmts = stmts.map(stmtToHrana);
+				const version = await this.#client.getVersion();
+				let resultsPromise;
+				const stream = this.#client.openStream();
+				try {
+					resultsPromise = executeHranaBatch("deferred", version, stream.batch(false), hranaStmts, true);
+				} finally {
+					stream.closeGracefully();
+				}
+				return await resultsPromise;
+			} catch (e) {
+				throw mapHranaError(e);
+			}
+		});
+	}
+	async transaction(mode = "write") {
+		return this.limit(async () => {
+			try {
+				const version = await this.#client.getVersion();
+				return new HttpTransaction(this.#client.openStream(), mode, version);
+			} catch (e) {
+				throw mapHranaError(e);
+			}
+		});
+	}
+	async executeMultiple(sql) {
+		return this.limit(async () => {
+			try {
+				let promise;
+				const stream = this.#client.openStream();
+				try {
+					promise = stream.sequence(sql);
+				} finally {
+					stream.closeGracefully();
+				}
+				await promise;
+			} catch (e) {
+				throw mapHranaError(e);
+			}
+		});
+	}
+	sync() {
+		throw new LibsqlError("sync not supported in http mode", "SYNC_NOT_SUPPORTED");
+	}
+	close() {
+		this.#client.close();
+	}
+	async reconnect() {
+		try {
+			if (!this.closed) this.#client.close();
+		} finally {
+			this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, this.#remoteEncryptionKey);
+			this.#client.intMode = this.#intMode;
+		}
+	}
+	get closed() {
+		return this.#client.closed;
+	}
+};
+var HttpTransaction = class extends HranaTransaction {
+	#stream;
+	#sqlCache;
+	/** @private */
+	constructor(stream, mode, version) {
+		super(mode, version);
+		this.#stream = stream;
+		this.#sqlCache = new SqlCache(stream, sqlCacheCapacity);
+	}
+	/** @private */
+	_getStream() {
+		return this.#stream;
+	}
+	/** @private */
+	_getSqlCache() {
+		return this.#sqlCache;
+	}
+	close() {
+		this.#stream.close();
+	}
+	get closed() {
+		return this.#stream.closed;
+	}
+};
+//#endregion
+//#region node_modules/@libsql/client/lib-esm/node.js
+/** Creates a {@link Client} object.
+*
+* You must pass at least an `url` in the {@link Config} object.
+*/
+function createClient(config) {
+	return _createClient(expandConfig(config, true));
+}
+function _createClient(config) {
+	if (config.scheme === "wss" || config.scheme === "ws") return _createClient$2(config);
+	else if (config.scheme === "https" || config.scheme === "http") return _createClient$1(config);
+	else return _createClient$3(config);
+}
+//#endregion
+//#region node_modules/drizzle-orm/libsql/driver.js
+function drizzle(...params) {
+	if (typeof params[0] === "string") return construct(createClient({ url: params[0] }), params[1]);
+	const { connection, client, ...DrizzleSQLiteConfig } = params[0];
+	if (client) return construct(client, DrizzleSQLiteConfig);
+	return construct(typeof connection === "string" ? createClient({ url: connection }) : createClient(connection), DrizzleSQLiteConfig);
+}
+(function(_drizzle) {
+	function mock(config) {
+		return construct({}, config);
+	}
+	_drizzle.mock = mock;
+})(drizzle || (drizzle = {}));
+//#endregion
+//#region src/db/schema.ts
+var usersTable = sqliteTable("users_table", {
+	id: int().primaryKey({ autoIncrement: true }),
+	username: text().notNull(),
+	user_id: text("user_id").notNull().unique(),
+	email: text().notNull().unique(),
+	userpass: text().notNull(),
+	role: text().notNull(),
+	createat: text("createat").default(sql`CURRENT_TIMESTAMP`).notNull()
+});
+//#endregion
 //#region src/main/repositories/user.repository.ts
 async function getAllusers() {}
+var db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
 async function getbyEmail(UserEmail, UserPass) {
-	console.log("Searching user:", UserEmail);
 	try {
-		const user = {
-			email: "yadetjsd@gmail.com",
-			password: "yaderjsd348d"
-		};
+		const user = await db.select({
+			email: usersTable.email,
+			password: usersTable.userpass
+		}).from(usersTable).where(eq(usersTable.email, UserEmail));
 		if (!user) return {
 			ok: false,
 			token: "malo"
 		};
-		if (user.password !== UserPass) return {
+		if (user[0].password !== UserPass) return {
 			ok: false,
 			token: "malo"
 		};
@@ -30,7 +14365,7 @@ async function getbyEmail(UserEmail, UserPass) {
 			token: "bien"
 		};
 	} catch (error) {
-		console.error("Prisma query failed:", error);
+		console.error("Drizzel query failed:", error);
 		throw error;
 	}
 }
@@ -50,20 +14385,20 @@ function RegisterUsersIpc() {
 }
 //#endregion
 //#region src/main/main.tsx
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
+var __filename$1 = fileURLToPath(import.meta.url);
+var __dirname$1 = path.dirname(__filename$1);
 function createWindow() {
 	const window = new BrowserWindow({
 		width: 1400,
 		height: 900,
 		webPreferences: {
-			preload: path.join(__dirname, "preload.mjs"),
+			preload: path.join(__dirname$1, "preload.mjs"),
 			contextIsolation: true,
 			nodeIntegration: false
 		}
 	});
 	if (process.env.VITE_DEV_SERVER_URL) window.loadURL(process.env.VITE_DEV_SERVER_URL);
-	else window.loadFile(path.join(__dirname, "../dist/index.html"));
+	else window.loadFile(path.join(__dirname$1, "../dist/index.html"));
 }
 app.whenReady().then(() => {
 	registerAppIPC();

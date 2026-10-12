@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import { registerAppIPC } from "./ipc/app.ipc";
 import { RegisterUsersIpc } from "./ipc/user.ipc";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+var __filename$1 = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename$1);
 
 function createWindow() {
   const window = new BrowserWindow({

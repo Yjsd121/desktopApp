@@ -3,6 +3,7 @@ import { BrowserWindow, app, ipcMain } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Buffer as Buffer$1 } from "node:buffer";
+import { randomBytes } from "node:crypto";
 //#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -8924,7 +8925,7 @@ var require_websocket = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var http$1 = __require("http");
 	var net = __require("net");
 	var tls = __require("tls");
-	var { randomBytes, createHash: createHash$1 } = __require("crypto");
+	var { randomBytes: randomBytes$1, createHash: createHash$1 } = __require("crypto");
 	var { Duplex: Duplex$2, Readable } = __require("stream");
 	var { URL: URL$1 } = __require("url");
 	var PerMessageDeflate = require_permessage_deflate();
@@ -9499,7 +9500,7 @@ var require_websocket = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 		const defaultPort = isSecure ? 443 : 80;
-		const key = randomBytes(16).toString("base64");
+		const key = randomBytes$1(16).toString("base64");
 		const request = isSecure ? https.request : http$1.request;
 		const protocolSet = /* @__PURE__ */ new Set();
 		let perMessageDeflate;
@@ -14344,25 +14345,49 @@ var usersTable = sqliteTable("users_table", {
 });
 //#endregion
 //#region src/main/repositories/user.repository.ts
-async function getAllusers() {}
 var db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
+async function getAllusers() {}
+async function getInfoAuth(id) {
+	try {
+		const userInfo = await db.select({
+			username: usersTable.username,
+			user_id: usersTable.user_id,
+			email: usersTable.email,
+			role: usersTable.role
+		}).from(usersTable).where(eq(usersTable.user_id, id));
+		if (!userInfo) return {
+			success: false,
+			message: "User info not foud"
+		};
+		return {
+			success: true,
+			message: "User Info found",
+			data: userInfo[0]
+		};
+	} catch (err) {
+		console.log(err);
+		throw err;
+	}
+}
 async function getbyEmail(UserEmail, UserPass) {
 	try {
 		const user = await db.select({
 			email: usersTable.email,
-			password: usersTable.userpass
+			password: usersTable.userpass,
+			userid: usersTable.user_id
 		}).from(usersTable).where(eq(usersTable.email, UserEmail));
 		if (!user) return {
-			ok: false,
-			token: "malo"
+			success: false,
+			message: "User not found"
 		};
 		if (user[0].password !== UserPass) return {
-			ok: false,
-			token: "malo"
+			success: false,
+			message: "Invalid credentials"
 		};
 		return {
-			ok: true,
-			token: "bien"
+			success: true,
+			message: "User found",
+			data: user[0].userid
 		};
 	} catch (error) {
 		console.error("Drizzel query failed:", error);
@@ -14380,6 +14405,48 @@ function RegisterUsersIpc() {
 			return await getbyEmail(email, pass);
 		} catch (error) {
 			console.log("error in user:getbyEmail", error);
+		}
+	});
+}
+//#endregion
+//#region src/main/auth/session.manager.ts
+var sessions = /* @__PURE__ */ new Map();
+function createSession(user) {
+	const token = randomBytes(32).toString("hex");
+	sessions.set(token, {
+		user,
+		createdAt: Date.now()
+	});
+	return token;
+}
+//#endregion
+//#region src/main/repositories/auth.reository.ts
+async function Login(email, pass) {
+	try {
+		const user = await getbyEmail(email, pass);
+		if (!user.data) return {
+			ok: false,
+			message: "User not foud"
+		};
+		const userInfo = await getInfoAuth(user.data);
+		if (!userInfo.data) return;
+		return {
+			success: true,
+			message: "Login Success",
+			data: createSession(userInfo.data)
+		};
+	} catch (err) {
+		console.log(err);
+	}
+}
+//#endregion
+//#region src/main/ipc/auth.ipc.ts
+function AuthIpc() {
+	ipcMain.handle("auth:login", async (_event, email, pass) => {
+		try {
+			return await Login(email, pass);
+		} catch (err) {
+			console.log(err);
 		}
 	});
 }
@@ -14403,6 +14470,7 @@ function createWindow() {
 app.whenReady().then(() => {
 	registerAppIPC();
 	RegisterUsersIpc();
+	AuthIpc();
 	createWindow();
 	app.on("activate", () => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();

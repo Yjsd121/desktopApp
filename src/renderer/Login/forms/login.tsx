@@ -5,6 +5,7 @@ import type { InfoUser, loginSucess } from "../../Types/type";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide";
 import { MorphIcon } from "morphicons/react";
+import type { Appresponse } from "../../Types/response.type";
 
 export function Loginform() {
   const [formData, setformData] = useState({
@@ -19,7 +20,7 @@ export function Loginform() {
 
     const response = await HandleLogin(formData.emailbody, formData.pass);
 
-    const data: loginSucess = await response;
+    const data: Appresponse = await response;
 
     console.log(data);
     // if (data.token) {

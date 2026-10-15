@@ -1,5 +1,5 @@
 export async function HandleLogin(email: string, pass: string) {
-  const response = await window.api.users.getbyEmail(email, pass);
+  const response = await window.api.auth.Login(email, pass);
 
   return response;
 }

@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { handleInfoUser, HandleLogin } from "../utils/login";
-import type { InfoUser, loginSucess } from "../../Types/type";
+import type { InfoUser } from "../../Types/type";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide";
 import { MorphIcon } from "morphicons/react";
@@ -18,28 +18,31 @@ export function Loginform() {
   async function handlesubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
-    const response = await HandleLogin(formData.emailbody, formData.pass);
-
-    const data: Appresponse = await response;
+    const data: Appresponse<string> = await HandleLogin(
+      formData.emailbody,
+      formData.pass,
+    );
 
     console.log(data);
-    // if (data.token) {
-    //   window.localStorage.setItem("token", data.token);
+    if (data.data) {
+      window.localStorage.setItem("token", data.data);
 
-    //   const InfoUser: InfoUser = await handleInfoUser(data.token);
-    //   window.localStorage.setItem(
-    //     "user",
-    //     JSON.stringify({
-    //       username: InfoUser.username,
-    //       email: InfoUser.email,
-    //       role: InfoUser.role,
-    //     }),
-    //   );
-    //   if (data.token && InfoUser) {
-    //     navigate("/Inventory");
-    //   }
-    // }
+      const InfoUser: InfoUser = await handleInfoUser(data.data);
+
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: InfoUser.username,
+          email: InfoUser.email,
+          role: InfoUser.role,
+        }),
+      );
+      if (data.data && InfoUser) {
+        navigate("/Inventory");
+      }
+    }
   }
+
   function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
     setformData({
       ...formData,

@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld("api", {
   },
   users: {
     getall: () => ipcRenderer.invoke("users:getall"),
+    getinfoshow: (token: string) =>
+      ipcRenderer.invoke("users:getinfoshow", token),
   },
 });

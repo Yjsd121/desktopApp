@@ -14347,7 +14347,27 @@ var usersTable = sqliteTable("users_table", {
 //#region src/main/repositories/user.repository.ts
 var db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
 async function getAllusers() {}
-async function getInfoAuth(id) {
+async function getinfoshow(id) {
+	try {
+		const InfoUser = await db.select({
+			username: usersTable.username,
+			email: usersTable.email,
+			role: usersTable.role
+		}).from(usersTable).where(eq(usersTable.user_id, id));
+		if (!InfoUser) return {
+			success: false,
+			message: "user not foud"
+		};
+		return {
+			success: true,
+			message: "user found",
+			data: InfoUser[0]
+		};
+	} catch (err) {
+		console.log(err);
+	}
+}
+async function getInfouser(id) {
 	try {
 		const userInfo = await db.select({
 			username: usersTable.username,
@@ -14395,22 +14415,9 @@ async function getbyEmail(UserEmail, UserPass) {
 	}
 }
 //#endregion
-//#region src/main/ipc/user.ipc.ts
-function RegisterUsersIpc() {
-	ipcMain.handle("users:getall", async () => {
-		return await getAllusers();
-	});
-	ipcMain.handle("users:getbyEmail", async (_event, email, pass) => {
-		try {
-			return await getbyEmail(email, pass);
-		} catch (error) {
-			console.log("error in user:getbyEmail", error);
-		}
-	});
-}
-//#endregion
 //#region src/main/auth/session.manager.ts
 var sessions = /* @__PURE__ */ new Map();
+var SESSION_DURATION = 288e5;
 function createSession(user) {
 	const token = randomBytes(32).toString("hex");
 	sessions.set(token, {
@@ -14418,6 +14425,35 @@ function createSession(user) {
 		createdAt: Date.now()
 	});
 	return token;
+}
+function getSession(token) {
+	if (typeof token !== "string") return null;
+	const session = sessions.get(token);
+	if (!session) return null;
+	if (Date.now() - session.createdAt >= SESSION_DURATION) {
+		sessions.delete(token);
+		return null;
+	}
+	return session.user;
+}
+//#endregion
+//#region src/main/ipc/user.ipc.ts
+function RegisterUsersIpc() {
+	ipcMain.handle("users:getall", async () => {
+		return await getAllusers();
+	});
+	ipcMain.handle("users:getinfoshow", async (_event, token) => {
+		try {
+			const id = await getSession(token);
+			if (!id) return {
+				success: false,
+				message: "Invalid token"
+			};
+			return await getinfoshow(id.user_id);
+		} catch (error) {
+			console.log("error in user:getbyEmail", error);
+		}
+	});
 }
 //#endregion
 //#region src/main/repositories/auth.reository.ts
@@ -14428,7 +14464,7 @@ async function Login(email, pass) {
 			ok: false,
 			message: "User not foud"
 		};
-		const userInfo = await getInfoAuth(user.data);
+		const userInfo = await getInfouser(user.data);
 		if (!userInfo.data) return;
 		return {
 			success: true,

@@ -10,6 +10,7 @@ declare global {
       auth: { Login: (email, pass) => Promise<Appresponse> };
       users: {
         getAll: () => Promise<unknown[]>;
+        getinfoshow: (token: string) => Promise<Appresponse>;
       };
     };
   }

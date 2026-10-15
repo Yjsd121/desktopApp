@@ -1,4 +1,4 @@
-import { getbyEmail, getInfoAuth } from "./user.repository";
+import { getbyEmail, getInfouser } from "./user.repository";
 import { createSession } from "../auth/session.manager";
 
 export async function Login(email: string, pass: string) {
@@ -11,7 +11,7 @@ export async function Login(email: string, pass: string) {
         message: "User not foud",
       };
     }
-    const userInfo = await getInfoAuth(user.data);
+    const userInfo = await getInfouser(user.data);
 
     if (!userInfo.data) {
       return;

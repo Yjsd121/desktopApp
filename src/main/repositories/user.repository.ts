@@ -8,9 +8,36 @@ export async function getAllusers() {
   return;
 }
 
-export async function getInfoAuth(id: string) {
+export async function getinfoshow(id: string) {
   try {
-    const userInfo =await db
+    const InfoUser = await db
+      .select({
+        username: usersTable.username,
+        email: usersTable.email,
+        role: usersTable.role,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.user_id, id));
+
+    if (!InfoUser) {
+      return {
+        success: false,
+        message: "user not foud",
+      };
+    }
+    return {
+      success: true,
+      message: "user found",
+      data: InfoUser[0],
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getInfouser(id: string) {
+  try {
+    const userInfo = await db
       .select({
         username: usersTable.username,
         user_id: usersTable.user_id,
@@ -30,8 +57,8 @@ export async function getInfoAuth(id: string) {
     return {
       success: true,
       message: "User Info found",
-      data: userInfo[0]
-    }
+      data: userInfo[0],
+    };
   } catch (err) {
     console.log(err);
     throw err;

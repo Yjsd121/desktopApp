@@ -1,11 +1,17 @@
 import { drizzle } from "drizzle-orm/libsql";
+<<<<<<< HEAD
 import { ProductTable } from "../../db/schema";
 // import { eq } from "drizzle-orm";
+=======
+import { usersTable } from "../../db/schema";
+import { eq } from "drizzle-orm";
+>>>>>>> origin/main
 
 const db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
 
 export async function CreateProduct() {
   try {
+<<<<<<< HEAD
     const allProducts = await db
       .select({
         sku: ProductTable.sku,
@@ -20,6 +26,8 @@ export async function CreateProduct() {
       })
       .from(ProductTable);
     console.log(allProducts);
+=======
+>>>>>>> origin/main
   } catch (err) {
     console.log("Error Creating product", err);
   }

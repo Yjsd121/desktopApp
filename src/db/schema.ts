@@ -1,5 +1,8 @@
 import { sql } from "drizzle-orm";
+<<<<<<< HEAD
 import { float } from "drizzle-orm/cockroach-core/columns/float";
+=======
+>>>>>>> origin/main
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const usersTable = sqliteTable("users_table", {
@@ -13,6 +16,7 @@ export const usersTable = sqliteTable("users_table", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
+<<<<<<< HEAD
 
 export const ProductTable = sqliteTable("ProductTable", {
   id: int().primaryKey({ autoIncrement: true }),
@@ -26,3 +30,5 @@ export const ProductTable = sqliteTable("ProductTable", {
   description: text().notNull(),
   image: text().notNull(),
 });
+=======
+>>>>>>> origin/main

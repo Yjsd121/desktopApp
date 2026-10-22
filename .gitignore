@@ -26,3 +26,8 @@ dist-ssr
 *.sw?
 repomix-output.xml
 
+# Local databases
+local.db
+local.db-*
+*.sqlite
+*.sqlite3

@@ -1,6 +1,5 @@
 import "./Inventory.css";
 import { useEffect, useState } from "react";
-import type { Producttype } from "../Types/type";
 
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -15,32 +14,37 @@ import { SearchFilter } from "../Components/SearchFilter/SearchFilter";
 import { productColumns } from "../static/TableHeaders";
 import { ProductsFilters } from "../static/Filters.ts";
 import { Modal } from "../Components/Modal/Modal";
-import { NewProductForm } from "./utilities/NewproductForm";
+import { NewProductForm } from "./forms/NewproductForm.tsx";
+import type { Appresponse } from "../Types/response.type.ts";
+import type { ListProcuts } from "../Types/type";
 
 export function InevntoryView() {
   const token = window.localStorage.getItem("token");
-  const [Product, setProduct] = useState<Producttype[]>([]);
+  const [Product, setProduct] = useState<ListProcuts>([]);
   const [OpenModal, setOPenModal] = useState(false);
+
   async function handlegetInventory() {
     if (!token) {
       return;
     }
-    const response = await getProducts(token);
-    const data = await response.json();
-    return data.Allproducts;
+    const Data: Appresponse<ListProcuts> = await getProducts(token);
+    return Data.data;
   }
 
   useEffect(() => {
     async function getProducts() {
-      const data = await handlegetInventory();
-      if (!data) {
+      const response = await handlegetInventory();
+
+      if (response == undefined) {
         return;
       }
-      setProduct(data);
+
+      setProduct(response);
     }
 
     getProducts();
   }, []);
+
   return (
     <>
       <Barnav />
@@ -48,7 +52,7 @@ export function InevntoryView() {
         <SearchFilter filters={ProductsFilters} setOpenModal={setOPenModal} />
         <Table Header={productColumns}>
           {Product.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.sku}>
               <td>{item.name}</td>
               <td>{item.sku}</td>
               <td>{item.category}</td>

@@ -23,7 +23,6 @@ export function Loginform() {
       formData.pass,
     );
 
-    console.log(data);
     if (data.data) {
       window.localStorage.setItem("token", data.data);
 

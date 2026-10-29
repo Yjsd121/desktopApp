@@ -1,13 +1,8 @@
-import { APIURL } from "../../API/apis";
+import type { Appresponse } from "../../Types/response.type";
+import type { ListProcuts } from "../../Types/type";
 
 export async function getProducts(token: string) {
-  const response = await fetch(`${APIURL}/Inventory`, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      authorization: `Bearer ${token}`,
-    },
-  });
-
+  const response: Appresponse<ListProcuts> =
+    await window.api.products.getallproducts(token);
   return response;
 }

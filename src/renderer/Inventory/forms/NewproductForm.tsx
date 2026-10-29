@@ -1,18 +1,29 @@
 import type React from "react";
 import { ProductsFilters } from "../../static/Filters";
 import { useState } from "react";
+import type { Producttype } from "../../Types/type";
 interface FormProp {
   SetOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export function NewProductForm({ SetOpenModal }: FormProp) {
-  const [ProductInfo, setProductInfo] = useState({
+  const [ProductInfo, setProductInfo] = useState<Producttype>({
+    sku: "",
     name: "",
     category: "",
-    price: "",
-    stock: "",
+    status: "",
+    stock: 0,
+    price: 0,
     supplier: "",
     description: "",
+    image: "",
   });
+
+  function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
+    setProductInfo({
+      ...ProductInfo,
+      [e.target.name]: e.target.value,
+    });
+  }
 
   const Category = ProductsFilters[1];
   return (

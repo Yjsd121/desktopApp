@@ -6,6 +6,10 @@ electron.contextBridge.exposeInMainWorld("api", {
 	users: {
 		getall: () => electron.ipcRenderer.invoke("users:getall"),
 		getinfoshow: (token) => electron.ipcRenderer.invoke("users:getinfoshow", token)
+	},
+	products: {
+		getallproducts: (token) => electron.ipcRenderer.invoke("product:getallproducts", token),
+		createproduct: (token, product) => electron.ipcRenderer.invoke("product:createProduct", token, product)
 	}
 });
 //#endregion

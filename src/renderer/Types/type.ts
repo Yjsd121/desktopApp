@@ -34,18 +34,11 @@ export interface loginSucess {
   token: string;
 }
 
-export interface Producttype {
-  id: number;
-  sku: string;
-  name: string;
-  category: string;
-  status: string;
-  stock: number;
-  price: number;
-  supplier: string;
-  description: string;
-  image: string;
-}
+import { ProductTable } from "../../db/schema";
+export type Producttype = typeof ProductTable.$inferInsert;
+
+export type ListProcuts = Producttype[];
+
 export interface FilterOption {
   key: string;
   option: string;

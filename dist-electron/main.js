@@ -229,6 +229,11 @@ var WithSubquery = class extends Subquery {
 	static [entityKind] = "WithSubquery";
 };
 //#endregion
+//#region node_modules/drizzle-orm/tracing-utils.js
+function iife(fn, ...args) {
+	return fn(...args);
+}
+//#endregion
 //#region node_modules/drizzle-orm/tracing.js
 /** @internal */
 var tracer = { startActiveSpan(name, fn) {
@@ -1380,7 +1385,7 @@ var ColumnBuilder = class {
 };
 //#endregion
 //#region node_modules/drizzle-orm/sqlite-core/foreign-keys.js
-var ForeignKeyBuilder = class {
+var ForeignKeyBuilder$1 = class {
 	static [entityKind] = "SQLiteForeignKeyBuilder";
 	/** @internal */
 	reference;
@@ -1413,10 +1418,10 @@ var ForeignKeyBuilder = class {
 	}
 	/** @internal */
 	build(table) {
-		return new ForeignKey(table, this);
+		return new ForeignKey$1(table, this);
 	}
 };
-var ForeignKey = class {
+var ForeignKey$1 = class {
 	static [entityKind] = "SQLiteForeignKey";
 	reference;
 	onUpdate;
@@ -1472,7 +1477,7 @@ var SQLiteColumnBuilder = class extends ColumnBuilder {
 	buildForeignKeys(column, table) {
 		return this.foreignKeyConfigs.map(({ ref, actions }) => {
 			return ((ref, actions) => {
-				const builder = new ForeignKeyBuilder(() => {
+				const builder = new ForeignKeyBuilder$1(() => {
 					const foreignColumn = ref();
 					return {
 						columns: [column],
@@ -14333,6 +14338,272 @@ function drizzle(...params) {
 	_drizzle.mock = mock;
 })(drizzle || (drizzle = {}));
 //#endregion
+//#region node_modules/drizzle-orm/cockroach-core/utils/array.js
+function parseCockroachArrayValue(arrayString, startFrom, inQuotes) {
+	for (let i = startFrom; i < arrayString.length; i++) {
+		const char = arrayString[i];
+		if (char === "\\") {
+			i++;
+			continue;
+		}
+		if (char === "\"") return [arrayString.slice(startFrom, i).replace(/\\/g, ""), i + 1];
+		if (inQuotes) continue;
+		if (char === "," || char === "}") return [arrayString.slice(startFrom, i).replace(/\\/g, ""), i];
+	}
+	return [arrayString.slice(startFrom).replace(/\\/g, ""), arrayString.length];
+}
+function parseCockroachNestedArray(arrayString, startFrom = 0) {
+	const result = [];
+	let i = startFrom;
+	let lastCharIsComma = false;
+	while (i < arrayString.length) {
+		const char = arrayString[i];
+		if (char === ",") {
+			if (lastCharIsComma || i === startFrom) result.push("");
+			lastCharIsComma = true;
+			i++;
+			continue;
+		}
+		lastCharIsComma = false;
+		if (char === "\\") {
+			i += 2;
+			continue;
+		}
+		if (char === "\"") {
+			const [value, startFrom] = parseCockroachArrayValue(arrayString, i + 1, true);
+			result.push(value);
+			i = startFrom;
+			continue;
+		}
+		if (char === "}") return [result, i + 1];
+		if (char === "{") {
+			const [value, startFrom] = parseCockroachNestedArray(arrayString, i + 1);
+			result.push(value);
+			i = startFrom;
+			continue;
+		}
+		const [value, newStartFrom] = parseCockroachArrayValue(arrayString, i, false);
+		result.push(value);
+		i = newStartFrom;
+	}
+	return [result, i];
+}
+function parseCockroachArray(arrayString) {
+	const [result] = parseCockroachNestedArray(arrayString, 1);
+	return result;
+}
+function makeCockroachArray(array) {
+	return `{${array.map((item) => {
+		if (Array.isArray(item)) return makeCockroachArray(item);
+		if (typeof item === "string") return `"${item.replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}"`;
+		return `${item}`;
+	}).join(",")}}`;
+}
+//#endregion
+//#region node_modules/drizzle-orm/cockroach-core/foreign-keys.js
+var ForeignKeyBuilder = class {
+	static [entityKind] = "CockroachForeignKeyBuilder";
+	/** @internal */
+	reference;
+	/** @internal */
+	_onUpdate = "no action";
+	/** @internal */
+	_onDelete = "no action";
+	constructor(config, actions) {
+		this.reference = () => {
+			const { name, columns, foreignColumns } = config();
+			return {
+				name,
+				columns,
+				foreignTable: foreignColumns[0].table,
+				foreignColumns
+			};
+		};
+		if (actions) {
+			this._onUpdate = actions.onUpdate;
+			this._onDelete = actions.onDelete;
+		}
+	}
+	onUpdate(action) {
+		this._onUpdate = action === void 0 ? "no action" : action;
+		return this;
+	}
+	onDelete(action) {
+		this._onDelete = action === void 0 ? "no action" : action;
+		return this;
+	}
+	/** @internal */
+	build(table) {
+		return new ForeignKey(table, this);
+	}
+};
+var ForeignKey = class {
+	static [entityKind] = "CockroachForeignKey";
+	reference;
+	onUpdate;
+	onDelete;
+	name;
+	constructor(table, builder) {
+		this.table = table;
+		this.reference = builder.reference;
+		this.onUpdate = builder._onUpdate;
+		this.onDelete = builder._onDelete;
+	}
+	getName() {
+		const { name } = this.reference();
+		return name;
+	}
+	isNameExplicit() {
+		return !!this.reference().name;
+	}
+};
+//#endregion
+//#region node_modules/drizzle-orm/cockroach-core/columns/common.js
+var CockroachColumnBuilder = class extends ColumnBuilder {
+	foreignKeyConfigs = [];
+	static [entityKind] = "CockroachColumnBuilder";
+	references(ref, config = {}) {
+		this.foreignKeyConfigs.push({
+			ref,
+			config
+		});
+		return this;
+	}
+	unique(name) {
+		this.config.isUnique = true;
+		this.config.uniqueName = name;
+		return this;
+	}
+	generatedAlwaysAs(as) {
+		this.config.generated = {
+			as,
+			type: "always",
+			mode: "stored"
+		};
+		return this;
+	}
+	/** @internal */
+	buildForeignKeys(column, table) {
+		return this.foreignKeyConfigs.map(({ ref, config }) => {
+			return iife((ref, config) => {
+				const builder = new ForeignKeyBuilder(() => {
+					const foreignColumn = ref();
+					return {
+						name: config.name,
+						columns: [column],
+						foreignColumns: [foreignColumn]
+					};
+				});
+				if (config.onUpdate) builder.onUpdate(config.onUpdate);
+				if (config.onDelete) builder.onDelete(config.onDelete);
+				return builder.build(table);
+			}, ref, config);
+		});
+	}
+	/** @internal */
+	buildExtraConfigColumn(table) {
+		return new ExtraConfigColumn(table, this.config);
+	}
+};
+var CockroachColumnWithArrayBuilder = class extends CockroachColumnBuilder {
+	static [entityKind] = "CockroachColumnWithArrayBuilder";
+	array(size) {
+		return new CockroachArrayBuilder(this.config.name, this, size);
+	}
+};
+var CockroachColumn = class extends Column {
+	static [entityKind] = "CockroachColumn";
+	/** @internal */
+	table;
+	constructor(table, config) {
+		super(table, config);
+		this.table = table;
+	}
+	/** @internal */
+	shouldDisableInsert() {
+		return this.config.generatedIdentity !== void 0 && this.config.generatedIdentity.type === "always" || this.config.generated !== void 0 && this.config.generated.type !== "byDefault";
+	}
+};
+var ExtraConfigColumn = class extends CockroachColumn {
+	static [entityKind] = "ExtraConfigColumn";
+	getSQLType() {
+		return this.getSQLType();
+	}
+	indexConfig = { order: this.config.order ?? "asc" };
+	defaultConfig = { order: "asc" };
+	asc() {
+		this.indexConfig.order = "asc";
+		return this;
+	}
+	desc() {
+		this.indexConfig.order = "desc";
+		return this;
+	}
+};
+var CockroachArrayBuilder = class extends CockroachColumnWithArrayBuilder {
+	static [entityKind] = "CockroachArrayBuilder";
+	constructor(name, baseBuilder, length) {
+		super(name, "array basecolumn", "CockroachArray");
+		this.config.baseBuilder = baseBuilder;
+		this.config.length = length;
+	}
+	/** @internal */
+	build(table) {
+		const baseColumn = this.config.baseBuilder.build(table);
+		return new CockroachArray(table, this.config, baseColumn);
+	}
+};
+var CockroachArray = class CockroachArray extends CockroachColumn {
+	static [entityKind] = "CockroachArray";
+	constructor(table, config, baseColumn, range) {
+		super(table, config);
+		this.baseColumn = baseColumn;
+		this.range = range;
+	}
+	getSQLType() {
+		return `${this.baseColumn.getSQLType()}[${typeof this.length === "number" ? this.length : ""}]`;
+	}
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") value = parseCockroachArray(value);
+		return value.map((v) => this.baseColumn.mapFromDriverValue(v));
+	};
+	mapFromJsonValue(value) {
+		if (typeof value === "string") value = parseCockroachArray(value);
+		const base = this.baseColumn;
+		return "mapFromJsonValue" in base ? value.map((v) => base.mapFromJsonValue(v)) : value.map((v) => base.mapFromDriverValue(v));
+	}
+	mapToDriverValue = (value, isNestedArray = false) => {
+		const a = value.map((v) => v === null ? null : is(this.baseColumn, CockroachArray) ? this.baseColumn.mapToDriverValue(v, true) : this.baseColumn.mapToDriverValue(v));
+		if (isNestedArray) return a;
+		return makeCockroachArray(a);
+	};
+};
+//#endregion
+//#region node_modules/drizzle-orm/cockroach-core/columns/float.js
+var CockroachFloatBuilder = class extends CockroachColumnWithArrayBuilder {
+	static [entityKind] = "CockroachFloatBuilder";
+	constructor(name) {
+		super(name, "number double", "CockroachFloat");
+	}
+	/** @internal */
+	build(table) {
+		return new CockroachFloat(table, this.config);
+	}
+};
+var CockroachFloat = class extends CockroachColumn {
+	static [entityKind] = "CockroachFloat";
+	getSQLType() {
+		return "float";
+	}
+	mapFromDriverValue = (value) => {
+		if (typeof value === "string") return Number.parseFloat(value);
+		return value;
+	};
+};
+function float(name) {
+	return new CockroachFloatBuilder(name ?? "");
+}
+//#endregion
 //#region src/db/schema.ts
 var usersTable = sqliteTable("users_table", {
 	id: int().primaryKey({ autoIncrement: true }),
@@ -14343,13 +14614,25 @@ var usersTable = sqliteTable("users_table", {
 	role: text().notNull(),
 	createat: text("createat").default(sql`CURRENT_TIMESTAMP`).notNull()
 });
+var ProductTable = sqliteTable("ProductTable", {
+	id: int().primaryKey({ autoIncrement: true }),
+	sku: text().notNull().unique(),
+	name: text().notNull(),
+	category: text().notNull(),
+	status: text().notNull(),
+	stock: int().notNull(),
+	price: float().notNull(),
+	supplier: text().notNull(),
+	description: text().notNull(),
+	image: text().notNull()
+});
 //#endregion
 //#region src/main/repositories/user.repository.ts
-var db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
+var db$1 = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
 async function getAllusers() {}
 async function getinfoshow(id) {
 	try {
-		const InfoUser = await db.select({
+		const InfoUser = await db$1.select({
 			username: usersTable.username,
 			email: usersTable.email,
 			role: usersTable.role
@@ -14369,7 +14652,7 @@ async function getinfoshow(id) {
 }
 async function getInfouser(id) {
 	try {
-		const userInfo = await db.select({
+		const userInfo = await db$1.select({
 			username: usersTable.username,
 			user_id: usersTable.user_id,
 			email: usersTable.email,
@@ -14391,7 +14674,7 @@ async function getInfouser(id) {
 }
 async function getbyEmail(UserEmail, UserPass) {
 	try {
-		const user = await db.select({
+		const user = await db$1.select({
 			email: usersTable.email,
 			password: usersTable.userpass,
 			userid: usersTable.user_id
@@ -14487,6 +14770,87 @@ function AuthIpc() {
 	});
 }
 //#endregion
+//#region src/main/repositories/product.repository.ts
+var db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
+async function GetallProducts() {
+	try {
+		const allProducts = await db.select({
+			sku: ProductTable.sku,
+			name: ProductTable.name,
+			category: ProductTable.category,
+			status: ProductTable.status,
+			stock: ProductTable.stock,
+			price: ProductTable.price,
+			supplier: ProductTable.supplier,
+			description: ProductTable.description,
+			image: ProductTable.image
+		}).from(ProductTable);
+		if (!allProducts) return {
+			success: false,
+			message: "Data not found"
+		};
+		return allProducts;
+	} catch (err) {
+		console.log("Error reading products", err);
+	}
+}
+async function CreateP(Product) {
+	try {
+		await db.insert(ProductTable).values({
+			sku: Product.sku,
+			name: Product.name,
+			category: Product.category,
+			status: Product.status,
+			stock: Product.stock,
+			price: Product.price,
+			supplier: Product.supplier,
+			description: Product.description,
+			image: Product.image
+		});
+	} catch (err) {
+		console.log("Error Creating product");
+	}
+}
+//#endregion
+//#region src/main/ipc/product.ipc.ts
+function RegisterProdutipc() {
+	ipcMain.handle("product:getallproducts", async (_event, token) => {
+		try {
+			if (!getSession(token)) return {
+				success: false,
+				message: "invalid token"
+			};
+			const getallProducts = await GetallProducts();
+			if (!getallProducts) return {
+				success: false,
+				message: "not found"
+			};
+			return {
+				success: true,
+				message: "data found",
+				data: getallProducts
+			};
+		} catch (err) {
+			console.log(err);
+		}
+	});
+	ipcMain.handle("product:createproducts", async (_event, token, Product) => {
+		try {
+			if (!getSession(token)) return {
+				sucess: false,
+				message: "invalid token"
+			};
+			await CreateP(Product);
+			return {
+				success: false,
+				message: "Product Create"
+			};
+		} catch (err) {
+			console.log(err);
+		}
+	});
+}
+//#endregion
 //#region src/main/main.tsx
 var __filename$1 = fileURLToPath(import.meta.url);
 var __dirname$1 = path.dirname(__filename$1);
@@ -14506,6 +14870,7 @@ function createWindow() {
 app.whenReady().then(() => {
 	registerAppIPC();
 	RegisterUsersIpc();
+	RegisterProdutipc();
 	AuthIpc();
 	createWindow();
 	app.on("activate", () => {

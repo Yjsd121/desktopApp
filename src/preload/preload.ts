@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type { Producttype } from "../renderer/Types/type";
 
 contextBridge.exposeInMainWorld("api", {
   ping: () => ipcRenderer.invoke("app:ping"),
@@ -10,5 +11,11 @@ contextBridge.exposeInMainWorld("api", {
     getall: () => ipcRenderer.invoke("users:getall"),
     getinfoshow: (token: string) =>
       ipcRenderer.invoke("users:getinfoshow", token),
+  },
+  products: {
+    getallproducts: (token: string) =>
+      ipcRenderer.invoke("product:getallproducts", token),
+    createproduct: (token: string, product: Producttype) =>
+      ipcRenderer.invoke("product:createProduct", token, product),
   },
 });

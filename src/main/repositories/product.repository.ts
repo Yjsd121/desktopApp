@@ -1,17 +1,11 @@
 import { drizzle } from "drizzle-orm/libsql";
-<<<<<<< HEAD
 import { ProductTable } from "../../db/schema";
-// import { eq } from "drizzle-orm";
-=======
-import { usersTable } from "../../db/schema";
-import { eq } from "drizzle-orm";
->>>>>>> origin/main
+import type { Producttype } from "../../renderer/Types/type";
 
 const db = drizzle(process.env.DB_FILE_NAME ?? "file:./local.db");
 
-export async function CreateProduct() {
+export async function GetallProducts() {
   try {
-<<<<<<< HEAD
     const allProducts = await db
       .select({
         sku: ProductTable.sku,
@@ -25,10 +19,33 @@ export async function CreateProduct() {
         image: ProductTable.image,
       })
       .from(ProductTable);
-    console.log(allProducts);
-=======
->>>>>>> origin/main
+
+    if (!allProducts) {
+      return {
+        success: false,
+        message: "Data not found",
+      };
+    }
+    return allProducts;
   } catch (err) {
-    console.log("Error Creating product", err);
+    console.log("Error reading products", err);
+  }
+}
+
+export async function CreateP(Product: Producttype) {
+  try {
+    await db.insert(ProductTable).values({
+      sku: Product.sku,
+      name: Product.name,
+      category: Product.category,
+      status: Product.status,
+      stock: Product.stock,
+      price: Product.price,
+      supplier: Product.supplier,
+      description: Product.description,
+      image: Product.image,
+    });
+  } catch (err) {
+    console.log("Error Creating product");
   }
 }

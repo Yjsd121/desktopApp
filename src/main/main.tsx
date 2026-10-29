@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { registerAppIPC } from "./ipc/app.ipc";
 import { RegisterUsersIpc } from "./ipc/user.ipc";
 import { AuthIpc } from "./ipc/auth.ipc";
+import { RegisterProdutipc } from "./ipc/product.ipc";
 
 var __filename$1 = fileURLToPath(import.meta.url);
 var __dirname = path.dirname(__filename$1);
@@ -30,7 +31,9 @@ function createWindow() {
 
 app.whenReady().then(() => {
   registerAppIPC();
+
   RegisterUsersIpc();
+  RegisterProdutipc();
   AuthIpc();
   createWindow();
 
